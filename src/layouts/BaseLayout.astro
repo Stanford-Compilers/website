@@ -1,0 +1,112 @@
+---
+import '../styles/global.css';
+import { SITE } from '../config/site';
+import SEO from '../components/global/SEO.astro';
+import ThemeScript from '../components/global/ThemeScript.astro';
+import Header from '../components/navigation/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import ClipboardScript from '../components/global/ClipboardScript.astro';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  jsonld?: Record<string, unknown> | Record<string, unknown>[];
+  citation?: { name: string; content: string }[];
+  isHome?: boolean;
+  mainClass?: string;
+}
+
+const {
+  title,
+  description,
+  path,
+  image,
+  ogType,
+  noindex,
+  jsonld,
+  citation,
+  isHome = false,
+  mainClass,
+} = Astro.props;
+
+// Site-wide organization structured data (present on every page).
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ResearchOrganization',
+  name: SITE.name,
+  alternateName: SITE.pi.name + ' Research Group',
+  description: SITE.description,
+  url: SITE.url,
+  parentOrganization: {
+    '@type': 'CollegeOrUniversity',
+    name: SITE.institution.name,
+    url: SITE.institution.url,
+  },
+  member: {
+    '@type': 'Person',
+    name: SITE.pi.name,
+    jobTitle: SITE.pi.title,
+    email: `mailto:${SITE.pi.email}`,
+  },
+};
+
+const pageJsonLd = jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [];
+const allJsonLd = [orgJsonLd, ...pageJsonLd];
+---
+
+<!doctype html>
+<html lang={SITE.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ThemeScript />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#faf6ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171310" media="(prefers-color-scheme: dark)" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Preload the two critical fonts; the rest use font-display: swap. */}
+    <link rel="preload" href="/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/fraunces-wght.woff2" as="font" type="font/woff2" crossorigin />
+
+    <SEO
+      title={title}
+      description={description}
+      path={path}
+      image={image}
+      ogType={ogType}
+      noindex={noindex}
+      jsonld={allJsonLd}
+      citation={citation}
+      isHome={isHome}
+    />
+
+    {SITE.features.viewTransitions && <ClientRouter />}
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main" class:list={['site-main', mainClass]} tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <ClipboardScript />
+
+    <style>
+      .site-main {
+        display: block;
+        outline: none;
+      }
+    </style>
+  </body>
+</html>

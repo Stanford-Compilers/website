@@ -1,0 +1,253 @@
+---
+import { SITE } from '../../config/site';
+import Wordmark from '../global/Wordmark.astro';
+import ThemeToggle from '../global/ThemeToggle.astro';
+import Icon from '../ui/Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+function isActive(href: string): boolean {
+  if (href === '/') return path === '/';
+  return path === href || path.startsWith(href + '/');
+}
+---
+
+<header class="site-header" data-site-header>
+  <div class="container container--wide site-header__inner">
+    <a href="/" class="site-header__brand" aria-label={`${SITE.name} — home`}>
+      <Wordmark />
+    </a>
+
+    <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+      <ul class="primary-nav__list">
+        {
+          SITE.nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="primary-nav__link"
+                aria-current={isActive(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      {SITE.features.themeToggle && <ThemeToggle />}
+      <button
+        type="button"
+        class="nav-toggle"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Open menu"
+      >
+        <span class="nav-toggle__open"><Icon name="menu" size={22} /></span>
+        <span class="nav-toggle__close"><Icon name="close" size={22} /></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    if (window.__navBound) return;
+    window.__navBound = true;
+    function header() {
+      return document.querySelector('[data-site-header]');
+    }
+    function close(h) {
+      if (!h) h = header();
+      if (!h) return;
+      h.classList.remove('is-open');
+      const btn = h.querySelector('[data-nav-toggle]');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Open menu');
+      }
+    }
+    document.addEventListener('click', function (e) {
+      const toggle = e.target.closest && e.target.closest('[data-nav-toggle]');
+      const h = header();
+      if (toggle) {
+        const open = !h.classList.contains('is-open');
+        h.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (open) {
+          const first = h.querySelector('.primary-nav__link');
+          if (first) first.focus();
+        }
+        return;
+      }
+      // Click a nav link or outside → close.
+      if (!h || !h.classList.contains('is-open')) return;
+      if (e.target.closest('.primary-nav__link') || !e.target.closest('.primary-nav')) {
+        close(h);
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      const h = header();
+      if (h && h.classList.contains('is-open')) {
+        close(h);
+        const btn = h.querySelector('[data-nav-toggle]');
+        if (btn) btn.focus();
+      }
+    });
+    document.addEventListener('astro:after-swap', function () {
+      close();
+    });
+  })();
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--line-hairline);
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    min-height: 4.25rem;
+  }
+  .site-header__brand {
+    text-decoration: none;
+    margin-right: auto;
+    border-radius: var(--radius-s);
+  }
+  .site-header__brand:focus-visible {
+    outline-offset: 4px;
+  }
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-left: auto;
+  }
+
+  .primary-nav__list {
+    list-style: none;
+    display: flex;
+    gap: clamp(0.25rem, 0.5vw, 1rem);
+    margin: 0;
+    padding: 0;
+  }
+  .primary-nav__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.7rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border-radius: var(--radius-s);
+    position: relative;
+    transition:
+      color var(--dur-1) var(--ease),
+      background var(--dur-1) var(--ease);
+  }
+  .primary-nav__link:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+  .primary-nav__link[aria-current='page'] {
+    color: var(--ink);
+  }
+  .primary-nav__link[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 0.15rem;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    background: var(--surface);
+  }
+  .nav-toggle__close {
+    display: none;
+  }
+
+  /* Enhanced (JS present): collapse nav into a toggle on small screens. */
+  @media (max-width: 60rem) {
+    :global(html.js) .nav-toggle {
+      display: inline-flex;
+    }
+    :global(html.js) .primary-nav {
+      position: absolute;
+      inset: 100% 0 auto 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow-2);
+      padding: var(--space-xs) var(--gutter) var(--space-m);
+      display: none;
+    }
+    :global(html.js) .site-header.is-open .primary-nav {
+      display: block;
+    }
+    :global(html.js) .site-header.is-open .nav-toggle__open {
+      display: none;
+    }
+    :global(html.js) .site-header.is-open .nav-toggle__close {
+      display: inline-flex;
+    }
+    .primary-nav__list {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .primary-nav__link {
+      padding: 0.7rem 0.6rem;
+      font-size: var(--step-0);
+    }
+    .primary-nav__link[aria-current='page']::after {
+      left: 0.6rem;
+      right: auto;
+      width: 1.2rem;
+      bottom: 0.5rem;
+    }
+  }
+
+  /* No-JS small screens: show a compact wrapped nav (always usable). */
+  @media (max-width: 60rem) {
+    :global(html:not(.js)) .site-header__inner {
+      flex-wrap: wrap;
+      padding-block: 0.6rem;
+    }
+    :global(html:not(.js)) .primary-nav {
+      order: 3;
+      flex-basis: 100%;
+    }
+    :global(html:not(.js)) .primary-nav__list {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header {
+      backdrop-filter: none;
+      background: var(--paper);
+    }
+  }
+</style>

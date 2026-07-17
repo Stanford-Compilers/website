@@ -1,0 +1,55 @@
+---
+import Icon from '../ui/Icon.astro';
+// Behavior lives in the global ThemeScript (delegated). This is presentation only.
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark theme">
+  <span class="theme-toggle__moon"><Icon name="moon" size={18} /></span>
+  <span class="theme-toggle__sun"><Icon name="sun" size={18} /></span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--line);
+    color: var(--ink-muted);
+    background: var(--surface);
+    transition:
+      color var(--dur-1) var(--ease),
+      border-color var(--dur-1) var(--ease),
+      background var(--dur-1) var(--ease);
+  }
+  .theme-toggle:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: var(--surface-2);
+  }
+
+  /* Show moon in light mode (action: go dark), sun in dark mode (action: go light).
+     Covers both explicit choice and system preference. */
+  .theme-toggle__sun {
+    display: none;
+  }
+  .theme-toggle__moon {
+    display: inline-flex;
+  }
+  :global(:root[data-theme='dark']) .theme-toggle__sun {
+    display: inline-flex;
+  }
+  :global(:root[data-theme='dark']) .theme-toggle__moon {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .theme-toggle__sun {
+      display: inline-flex;
+    }
+    :global(:root:not([data-theme='light'])) .theme-toggle__moon {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+/**
+ * Original lab wordmark. The symbol is a pair of matrix brackets enclosing a
+ * sparse coordinate pattern (a few "nonzeros") — evoking sparse data structures
+ * and the bracket notation of tensors. It stays legible at favicon size.
+ */
+import { SITE } from '../../config/site';
+
+interface Props {
+  symbolOnly?: boolean;
+  size?: number;
+  class?: string;
+}
+const { symbolOnly = false, size = 30, class: className } = Astro.props;
+// Sparse "nonzero" cells on an implied 3×3 grid inside the brackets.
+const cells = [
+  [12.5, 9.5],
+  [19, 9.5],
+  [15.75, 15.4],
+  [12.5, 21.3],
+];
+---
+
+<span class:list={['wordmark', className]}>
+  <svg
+    class="wordmark__symbol"
+    width={size}
+    height={size}
+    viewBox="0 0 32 32"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g
+      class="wordmark__brackets"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="square"
+    >
+      <path d="M11 6 H7.5 V26 H11"></path>
+      <path d="M21 6 H24.5 V26 H21"></path>
+    </g>
+    <g class="wordmark__cells">
+      {cells.map(([x, y]) => <rect x={x} y={y} width="2.6" height="2.6" rx="0.4" />)}
+    </g>
+  </svg>
+  {
+    !symbolOnly && (
+      <span class="wordmark__text">
+        <span class="wordmark__name">{SITE.shortName}</span>
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1;
+  }
+  .wordmark__symbol {
+    color: var(--ink);
+  }
+  .wordmark__cells rect {
+    fill: var(--accent);
+  }
+  .wordmark__text {
+    display: inline-flex;
+    flex-direction: column;
+  }
+  .wordmark__name {
+    font-family: var(--font-display);
+    font-weight: 520;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  a:hover > .wordmark .wordmark__cells rect,
+  .wordmark:hover .wordmark__cells rect {
+    fill: var(--accent-strong);
+  }
+</style>

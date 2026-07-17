@@ -1,0 +1,80 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
+
+interface Props {
+  title: string;
+  kicker?: string;
+  lead?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  jsonld?: Record<string, unknown> | Record<string, unknown>[];
+  citation?: { name: string; content: string }[];
+  breadcrumbs?: { label: string; href?: string }[];
+  /** Constrain the header text width. */
+  headWidth?: 'narrow' | 'wide';
+}
+
+const { title, kicker, lead, breadcrumbs, headWidth = 'wide', ...seo } = Astro.props;
+---
+
+<BaseLayout title={title} {...seo}>
+  <header class="page-head">
+    <div class="container container--wide">
+      {breadcrumbs && <Breadcrumbs items={breadcrumbs} class="page-head__crumbs" />}
+      <div class:list={['page-head__text', headWidth === 'narrow' && 'page-head__text--narrow']}>
+        {kicker && <p class="kicker page-head__kicker">{kicker}</p>}
+        <h1 class="page-head__title">{title}</h1>
+        {lead && <p class="lead page-head__lead">{lead}</p>}
+        <slot name="head-extra" />
+      </div>
+    </div>
+  </header>
+  <slot />
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-top: clamp(2rem, 1.2rem + 3vw, 3.75rem);
+    padding-bottom: clamp(1.25rem, 0.8rem + 2vw, 2.25rem);
+    border-bottom: 1px solid var(--line-hairline);
+    position: relative;
+  }
+  /* Coordinate-tick motif along the header baseline. */
+  .page-head::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--line-strong) 0,
+      var(--line-strong) 1px,
+      transparent 1px,
+      transparent 28px
+    );
+    opacity: 0.5;
+  }
+  .page-head__crumbs {
+    margin-bottom: var(--space-m);
+  }
+  .page-head__text--narrow {
+    max-width: var(--container-narrow);
+  }
+  .page-head__kicker {
+    margin-bottom: var(--space-s);
+  }
+  .page-head__title {
+    font-size: var(--step-5);
+    max-width: 20ch;
+  }
+  .page-head__lead {
+    margin-top: var(--space-m);
+    max-width: 62ch;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PublicationExplorer from '../components/publications/PublicationExplorer.astro';
+import { loadPublications, peopleMap } from '../lib/collections';
+import { awardCount } from '../lib/publications';
+
+const pubs = await loadPublications();
+const people = await peopleMap();
+const awards = awardCount(pubs);
+const firstYear = Math.min(...pubs.map((p) => p.year));
+const lastYear = Math.max(...pubs.map((p) => p.year));
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Publications',
+  description: `Publications from the Kjolstad Lab, ${firstYear}–${lastYear}.`,
+  isPartOf: { '@type': 'WebSite', name: 'Kjolstad Lab' },
+};
+---
+
+<PageLayout
+  title="Publications"
+  kicker="Publications"
+  lead="Papers on languages, compilers, and systems for computation across data representations and machines. Search and filter the full list, or open any paper for its citation and links."
+  description={`All ${pubs.length} publications from the Kjolstad Lab (${firstYear}–${lastYear}), with search and filtering by year, venue, topic, award, and lab member.`}
+  jsonld={jsonld}
+>
+  <Fragment slot="head-extra">
+    <p class="pub-stats mono">
+      {pubs.length} papers · {lastYear}–{firstYear} · {awards} awards
+    </p>
+  </Fragment>
+
+  <section class="section--tight">
+    <div class="container container--wide">
+      <PublicationExplorer pubs={pubs} people={people} />
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .pub-stats {
+    margin-top: var(--space-m);
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+  }
+</style>

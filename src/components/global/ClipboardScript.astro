@@ -1,0 +1,52 @@
+---
+// Progressive enhancement for [data-copy-target] buttons. Copies the referenced
+// element's text and briefly confirms. No-op without JS (the text is still visible
+// and selectable). Bound once, survives view transitions.
+---
+
+<div class="copy-live visually-hidden" role="status" aria-live="polite" data-copy-live></div>
+
+<script is:inline>
+  (function () {
+    if (window.__copyBound) return;
+    window.__copyBound = true;
+    function announce(msg) {
+      const live = document.querySelector('[data-copy-live]');
+      if (live) live.textContent = msg;
+    }
+    document.addEventListener('click', function (e) {
+      const btn = e.target.closest && e.target.closest('[data-copy-target]');
+      if (!btn) return;
+      const target = document.getElementById(btn.getAttribute('data-copy-target'));
+      if (!target) return;
+      const text = target.textContent || '';
+      const label = btn.getAttribute('data-copy-label') || 'Text';
+      function done() {
+        const span = btn.querySelector('span');
+        const prev = span ? span.textContent : null;
+        if (span) span.textContent = 'Copied';
+        announce(label + ' copied to clipboard');
+        setTimeout(function () {
+          if (span && prev !== null) span.textContent = prev;
+        }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {
+          announce('Copy failed — select the text to copy manually');
+        });
+      } else {
+        const r = document.createRange();
+        r.selectNodeContents(target);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        try {
+          document.execCommand('copy');
+          done();
+        } catch (err) {
+          announce('Copy not supported — select the text to copy manually');
+        }
+      }
+    });
+  })();
+</script>

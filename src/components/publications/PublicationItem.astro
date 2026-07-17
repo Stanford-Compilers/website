@@ -1,0 +1,333 @@
+---
+import Icon from '../ui/Icon.astro';
+import Tag from '../ui/Tag.astro';
+import { resolveAuthor, type Pub, type Person } from '../../lib/collections';
+import { venueShort } from '../../lib/taxonomy';
+import { toBibtex, citationString } from '../../lib/citation';
+import { TOPICS } from '../../lib/taxonomy';
+
+interface Props {
+  pub: Pub;
+  people: Map<string, Person>;
+  /** Show research-topic chips. */
+  showTopics?: boolean;
+  /** Heading level for the title (for correct document outline). */
+  headingLevel?: 2 | 3 | 4;
+  /** Compact variant (used in related lists). */
+  compact?: boolean;
+}
+
+const { pub, people, showTopics = true, headingLevel = 3, compact = false } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+
+const authors = pub.authors.map((a) => resolveAuthor(a, people));
+const venue = venueShort(pub.venueKey);
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dateStr = pub.month ? `${MONTHS[pub.month - 1]} ${pub.year}` : String(pub.year);
+
+const bibtex = toBibtex(pub, pub.links);
+const citation = citationString(pub);
+const titleHref = pub.detail ? `/publications/${pub.id}` : (pub.links.pdf ?? pub.links.doi);
+
+// Action links, only those that exist.
+const actions = [
+  pub.links.pdf && { href: pub.links.pdf, icon: 'pdf', label: 'PDF' },
+  pub.links.doi && { href: pub.links.doi, icon: 'doi', label: 'DOI' },
+  pub.links.arxiv && { href: pub.links.arxiv, icon: 'book', label: 'arXiv' },
+  pub.links.code && { href: pub.links.code, icon: 'code', label: 'Code' },
+  pub.links.project && { href: pub.links.project, icon: 'project', label: 'Project' },
+  pub.links.video && { href: pub.links.video, icon: 'video', label: 'Video' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+const bibId = `bib-${pub.id}`;
+const citeId = `cite-${pub.id}`;
+---
+
+<article class:list={['pub', compact && 'pub--compact']} data-pub>
+  <div class="pub__body">
+    <Heading class="pub__title">
+      {
+        titleHref ? (
+          <a
+            href={titleHref}
+            class="pub__title-link"
+            {...(!pub.detail ? { rel: 'noopener noreferrer' } : {})}
+          >
+            {pub.title}
+          </a>
+        ) : (
+          pub.title
+        )
+      }
+    </Heading>
+
+    <p class="pub__authors">
+      {
+        authors.map((a, i) => (
+          <>
+            {a.href ? (
+              <a
+                href={a.href}
+                class:list={['pub__author', a.isPI && 'pub__author--pi']}
+                {...(a.internal ? {} : { rel: 'noopener noreferrer' })}
+              >
+                {a.name}
+              </a>
+            ) : (
+              <span class:list={['pub__author', a.isPI && 'pub__author--pi']}>{a.name}</span>
+            )}
+            {i < authors.length - 2 ? <span aria-hidden="true">, </span> : null}
+            {i === authors.length - 2 ? (
+              <span aria-hidden="true">{authors.length > 2 ? ', and ' : ' and '}</span>
+            ) : null}
+          </>
+        ))
+      }
+    </p>
+
+    <p class="pub__meta">
+      <span class="pub__venue mono">{venue}</span>
+      {pub.venueDetail && <span class="pub__venue-detail subtle">· {pub.venueDetail}</span>}
+      <span class="pub__dot" aria-hidden="true">·</span>
+      <span class="pub__date mono">{dateStr}</span>
+      {pub.status === 'to-appear' && <span class="pub__status">To appear</span>}
+      {
+        pub.award && (
+          <span class="pub__award">
+            <Icon name="check" size={13} /> {pub.award}
+          </span>
+        )
+      }
+    </p>
+
+    {
+      showTopics && pub.topics.length > 0 && (
+        <p class="pub__topics cluster" style="--cluster-gap: 0.35rem;">
+          {pub.topics.map((t) => (
+            <Tag href={`/publications?topic=${t}`} variant="default">
+              {TOPICS[t as keyof typeof TOPICS]?.short ?? t}
+            </Tag>
+          ))}
+        </p>
+      )
+    }
+
+    {
+      !compact && (
+        <div class="pub__actions">
+          {actions.map((a) => (
+            <a class="pub__action" href={a.href} rel="noopener noreferrer">
+              <Icon name={a.icon} size={15} />
+              <span>{a.label}</span>
+            </a>
+          ))}
+          <details class="pub__disclosure" name={`disc-${pub.id}`}>
+            <summary class="pub__action pub__action--toggle">
+              <Icon name="quote" size={15} />
+              <span>BibTeX</span>
+            </summary>
+            <div class="pub__panel">
+              <pre id={bibId} class="pub__code scroll-x">
+                {bibtex}
+              </pre>
+              <button
+                type="button"
+                class="pub__copy"
+                data-copy-target={bibId}
+                data-copy-label="BibTeX"
+              >
+                <Icon name="copy" size={14} /> <span>Copy</span>
+              </button>
+            </div>
+          </details>
+          <details class="pub__disclosure" name={`disc-${pub.id}`}>
+            <summary class="pub__action pub__action--toggle">
+              <Icon name="copy" size={15} />
+              <span>Cite</span>
+            </summary>
+            <div class="pub__panel">
+              <p id={citeId} class="pub__citation">
+                {citation}
+              </p>
+              <button
+                type="button"
+                class="pub__copy"
+                data-copy-target={citeId}
+                data-copy-label="Citation"
+              >
+                <Icon name="copy" size={14} /> <span>Copy</span>
+              </button>
+            </div>
+          </details>
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .pub {
+    padding-block: var(--space-m);
+    border-top: 1px solid var(--line-hairline);
+  }
+  .pub--compact {
+    padding-block: var(--space-s);
+  }
+  .pub__title {
+    font-size: var(--step-1);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .pub--compact .pub__title {
+    font-size: var(--step-0);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .pub__title-link {
+    color: var(--ink);
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition:
+      background-size var(--dur-2) var(--ease),
+      color var(--dur-1) var(--ease);
+  }
+  .pub__title-link:hover {
+    color: var(--accent);
+    background-size: 100% 1.5px;
+  }
+  .pub__authors {
+    font-size: var(--step-0);
+    color: var(--ink-muted);
+    line-height: 1.5;
+    margin-bottom: 0.3rem;
+  }
+  .pub--compact .pub__authors {
+    font-size: var(--step--1);
+  }
+  .pub__author {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  a.pub__author:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  .pub__author--pi {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .pub__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5ch;
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+    margin-bottom: 0.5rem;
+  }
+  .pub__venue {
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+  .pub__dot {
+    color: var(--line-strong);
+  }
+  .pub__status {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--tech);
+    border: 1px solid var(--tech-line);
+    background: var(--tech-tint);
+    border-radius: var(--radius-xs);
+    padding: 0.1em 0.5em;
+  }
+  .pub__award {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35ch;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .pub__topics {
+    margin-top: 0.55rem;
+  }
+  .pub__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.9rem;
+    margin-top: 0.85rem;
+  }
+  .pub__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    padding: 0.25rem 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    list-style: none;
+  }
+  .pub__action:hover {
+    color: var(--accent);
+  }
+  .pub__action--toggle::-webkit-details-marker {
+    display: none;
+  }
+  .pub__disclosure {
+    position: relative;
+  }
+  .pub__disclosure > summary {
+    user-select: none;
+  }
+  .pub__panel {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    max-width: 100%;
+  }
+  .pub__code {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.6;
+    color: var(--ink);
+    white-space: pre;
+    margin: 0 0 0.5rem;
+  }
+  .pub__citation {
+    font-size: var(--step--1);
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+  }
+  .pub__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-muted);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-xs);
+    padding: 0.3em 0.7em;
+    background: var(--surface);
+  }
+  .pub__copy:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+</style>

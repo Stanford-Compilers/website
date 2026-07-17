@@ -1,0 +1,86 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  kicker?: string;
+  title: string;
+  description?: string;
+  /** Optional "view all" style link. */
+  href?: string;
+  linkLabel?: string;
+  id?: string;
+  headingLevel?: 2 | 3;
+  class?: string;
+}
+const {
+  kicker,
+  title,
+  description,
+  href,
+  linkLabel = 'View all',
+  id,
+  headingLevel = 2,
+  class: className,
+} = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<div class:list={['section-head', className]}>
+  <div class="section-head__text">
+    {kicker && <p class="kicker section-head__kicker">{kicker}</p>}
+    <Heading class="section-head__title" id={id}>{title}</Heading>
+    {description && <p class="section-head__desc lead">{description}</p>}
+  </div>
+  {
+    href && (
+      <a href={href} class="section-head__link">
+        {linkLabel}
+        <Icon name="arrow-right" size={16} />
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-m);
+    margin-bottom: var(--space-l);
+  }
+  .section-head__kicker {
+    margin-bottom: var(--space-xs);
+  }
+  .section-head__title {
+    font-size: var(--step-3);
+    max-width: 22ch;
+  }
+  .section-head__desc {
+    margin-top: var(--space-s);
+    max-width: 56ch;
+    font-size: var(--step-0);
+  }
+  .section-head__link {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    padding-bottom: 0.35rem;
+    white-space: nowrap;
+  }
+  .section-head__link:hover {
+    gap: 0.7ch;
+  }
+  @media (max-width: 40rem) {
+    .section-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-s);
+    }
+  }
+</style>

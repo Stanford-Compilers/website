@@ -1,0 +1,145 @@
+---
+/**
+ * The research stack: from high-level languages down to machine targets.
+ * A vertical, labeled transformation with a coordinate rail. Static and
+ * responsive; the "current representation" is what changes at each layer.
+ */
+interface Layer {
+  n: string;
+  name: string;
+  plain: string;
+  detail: string;
+}
+const layers: Layer[] = [
+  {
+    n: '01',
+    name: 'Languages',
+    plain: 'What you write',
+    detail:
+      'High-level languages and libraries over tensors, relations, graphs, and objects in space.',
+  },
+  {
+    n: '02',
+    name: 'Compiler abstractions',
+    plain: 'What the compiler reasons about',
+    detail:
+      'Iteration models and intermediate representations that capture the computation on its own, apart from any data structure or machine.',
+  },
+  {
+    n: '03',
+    name: 'Representations & formats',
+    plain: 'How the data is stored',
+    detail:
+      'Dense and sparse data structures, layouts, and formats — chosen without changing what is computed.',
+  },
+  {
+    n: '04',
+    name: 'Schedules & execution',
+    plain: 'How the work is organized',
+    detail:
+      'Loop orders, tiling, fusion, and distribution — the strategy for running the computation well.',
+  },
+  {
+    n: '05',
+    name: 'Machine targets',
+    plain: 'Where it runs',
+    detail: 'CPUs, GPUs, accelerators, and distributed clusters, reached from the same source.',
+  },
+];
+---
+
+<ol class="stack-diagram">
+  {
+    layers.map((layer, i) => (
+      <li class="layer" style={`--i:${i}`}>
+        <div class="layer__rail" aria-hidden="true">
+          <span class="layer__node" />
+          {i < layers.length - 1 && <span class="layer__line" />}
+        </div>
+        <div class="layer__content">
+          <div class="layer__heading">
+            <span class="layer__n mono">{layer.n}</span>
+            <h3 class="layer__name">{layer.name}</h3>
+            <span class="layer__plain mono">{layer.plain}</span>
+          </div>
+          <p class="layer__detail">{layer.detail}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .stack-diagram {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: layer;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: var(--space-m);
+  }
+  .layer__rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .layer__node {
+    width: 13px;
+    height: 13px;
+    margin-top: 0.45rem;
+    border-radius: 3px;
+    border: 1.5px solid var(--accent);
+    background: var(--paper);
+    transform: rotate(45deg);
+    flex: none;
+  }
+  .layer:first-child .layer__node {
+    background: var(--accent);
+  }
+  .layer:last-child .layer__node {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .layer__line {
+    flex: 1;
+    width: 1.5px;
+    background: linear-gradient(var(--accent-line), var(--line));
+    margin-block: 0.35rem;
+    min-height: 1.5rem;
+  }
+  .layer__content {
+    padding-bottom: var(--space-l);
+  }
+  .layer:last-child .layer__content {
+    padding-bottom: 0;
+  }
+  .layer__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.9rem;
+  }
+  .layer__n {
+    font-size: var(--step--1);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .layer__name {
+    font-size: var(--step-1);
+    line-height: 1.1;
+  }
+  .layer__plain {
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .layer__detail {
+    margin-top: 0.5rem;
+    color: var(--ink-muted);
+    max-width: 60ch;
+  }
+</style>

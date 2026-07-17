@@ -1,0 +1,184 @@
+---
+import { SITE } from '../../config/site';
+import Wordmark from './Wordmark.astro';
+import Icon from '../ui/Icon.astro';
+
+const year = 2026; // Build year; static site.
+const allNav = [...SITE.nav, ...SITE.footerNav];
+---
+
+<footer class="site-footer">
+  <div class="container container--wide">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a href="/" class="site-footer__brand-link" aria-label={`${SITE.name} — home`}>
+          <Wordmark />
+        </a>
+        <p class="site-footer__tagline">{SITE.tagline}</p>
+        <p class="site-footer__affil mono">{SITE.institution.affiliationLine}</p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Footer">
+        <h2 class="site-footer__heading kicker">Explore</h2>
+        <ul>
+          {
+            allNav.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="site-footer__contact">
+        <h2 class="site-footer__heading kicker">Contact</h2>
+        <ul>
+          <li>
+            <a href={`mailto:${SITE.contact.email}`} class="site-footer__contact-link">
+              <Icon name="mail" size={16} />
+              <span>{SITE.contact.email}</span>
+            </a>
+          </li>
+          <li class="site-footer__office subtle">{SITE.pi.office}</li>
+          <li class="site-footer__mailing subtle">{SITE.contact.mailing}</li>
+        </ul>
+        <ul class="site-footer__social">
+          {
+            SITE.social.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  class="site-footer__social-link"
+                >
+                  <Icon name={s.icon} size={20} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__base">
+      <p class="subtle mono">
+        © {year}
+        {SITE.name}. Built as a static site — no trackers, no cookies for analytics.
+      </p>
+      <p class="subtle mono">
+        <a href="/accessibility">Accessibility</a>
+        <span aria-hidden="true"> · </span>
+        <a href={SITE.institution.url} rel="noopener noreferrer">{SITE.institution.name}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-3xl);
+    border-top: 1px solid var(--line);
+    background: var(--paper-2);
+    padding-block: var(--space-2xl) var(--space-l);
+  }
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.6fr;
+    gap: var(--space-xl);
+  }
+  .site-footer__brand-link {
+    text-decoration: none;
+    display: inline-block;
+    border-radius: var(--radius-s);
+  }
+  .site-footer__tagline {
+    margin-top: var(--space-s);
+    max-width: 30ch;
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    line-height: 1.35;
+  }
+  .site-footer__affil {
+    margin-top: var(--space-xs);
+    color: var(--ink-subtle);
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .site-footer__heading {
+    margin-bottom: var(--space-s);
+  }
+  .site-footer__nav ul,
+  .site-footer__contact ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .site-footer__nav a,
+  .site-footer__contact a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--step--1);
+  }
+  .site-footer__nav a:hover,
+  .site-footer__contact a:hover {
+    color: var(--accent);
+  }
+  .site-footer__contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .site-footer__office,
+  .site-footer__mailing {
+    font-size: var(--step--1);
+    max-width: 34ch;
+    line-height: 1.5;
+  }
+  .site-footer__social {
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+    margin-top: var(--space-s) !important;
+  }
+  .site-footer__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    color: var(--ink-muted);
+    background: var(--surface);
+  }
+  .site-footer__social-link:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .site-footer__base {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-hairline);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-s);
+    font-size: var(--step--2);
+  }
+  .site-footer__base a {
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 52rem) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

@@ -1,0 +1,6 @@
+# Redirects (Netlify / Cloudflare Pages format).
+# Add legacy-URL redirects here as needed when the site's domain is finalized.
+/home              /                 301
+/index.html        /                 301
+/publications.html /publications     301
+/people.html       /people           301

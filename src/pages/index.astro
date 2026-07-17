@@ -1,0 +1,520 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroPipeline from '../components/home/HeroPipeline.astro';
+import TransformStack from '../components/research/TransformStack.astro';
+import SectionHead from '../components/ui/SectionHead.astro';
+import PublicationItem from '../components/publications/PublicationItem.astro';
+import PersonCard from '../components/people/PersonCard.astro';
+import SoftwareCard from '../components/software/SoftwareCard.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import { SITE } from '../config/site';
+import {
+  loadFeaturedPublications,
+  loadFeaturedSoftware,
+  loadPeopleByCategory,
+  peopleMap,
+} from '../lib/collections';
+
+const featuredPubs = (await loadFeaturedPublications()).slice(0, 5);
+const featuredSoftware = await loadFeaturedSoftware(6);
+const people = await loadPeopleByCategory();
+const pMap = await peopleMap();
+
+const pi = people.pi[0];
+const previewPeople = people.phd.slice(0, 5);
+const memberCount = people.phd.length + people.member.length + 1;
+
+const themes = [
+  {
+    n: '01',
+    icon: 'layers',
+    title: 'Portability across data representations',
+    body: 'Decoupling what a program computes from how its data is stored, so one expression runs over many dense and sparse formats.',
+    href: '/research#representation',
+  },
+  {
+    n: '02',
+    icon: 'compass',
+    title: 'One program, many machines',
+    body: 'Mapping the same computation onto CPUs, GPUs, accelerators, and distributed clusters through explicit schedules.',
+    href: '/research#machines',
+  },
+  {
+    n: '03',
+    icon: 'chip',
+    title: 'Compilers that generate compilers',
+    body: 'Meta-compilers, fast baseline JITs, and virtual-machine generators that build compilers instead of writing them by hand.',
+    href: '/research#meta',
+  },
+  {
+    n: '04',
+    icon: 'code',
+    title: 'Sparse & structured computation',
+    body: 'Compiling tensor, array, and relational computation over sparse and irregular data without sacrificing performance.',
+    href: '/publications?topic=sparse-tensor-algebra',
+  },
+];
+---
+
+<BaseLayout title="Home" isHome path="/">
+  {/* ---------------- Hero ---------------- */}
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container container--wide">
+      <div class="hero__intro">
+        <p class="hero__eyebrow">
+          <span class="hero__lab">{SITE.name}</span>
+          <span class="hero__affil mono">{SITE.institution.affiliationLine}</span>
+        </p>
+        <h1 class="hero__title" id="hero-title">{SITE.tagline}</h1>
+        <p class="hero__lead">
+          We develop programming languages and compiler systems that let the same high-level
+          computation run across different data representations — dense and sparse, tensors and
+          relations — and different machines, from CPUs and GPUs to accelerators and clusters.
+        </p>
+        <p class="hero__sub">
+          The recurring idea is to separate <em>what</em> a program computes from <em>how</em> its data
+          is stored and <em>where</em> it runs, and to let a compiler bridge the gap.
+        </p>
+        <div class="hero__cta">
+          <Button href="/research" variant="primary" iconRight="arrow-right"
+            >Read the research</Button
+          >
+          <Button href="/publications" variant="outline">Browse publications</Button>
+        </div>
+      </div>
+
+      <div class="hero__viz">
+        <p class="hero__viz-label kicker kicker--tech">Computation, re-formed</p>
+        <HeroPipeline />
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- Research themes ---------------- */}
+  <section class="section" aria-labelledby="themes-title">
+    <div class="container container--wide">
+      <SectionHead
+        kicker="Research"
+        title="Four threads, one question"
+        description="How can a single high-level program stay fast as its data and target keep changing? Our work approaches that question from several directions."
+        id="themes-title"
+        href="/research"
+        linkLabel="The full picture"
+      />
+      <ul class="themes">
+        {
+          themes.map((t) => (
+            <li class="theme">
+              <a href={t.href} class="theme__link">
+                <span class="theme__top">
+                  <span class="theme__n mono">{t.n}</span>
+                  <span class="theme__icon">
+                    <Icon name={t.icon} size={20} />
+                  </span>
+                </span>
+                <h3 class="theme__title">{t.title}</h3>
+                <p class="theme__body">{t.body}</p>
+                <span class="theme__more mono">
+                  Explore <Icon name="arrow-right" size={14} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ---------------- From abstractions to machines ---------------- */}
+  <section class="section band" aria-labelledby="stack-title">
+    <div class="container container--wide stack-band">
+      <div class="stack-band__intro">
+        <p class="kicker">From abstractions to machines</p>
+        <h2 id="stack-title" class="stack-band__title">
+          The same computation, lowered layer by layer
+        </h2>
+        <p class="stack-band__text muted">
+          A program starts as a high-level description. At each layer, the compiler fixes one more
+          decision — the representation, then the schedule, then the target — until it becomes code
+          for a specific machine. Because these choices are made separately, changing the data
+          format or the hardware does not mean rewriting the program.
+        </p>
+        <p class="stack-band__text muted">
+          This separation is what makes a single library or language <em>polymorphic</em> over data structures
+          and portable across machines.
+        </p>
+      </div>
+      <div class="stack-band__diagram">
+        <TransformStack />
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- Featured software ---------------- */}
+  <section class="section" aria-labelledby="software-title">
+    <div class="container container--wide">
+      <SectionHead
+        kicker="Software"
+        title="Systems we build"
+        description="Our research ships as compilers, languages, and libraries — a connected body of work rather than isolated tools."
+        id="software-title"
+        href="/software"
+        linkLabel="All software"
+      />
+      <ul class="sw-grid">
+        {
+          featuredSoftware.map((s) => (
+            <li>
+              <SoftwareCard software={s} featured />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ---------------- Selected publications ---------------- */}
+  <section class="section band" aria-labelledby="pubs-title">
+    <div class="container container--wide">
+      <SectionHead
+        kicker="Publications"
+        title="Selected & recent work"
+        description="A few papers that show the range of the group. Every paper, with search and filters, is on the publications page."
+        id="pubs-title"
+        href="/publications"
+        linkLabel="All publications"
+      />
+      <div class="pub-list">
+        {featuredPubs.map((pub) => <PublicationItem pub={pub} people={pMap} headingLevel={3} />)}
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- People ---------------- */}
+  <section class="section" aria-labelledby="people-title">
+    <div class="container container--wide">
+      <SectionHead
+        kicker="People"
+        title="Who works here"
+        description={`The group is led by ${SITE.pi.name} and includes ${memberCount - 1} PhD students and members.`}
+        id="people-title"
+        href="/people"
+        linkLabel="Everyone"
+      />
+      <div class="people-preview">
+        {
+          pi && (
+            <div class="people-preview__pi">
+              <PersonCard person={pi} />
+            </div>
+          )
+        }
+        <ul class="people-preview__list">
+          {
+            previewPeople.map((person) => (
+              <li>
+                <PersonCard person={person} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- Join CTA ---------------- */}
+  {
+    SITE.features.homeJoinCta && (
+      <section class="section" aria-labelledby="join-title">
+        <div class="container container--wide">
+          <div class="join-cta">
+            <div class="join-cta__marks" aria-hidden="true">
+              <>
+                <span>[</span>
+                <span>·</span>
+                <span>·</span>
+                <span>]</span>
+              </>
+            </div>
+            <h2 class="join-cta__title" id="join-title">
+              Interested in this kind of work?
+            </h2>
+            <p class="join-cta__text">
+              We welcome prospective PhD students, current Stanford students, and collaborators who
+              are curious about languages, compilers, and the systems that run underneath.
+            </p>
+            <div class="join-cta__actions">
+              <Button href="/join" variant="primary" iconRight="arrow-right">
+                How to get involved
+              </Button>
+              <Button href={`mailto:${SITE.contact.email}`} variant="outline">
+                Email the group
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  /* ---------------- Hero ---------------- */
+  .hero {
+    padding-top: clamp(2rem, 1rem + 4vw, 4.5rem);
+    padding-bottom: clamp(2rem, 1rem + 4vw, 4rem);
+  }
+  .hero__intro {
+    max-width: 46rem;
+  }
+  .hero__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1rem;
+    margin-bottom: var(--space-m);
+  }
+  .hero__lab {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-xs);
+    background: var(--accent-tint);
+  }
+  .hero__affil {
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .hero__title {
+    font-size: var(--step-6);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    max-width: 16ch;
+  }
+  .hero__lead {
+    margin-top: var(--space-l);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink-muted);
+    max-width: 60ch;
+  }
+  .hero__sub {
+    margin-top: var(--space-s);
+    color: var(--ink-subtle);
+    max-width: 58ch;
+  }
+  .hero__sub em,
+  .hero__lead em {
+    font-style: italic;
+    color: var(--ink);
+  }
+  .hero__cta {
+    margin-top: var(--space-l);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+  }
+  .hero__viz {
+    margin-top: var(--space-2xl);
+  }
+  .hero__viz-label {
+    margin-bottom: var(--space-s);
+  }
+
+  /* ---------------- Themes ---------------- */
+  .themes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-s);
+  }
+  .theme {
+    display: flex;
+  }
+  .theme__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--space-m);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    transition:
+      border-color var(--dur-2) var(--ease),
+      background var(--dur-2) var(--ease),
+      transform var(--dur-2) var(--ease);
+  }
+  .theme__link:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+  }
+  .theme__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--accent);
+  }
+  .theme__n {
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+  .theme__icon {
+    color: var(--tech);
+  }
+  .theme__title {
+    font-size: var(--step-1);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
+  .theme__body {
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .theme__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .theme__link:hover .theme__more {
+    color: var(--accent);
+  }
+
+  /* ---------------- Band sections ---------------- */
+  .band {
+    background: var(--paper-2);
+    border-block: 1px solid var(--line-hairline);
+  }
+  .stack-band {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  .stack-band__title {
+    font-size: var(--step-3);
+    margin-top: var(--space-s);
+    max-width: 16ch;
+  }
+  .stack-band__text {
+    margin-top: var(--space-m);
+    max-width: 52ch;
+  }
+  .stack-band__text em {
+    font-style: italic;
+    color: var(--ink);
+  }
+  .stack-band__diagram {
+    padding-top: var(--space-2xs);
+  }
+
+  /* ---------------- Software grid ---------------- */
+  .sw-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-s);
+  }
+
+  /* ---------------- Publications ---------------- */
+  .pub-list {
+    border-bottom: 1px solid var(--line-hairline);
+  }
+
+  /* ---------------- People ---------------- */
+  .people-preview {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-l);
+    align-items: start;
+  }
+  .people-preview__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-s);
+  }
+
+  /* ---------------- Join CTA ---------------- */
+  .join-cta {
+    text-align: center;
+    padding: clamp(2rem, 1.4rem + 3vw, 3.5rem);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-l);
+    background:
+      radial-gradient(120% 120% at 50% 0%, var(--accent-tint), transparent 60%), var(--surface);
+  }
+  .join-cta__marks {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: var(--space-s);
+  }
+  .join-cta__title {
+    font-size: var(--step-3);
+  }
+  .join-cta__text {
+    margin: var(--space-s) auto 0;
+    max-width: 52ch;
+    color: var(--ink-muted);
+  }
+  .join-cta__actions {
+    margin-top: var(--space-l);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    justify-content: center;
+  }
+
+  /* ---------------- Responsive ---------------- */
+  @media (max-width: 62rem) {
+    .themes {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .sw-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stack-band {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+    .people-preview {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 40rem) {
+    .themes {
+      grid-template-columns: 1fr;
+    }
+    .sw-grid {
+      grid-template-columns: 1fr;
+    }
+    .people-preview__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

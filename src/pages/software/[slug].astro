@@ -1,0 +1,370 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Tag from '../../components/ui/Tag.astro';
+import PublicationItem from '../../components/publications/PublicationItem.astro';
+import { SOFTWARE_CATEGORIES } from '../../lib/taxonomy';
+import { loadPublications, peopleMap, softwareMap } from '../../lib/collections';
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('software');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const s = entry.data;
+const { Content } = await render(entry);
+
+const people = await peopleMap();
+const sw = await softwareMap();
+const allPubs = await loadPublications();
+const pubById = new Map(allPubs.map((p) => [p.id, p]));
+
+const relatedPeople = s.people.map((ref) => people.get(ref.id)).filter(Boolean);
+const relatedPubs = s.publications.map((id) => pubById.get(id)).filter(Boolean);
+const relatedProjects = s.relatedProjects.map((id) => sw.get(id)).filter(Boolean);
+const cat = SOFTWARE_CATEGORIES[s.category];
+
+const links = [
+  s.links.repo && { href: s.links.repo, icon: 'github', label: 'Source code' },
+  s.links.docs && { href: s.links.docs, icon: 'book', label: 'Documentation' },
+  s.links.site && { href: s.links.site, icon: 'project', label: 'Project site' },
+  s.links.install && { href: s.links.install, icon: 'arrow-right', label: 'Install' },
+  s.links.paper && { href: s.links.paper, icon: 'pdf', label: 'Paper' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: s.name,
+  description: s.summary,
+  ...(s.links.repo ? { codeRepository: s.links.repo } : {}),
+  ...(s.tags.length ? { programmingLanguage: s.tags } : {}),
+};
+---
+
+<BaseLayout title={s.name} description={s.summary} path={`/software/${entry.id}`} jsonld={jsonld}>
+  <article class="swpage">
+    <div class="container container--narrow">
+      <Breadcrumbs
+        items={[{ label: 'Software', href: '/software' }, { label: s.shortName ?? s.name }]}
+      />
+
+      <header class="swpage__head">
+        <p class="swpage__cat kicker">{cat.label}</p>
+        <h1 class="swpage__title">{s.name}</h1>
+        <p class="swpage__summary lead">{s.summary}</p>
+        {
+          s.tags.length > 0 && (
+            <p class="cluster swpage__tags" style="--cluster-gap:0.4rem;">
+              {s.tags.map((t) => (
+                <Tag variant="tech">{t}</Tag>
+              ))}
+            </p>
+          )
+        }
+        {
+          links.length > 0 && (
+            <div class="swpage__links">
+              {links.map((l) => (
+                <a href={l.href} rel="noopener noreferrer" class="swpage__link">
+                  <Icon name={l.icon} size={16} />
+                  <span>{l.label}</span>
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      <div class="swpage__grid">
+        <div class="swpage__main">
+          {
+            (s.problem || s.idea) && (
+              <section class="swpage__qa">
+                {s.problem && (
+                  <div class="qa">
+                    <h2 class="qa__q">The problem</h2>
+                    <p class="qa__a">{s.problem}</p>
+                  </div>
+                )}
+                {s.idea && (
+                  <div class="qa">
+                    <h2 class="qa__q">The idea</h2>
+                    <p class="qa__a">{s.idea}</p>
+                  </div>
+                )}
+              </section>
+            )
+          }
+
+          <section class="swpage__body rich flow">
+            <h2 class="swpage__h2">How it fits the group's work</h2>
+            <Content />
+          </section>
+
+          {
+            relatedPubs.length > 0 && (
+              <section class="swpage__section">
+                <h2 class="swpage__h2">Key publications</h2>
+                <div class="swpage__pubs">
+                  {relatedPubs.map((pub) => (
+                    <PublicationItem
+                      pub={pub!}
+                      people={people}
+                      headingLevel={3}
+                      compact
+                      showTopics={false}
+                    />
+                  ))}
+                </div>
+              </section>
+            )
+          }
+        </div>
+
+        <aside class="swpage__aside">
+          {
+            s.status && (
+              <div class="aside-block">
+                <h2 class="aside-block__title kicker">Status</h2>
+                <p class="aside-block__text">{s.status}</p>
+              </div>
+            )
+          }
+          {
+            relatedPeople.length > 0 && (
+              <div class="aside-block">
+                <h2 class="aside-block__title kicker">People</h2>
+                <ul class="aside-list">
+                  {relatedPeople.map((p) => (
+                    <li>
+                      {p!.hasDetail ? (
+                        <a href={`/people/${p!.id}`}>{p!.name}</a>
+                      ) : p!.website ? (
+                        <a href={p!.website} rel="noopener noreferrer">
+                          {p!.name}
+                        </a>
+                      ) : (
+                        <span>{p!.name}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          {
+            relatedProjects.length > 0 && (
+              <div class="aside-block">
+                <h2 class="aside-block__title kicker">Related projects</h2>
+                <ul class="aside-list">
+                  {relatedProjects.map((p) => (
+                    <li>
+                      <a href={`/software/${p!.id}`}>{p!.shortName ?? p!.name}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </aside>
+      </div>
+
+      <p class="swpage__back">
+        <a href="/software"><Icon name="arrow-right" size={15} class="flip" /> All software</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .swpage {
+    padding-top: var(--space-l);
+  }
+  .swpage__head {
+    margin-top: var(--space-l);
+    padding-bottom: var(--space-l);
+    border-bottom: 1px solid var(--line);
+  }
+  .swpage__cat {
+    margin-bottom: var(--space-s);
+  }
+  .swpage__title {
+    font-size: var(--step-4);
+  }
+  .swpage__summary {
+    margin-top: var(--space-m);
+    max-width: 56ch;
+    color: var(--ink-muted);
+  }
+  .swpage__tags {
+    margin-top: var(--space-m);
+  }
+  .swpage__links {
+    margin-top: var(--space-l);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+  .swpage__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5ch;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-s);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+    background: var(--surface);
+  }
+  .swpage__link:first-child {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-color: var(--accent);
+  }
+  .swpage__link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .swpage__link:first-child:hover {
+    background: var(--accent-strong);
+    color: var(--accent-contrast);
+  }
+  .swpage__grid {
+    display: grid;
+    grid-template-columns: 1fr 15rem;
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+    align-items: start;
+  }
+  .swpage__qa {
+    display: grid;
+    gap: var(--space-m);
+    margin-bottom: var(--space-xl);
+  }
+  .qa__q {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+  }
+  .qa__a {
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 54ch;
+  }
+  .swpage__h2 {
+    font-size: var(--step-1);
+    padding-bottom: var(--space-2xs);
+    border-bottom: 1px solid var(--line-hairline);
+    margin-bottom: var(--space-m);
+  }
+  .swpage__section {
+    margin-top: var(--space-xl);
+  }
+  .swpage__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+    position: sticky;
+    top: 5.5rem;
+  }
+  .aside-block__title {
+    margin-bottom: var(--space-2xs);
+  }
+  .aside-block__text {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+  .aside-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .aside-list a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--step--1);
+  }
+  .aside-list a:hover {
+    color: var(--accent);
+  }
+  .swpage__back {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-hairline);
+  }
+  .swpage__back a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5ch;
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .swpage__back a:hover {
+    color: var(--accent);
+  }
+  .flip {
+    transform: rotate(180deg);
+  }
+  @media (max-width: 52rem) {
+    .swpage__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-l);
+    }
+    .swpage__aside {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-l);
+      padding-top: var(--space-l);
+      border-top: 1px solid var(--line-hairline);
+    }
+    .aside-block {
+      flex: 1 1 12rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .rich p {
+    max-width: var(--measure);
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+  .rich a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  .rich strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .rich em {
+    font-style: italic;
+    color: var(--ink);
+  }
+  .rich ul,
+  .rich ol {
+    max-width: var(--measure);
+    color: var(--ink-muted);
+  }
+  .rich li + li {
+    margin-top: 0.4em;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import { SITE } from '../config/site';
+
+const links = SITE.nav;
+---
+
+<BaseLayout title="Page not found" noindex path="/404">
+  <section class="notfound">
+    <div class="container container--narrow">
+      <div class="notfound__mark" aria-hidden="true">
+        <span class="notfound__bracket">[</span>
+        <span class="notfound__code">404</span>
+        <span class="notfound__bracket">]</span>
+      </div>
+      <h1 class="notfound__title">This coordinate is empty.</h1>
+      <p class="notfound__text">
+        The page you’re looking for isn’t here — the address may be mistyped, or the page may have
+        moved. Here are some good places to land instead.
+      </p>
+      <ul class="notfound__links">
+        <li>
+          <a href="/" class="notfound__link">
+            <span class="notfound__link-title">Home</span>
+            <Icon name="arrow-right" size={15} />
+          </a>
+        </li>
+        {
+          links.map((item) => (
+            <li>
+              <a href={item.href} class="notfound__link">
+                <span class="notfound__link-title">{item.label}</span>
+                {item.description && <span class="notfound__link-desc">{item.description}</span>}
+                <Icon name="arrow-right" size={15} class="notfound__link-arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="notfound__contact subtle">
+        Still stuck? Email <a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding-block: clamp(3rem, 2rem + 6vw, 6rem);
+  }
+  .notfound__mark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: clamp(2.5rem, 1.8rem + 4vw, 4.5rem);
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: var(--space-m);
+  }
+  .notfound__bracket {
+    color: var(--accent);
+  }
+  .notfound__title {
+    font-size: var(--step-4);
+    max-width: 16ch;
+  }
+  .notfound__text {
+    margin-top: var(--space-m);
+    color: var(--ink-muted);
+    max-width: 52ch;
+    font-size: var(--step-1);
+  }
+  .notfound__links {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-xl) 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2xs);
+  }
+  .notfound__link {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.2rem 1rem;
+    padding: var(--space-s) var(--space-m);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    background: var(--surface);
+    text-decoration: none;
+    transition: border-color var(--dur-2) var(--ease);
+  }
+  .notfound__link:hover {
+    border-color: var(--accent);
+  }
+  .notfound__link-title {
+    font-weight: 600;
+    color: var(--ink);
+    grid-column: 1;
+  }
+  .notfound__link-desc {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+  }
+  .notfound__link-arrow,
+  .notfound__link :global(svg) {
+    color: var(--ink-subtle);
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+  .notfound__contact {
+    margin-top: var(--space-xl);
+    font-size: var(--step--1);
+  }
+  @media (max-width: 40rem) {
+    .notfound__links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

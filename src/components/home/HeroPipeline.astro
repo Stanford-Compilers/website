@@ -1,0 +1,366 @@
+---
+/**
+ * "Computation, re-formed."
+ * The same high-level computation shown transforming across four stages:
+ *   source expression → compiler representation → sparse coordinate structure
+ *   → machine mapping.
+ * Built from lightweight SVG + CSS. It is a complete static composition; the
+ * staged pulse animation is optional and disabled under prefers-reduced-motion.
+ */
+
+// A fixed, intentional sparse pattern for the coordinate lattice (6×6).
+const N = 6;
+const NONZEROS = new Set([
+  '0,0',
+  '0,4',
+  '1,2',
+  '2,1',
+  '2,5',
+  '3,3',
+  '4,0',
+  '4,4',
+  '5,2',
+  '5,5',
+  '1,5',
+  '3,0',
+]);
+const lattice = Array.from({ length: N * N }, (_, k) => {
+  const r = Math.floor(k / N);
+  const c = k % N;
+  return { r, c, on: NONZEROS.has(`${r},${c}`) };
+});
+
+// Machine tiles: 4×4 grid partitioned into four 2×2 tiles.
+const tiles = Array.from({ length: 16 }, (_, k) => {
+  const r = Math.floor(k / 4);
+  const c = k % 4;
+  const part = (r < 2 ? 0 : 2) + (c < 2 ? 0 : 1); // 0..3
+  return { r, c, part };
+});
+---
+
+<figure
+  class="pipeline"
+  role="img"
+  aria-label="A tensor contraction transformed through four compiler stages: from an index-notation expression, to a nested iteration space, to a sparse coordinate structure, to a partitioned mapping across four machine targets."
+>
+  <div class="pipeline__track">
+    {/* Stage 1 — source expression */}
+    <div class="stage" style="--i: 0">
+      <p class="stage__label kicker">01 · Source</p>
+      <div class="stage__viz stage__viz--code">
+        <pre
+          class="expr"><span class="expr__lhs">A(i,j)</span> = <span class="expr__sum">Σ<sub>k</sub></span> <span>B(i,<span class="expr__k">k</span>)</span> · <span>C(<span class="expr__k">k</span>,j)</span></pre>
+      </div>
+      <p class="stage__caption">A high-level expression, independent of layout or machine.</p>
+    </div>
+
+    <div class="connector" aria-hidden="true">
+      <svg viewBox="0 0 40 24" width="40" height="24"
+        ><path
+          d="M2 12h30M26 6l8 6-8 6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path></svg
+      >
+    </div>
+
+    {/* Stage 2 — compiler representation (iteration space) */}
+    <div class="stage" style="--i: 1">
+      <p class="stage__label kicker">02 · Representation</p>
+      <div class="stage__viz">
+        <svg viewBox="0 0 120 96" class="viz-svg" width="120" height="96" aria-hidden="true">
+          <rect x="8" y="8" width="104" height="80" rx="6" class="loop loop-1"></rect>
+          <rect x="24" y="24" width="72" height="52" rx="5" class="loop loop-2"></rect>
+          <rect x="40" y="40" width="40" height="24" rx="4" class="loop loop-3"></rect>
+          <text x="12" y="20" class="ivar">i</text>
+          <text x="28" y="36" class="ivar">k</text>
+          <text x="44" y="52" class="ivar ivar--k">·</text>
+          <circle cx="60" cy="52" r="3" class="node"></circle>
+        </svg>
+      </div>
+      <p class="stage__caption">A nested iteration space the compiler can reshape.</p>
+    </div>
+
+    <div class="connector" aria-hidden="true">
+      <svg viewBox="0 0 40 24" width="40" height="24"
+        ><path
+          d="M2 12h30M26 6l8 6-8 6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path></svg
+      >
+    </div>
+
+    {/* Stage 3 — sparse coordinate structure */}
+    <div class="stage" style="--i: 2">
+      <p class="stage__label kicker">03 · Structure</p>
+      <div class="stage__viz">
+        <svg viewBox="0 0 96 96" class="viz-svg" width="96" height="96" aria-hidden="true">
+          {
+            lattice.map(({ r, c, on }) => (
+              <rect
+                x={8 + c * 13.5}
+                y={8 + r * 13.5}
+                width="9"
+                height="9"
+                rx="1.5"
+                class:list={['cell', on && 'cell--on']}
+              />
+            ))
+          }
+        </svg>
+      </div>
+      <p class="stage__caption">A sparse layout: only nonzeros are stored and visited.</p>
+    </div>
+
+    <div class="connector" aria-hidden="true">
+      <svg viewBox="0 0 40 24" width="40" height="24"
+        ><path
+          d="M2 12h30M26 6l8 6-8 6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path></svg
+      >
+    </div>
+
+    {/* Stage 4 — machine mapping */}
+    <div class="stage" style="--i: 3">
+      <p class="stage__label kicker">04 · Machine</p>
+      <div class="stage__viz">
+        <svg viewBox="0 0 96 96" class="viz-svg" width="96" height="96" aria-hidden="true">
+          {
+            tiles.map(({ r, c, part }) => (
+              <rect
+                x={8 + c * 20}
+                y={8 + r * 20}
+                width="16"
+                height="16"
+                rx="2"
+                class:list={['tile', `tile--p${part}`]}
+              />
+            ))
+          }
+        </svg>
+      </div>
+      <p class="stage__caption">A partitioned mapping across CPUs, GPUs, and accelerators.</p>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .pipeline {
+    margin: 0;
+    width: 100%;
+  }
+  .pipeline__track {
+    display: flex;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+  .stage {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    position: relative;
+    isolation: isolate;
+    animation: stage-pulse 9s var(--ease) infinite;
+    animation-delay: calc(var(--i) * 0.9s);
+  }
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid transparent;
+    z-index: -1;
+    transition: border-color var(--dur-2) var(--ease);
+  }
+  .stage__label {
+    font-size: var(--step--2);
+  }
+  .stage__viz {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 104px;
+    padding: 0.4rem 0;
+  }
+  .stage__viz--code {
+    justify-content: flex-start;
+  }
+  .viz-svg {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 104px;
+  }
+  .stage__caption {
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    line-height: 1.4;
+    margin-top: auto;
+  }
+
+  /* Stage 1 — expression */
+  .expr {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+    margin: 0;
+  }
+  .expr__lhs {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .expr__sum {
+    color: var(--tech);
+    font-weight: 500;
+  }
+  .expr__k {
+    color: var(--tech);
+    font-weight: 500;
+  }
+  .expr sub {
+    font-size: 0.7em;
+  }
+
+  /* Stage 2 — iteration space */
+  .loop {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1.4;
+  }
+  .loop-2 {
+    stroke: var(--tech-line);
+  }
+  .loop-3 {
+    stroke: var(--accent-line);
+  }
+  .ivar {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    fill: var(--ink-muted);
+  }
+  .node {
+    fill: var(--accent);
+  }
+
+  /* Stage 3 — sparse lattice */
+  .cell {
+    fill: var(--surface-inset);
+    stroke: var(--line-hairline);
+    stroke-width: 0.75;
+  }
+  .cell--on {
+    fill: var(--accent);
+    stroke: none;
+  }
+
+  /* Stage 4 — machine tiles */
+  .tile {
+    stroke: var(--paper);
+    stroke-width: 1.5;
+  }
+  .tile--p0 {
+    fill: var(--accent);
+  }
+  .tile--p1 {
+    fill: var(--tech);
+  }
+  .tile--p2 {
+    fill: color-mix(in srgb, var(--accent) 55%, var(--tech));
+  }
+  .tile--p3 {
+    fill: var(--ink-muted);
+  }
+
+  /* Connectors */
+  .connector {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--line-strong);
+    padding: 0 0.1rem;
+  }
+
+  /* Staged pulse: a subtle wave passes through the stages. */
+  @keyframes stage-pulse {
+    0%,
+    72%,
+    100% {
+      border-color: var(--line);
+    }
+    10%,
+    22% {
+      border-color: var(--accent-line);
+    }
+  }
+  .stage {
+    transition: border-color var(--dur-2) var(--ease);
+  }
+
+  @media (max-width: 60rem) {
+    .pipeline__track {
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .stage {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+    }
+    .stage__label {
+      flex: 0 0 6.5rem;
+    }
+    .stage__viz {
+      min-height: 76px;
+      flex: 0 0 auto;
+    }
+    .viz-svg {
+      max-height: 76px;
+    }
+    .stage__caption {
+      flex: 1;
+      margin-top: 0;
+    }
+    .connector {
+      transform: rotate(90deg);
+      align-self: center;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .stage {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .stage__label {
+      flex-basis: auto;
+    }
+    .stage__viz {
+      align-self: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stage {
+      animation: none;
+    }
+  }
+</style>

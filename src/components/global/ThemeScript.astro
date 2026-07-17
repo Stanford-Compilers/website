@@ -1,0 +1,52 @@
+---
+// Inline, render-blocking theme bootstrap. Applies the saved theme before first
+// paint (no flash), delegates the toggle click, and re-applies after view-transition
+// swaps. Placed in <head>. No external JS, no framework.
+---
+
+<script is:inline>
+  (function () {
+    // Mark JS availability early so progressive-enhancement CSS can key off it.
+    document.documentElement.classList.add('js');
+    function apply() {
+      document.documentElement.classList.add('js');
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      } catch (e) {}
+    }
+    function effective() {
+      const attr = document.documentElement.getAttribute('data-theme');
+      if (attr === 'light' || attr === 'dark') return attr;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+    }
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      try {
+        localStorage.setItem('theme', t);
+      } catch (e) {}
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+        b.setAttribute(
+          'aria-label',
+          t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+        );
+      });
+    }
+    apply();
+    if (!window.__themeBound) {
+      window.__themeBound = true;
+      document.addEventListener('click', function (e) {
+        const btn = e.target && e.target.closest && e.target.closest('[data-theme-toggle]');
+        if (!btn) return;
+        setTheme(effective() === 'dark' ? 'light' : 'dark');
+      });
+      document.addEventListener('astro:after-swap', apply);
+    }
+  })();
+</script>

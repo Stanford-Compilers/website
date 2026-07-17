@@ -1,0 +1,304 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import Button from '../components/ui/Button.astro';
+import { SITE } from '../config/site';
+
+const audiences = [
+  {
+    icon: 'compass',
+    title: 'Prospective PhD students',
+    body: 'Apply through the Stanford Computer Science PhD program. In your application, it helps to say which research you connect with and why. Admission is decided by the department, not by individual emails.',
+  },
+  {
+    icon: 'users',
+    title: 'Current Stanford students',
+    body: 'Graduate and undergraduate students at Stanford who want to work on languages, compilers, or systems are welcome to get in touch using the format below.',
+  },
+  {
+    icon: 'chip',
+    title: 'Postdocs & research staff',
+    body: 'Any open positions are posted through Stanford. If you are interested, check official Stanford listings and reach out with your background and interests.',
+  },
+  {
+    icon: 'external',
+    title: 'Visitors & collaborators',
+    body: 'Researchers and engineers in industry or academia are welcome to propose collaborations related to the group’s work.',
+  },
+];
+
+const contactFormat = [
+  'Your program and year (or that you are applying)',
+  'Relevant background — courses, projects, or systems you have built',
+  'Research topics you are interested in',
+  'A specific paper or project of ours that caught your attention',
+  'Your expected time commitment',
+  'A CV or résumé, if appropriate',
+];
+
+const faqs = [
+  {
+    q: 'Do I need previous compiler experience?',
+    a: 'No specific course or background is required to be interested in this work. Curiosity about languages, performance, and how systems fit together matters more than any single prerequisite, though strong programming skills help.',
+  },
+  {
+    q: 'Should prospective PhD students email before applying?',
+    a: 'The most important step is to apply through the official Stanford Computer Science PhD process, where applications are reviewed by the department. Naming the research you are interested in within your application is generally useful. Given the volume of email, an individual reply to pre-application messages cannot be guaranteed.',
+  },
+  {
+    q: 'Are undergraduate projects available?',
+    a: 'Stanford undergraduates interested in research can reach out. Whether a project is available depends on the term and on current work, so availability varies.',
+  },
+  {
+    q: 'Are remote internships available?',
+    a: 'The group’s work is primarily on campus at Stanford, and there is no standing remote-internship program.',
+  },
+  {
+    q: 'Are there postdoctoral openings?',
+    a: 'Open positions, when they exist, are posted through Stanford’s official channels. Current availability cannot be confirmed here — please check Stanford listings and contact the group.',
+  },
+  {
+    q: 'How should industry researchers propose collaboration?',
+    a: 'Email the group with a short description of the problem you have in mind and how it relates to our research. Concrete, specific proposals are easiest to respond to.',
+  },
+];
+---
+
+<PageLayout
+  title="Join"
+  kicker="Join & collaborate"
+  lead="We’re glad you’re interested. Here is how prospective students, current Stanford students, and collaborators can get involved — and what to expect."
+  description="How to get involved with the Kjolstad Lab at Stanford: guidance for prospective PhD students, current Stanford students, postdocs, and collaborators."
+>
+  <section class="section">
+    <div class="container container--wide">
+      <ul class="audiences">
+        {
+          audiences.map((a) => (
+            <li class="audience">
+              <span class="audience__icon">
+                <Icon name={a.icon} size={22} />
+              </span>
+              <h2 class="audience__title">{a.title}</h2>
+              <p class="audience__body muted">{a.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="admissions-note" role="note">
+        <Icon name="doi" size={20} class="admissions-note__icon" />
+        <p>
+          Admissions decisions are made by the {SITE.institution.department} through its official process.
+          Contacting the group does not guarantee review or admission. Please use the official
+          {' '}<a href={SITE.institution.admissionsUrl} rel="noopener noreferrer"
+            >Stanford CS PhD admissions</a
+          >
+          {' '}pages for requirements and deadlines.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container container--wide join-contact">
+      <div class="join-contact__intro">
+        <p class="kicker">Getting in touch</p>
+        <h2 class="join-contact__title">If you email, make it easy to respond</h2>
+        <p class="muted">
+          A short, specific message is best. Including the details on the right helps us understand
+          how your interests line up with the group’s work.
+        </p>
+        <div class="join-contact__cta">
+          <Button href={`mailto:${SITE.contact.email}`} variant="primary" iconRight="mail">
+            {SITE.contact.email}
+          </Button>
+        </div>
+        <p class="join-contact__spam subtle">
+          We prefer a plain email link over a contact form — it keeps your message private and
+          avoids third-party form services.
+        </p>
+      </div>
+      <div class="join-contact__list">
+        <p class="join-contact__list-label kicker">Please include</p>
+        <ul>
+          {
+            contactFormat.map((item) => (
+              <li>
+                <Icon name="check" size={16} class="join-check" />
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <h2 class="faq-title">Questions</h2>
+      <div class="faq">
+        {
+          faqs.map((f) => (
+            <details class="faq__item">
+              <summary class="faq__q">
+                <span>{f.q}</span>
+                <Icon name="plus" size={18} class="faq__plus" />
+              </summary>
+              <p class="faq__a">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .audiences {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-s);
+  }
+  .audience {
+    padding: var(--space-l);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+  }
+  .audience__icon {
+    display: inline-flex;
+    color: var(--tech);
+    margin-bottom: var(--space-s);
+  }
+  .audience__title {
+    font-size: var(--step-1);
+    line-height: 1.15;
+  }
+  .audience__body {
+    margin-top: var(--space-2xs);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .admissions-note {
+    display: flex;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+    padding: var(--space-m) var(--space-l);
+    border: 1px solid var(--accent-line);
+    border-left-width: 3px;
+    border-radius: var(--radius-s);
+    background: var(--accent-tint);
+    max-width: 72ch;
+  }
+  .admissions-note__icon {
+    flex: none;
+    color: var(--accent);
+    margin-top: 0.15rem;
+  }
+  .admissions-note p {
+    font-size: var(--step--1);
+    color: var(--ink);
+  }
+
+  .join-contact {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  .join-contact__title {
+    font-size: var(--step-2);
+    margin-top: var(--space-s);
+    max-width: 18ch;
+  }
+  .join-contact__cta {
+    margin-top: var(--space-l);
+  }
+  .join-contact__spam {
+    margin-top: var(--space-s);
+    font-size: var(--step--2);
+    max-width: 44ch;
+  }
+  .join-contact__list {
+    padding: var(--space-l);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+  }
+  .join-contact__list-label {
+    margin-bottom: var(--space-s);
+  }
+  .join-contact__list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+  .join-contact__list li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+  .join-check {
+    flex: none;
+    color: var(--accent);
+    margin-top: 0.15rem;
+  }
+
+  .faq-title {
+    font-size: var(--step-2);
+    margin-bottom: var(--space-m);
+  }
+  .faq {
+    border-top: 1px solid var(--line);
+  }
+  .faq__item {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: var(--space-m) 0;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--step-0);
+    color: var(--ink);
+    list-style: none;
+  }
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .faq__plus {
+    flex: none;
+    color: var(--accent);
+    transition: transform var(--dur-2) var(--ease);
+  }
+  .faq__item[open] .faq__plus {
+    transform: rotate(45deg);
+  }
+  .faq__a {
+    padding-bottom: var(--space-m);
+    color: var(--ink-muted);
+    max-width: 68ch;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 52rem) {
+    .join-contact {
+      grid-template-columns: 1fr;
+      gap: var(--space-l);
+    }
+  }
+</style>

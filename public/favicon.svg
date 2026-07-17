@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Kjolstad Lab">
+  <rect width="32" height="32" rx="7" fill="#8c1515" />
+  <g fill="none" stroke="#faf6ee" stroke-width="1.9" stroke-linecap="square">
+    <path d="M11.5 7 H8 V25 H11.5" />
+    <path d="M20.5 7 H24 V25 H20.5" />
+  </g>
+  <g fill="#faf6ee">
+    <rect x="12.4" y="9.6" width="2.7" height="2.7" rx="0.5" />
+    <rect x="18.9" y="9.6" width="2.7" height="2.7" rx="0.5" />
+    <rect x="15.6" y="14.7" width="2.7" height="2.7" rx="0.5" />
+    <rect x="12.4" y="19.8" width="2.7" height="2.7" rx="0.5" />
+  </g>
+</svg>

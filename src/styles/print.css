@@ -1,0 +1,62 @@
+/* Clean print output for publication lists and detail pages. */
+@media print {
+  :root {
+    --paper: #fff;
+    --surface: #fff;
+    --surface-2: #fff;
+    --ink: #000;
+    --ink-muted: #222;
+    --ink-subtle: #444;
+    --line: #bbb;
+    --line-hairline: #ccc;
+    --line-strong: #999;
+    --accent: #000;
+  }
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .filters,
+  .pub__actions,
+  .theme-toggle,
+  .nav-toggle,
+  .copy-live,
+  .hero__viz,
+  .hero__cta,
+  .join-cta,
+  .breadcrumbs,
+  .section-head__link {
+    display: none !important;
+  }
+  .explorer {
+    display: block !important;
+  }
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+  .page-head::after {
+    display: none;
+  }
+  .pub,
+  .year-group {
+    break-inside: avoid;
+  }
+  .year-group__year {
+    break-after: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  .container,
+  .container--wide,
+  .container--narrow {
+    max-width: 100%;
+  }
+}

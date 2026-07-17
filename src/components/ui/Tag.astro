@@ -1,0 +1,70 @@
+---
+/** Small monospace chip for topics, tags, and metadata. */
+interface Props {
+  href?: string;
+  variant?: 'default' | 'tech' | 'accent' | 'solid';
+  size?: 'sm' | 'md';
+  class?: string;
+  'aria-label'?: string;
+}
+const { href, variant = 'default', size = 'sm', class: className, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'span';
+const cls = ['tag', `tag--${variant}`, `tag--${size}`, className];
+---
+
+<Tag class:list={cls} {...href ? { href } : {}} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    padding: 0.32em 0.6em;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color var(--dur-1) var(--ease),
+      border-color var(--dur-1) var(--ease);
+  }
+  .tag--md {
+    font-size: var(--step--1);
+    padding: 0.4em 0.7em;
+  }
+  a.tag:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .tag--tech {
+    color: var(--tech);
+    border-color: var(--tech-line);
+    background: var(--tech-tint);
+  }
+  a.tag--tech:hover {
+    color: var(--tech-strong);
+    border-color: var(--tech);
+  }
+  .tag--accent {
+    color: var(--accent);
+    border-color: var(--accent-line);
+    background: var(--accent-tint);
+  }
+  a.tag--accent:hover {
+    border-color: var(--accent);
+  }
+  .tag--solid {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+</style>

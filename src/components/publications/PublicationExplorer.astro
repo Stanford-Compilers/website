@@ -1,0 +1,497 @@
+---
+import PublicationItem from './PublicationItem.astro';
+import Icon from '../ui/Icon.astro';
+import {
+  groupByYear,
+  yearFacets,
+  venueFacets,
+  topicFacets,
+  memberFacets,
+  awardCount,
+} from '../../lib/publications';
+import { venueShort, TOPICS } from '../../lib/taxonomy';
+import type { Pub, Person } from '../../lib/collections';
+
+interface Props {
+  pubs: Pub[];
+  people: Map<string, Person>;
+}
+const { pubs, people } = Astro.props;
+
+const groups = groupByYear(pubs);
+const years = yearFacets(pubs);
+const venues = venueFacets(pubs);
+const topics = topicFacets(pubs);
+const members = memberFacets(pubs).filter((m) => people.get(m.value)); // only known people
+const awards = awardCount(pubs);
+const total = pubs.length;
+
+const DIAC = /[\u0300-\u036f]/g;
+// Normalized search string + filter attributes per pub (for the enhancement island).
+function attrs(pub: Pub) {
+  const text = `${pub.title} ${pub.authors.map((a) => a.name).join(' ')}`
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(DIAC, '');
+  return {
+    'data-pub-item': '',
+    'data-year': String(pub.year),
+    'data-venue': pub.venueKey,
+    'data-topics': pub.topics.join(' '),
+    'data-award': pub.award ? '1' : '0',
+    'data-members': pub.authors
+      .filter((a) => a.id)
+      .map((a) => a.id)
+      .join(' '),
+    'data-text': text,
+  };
+}
+---
+
+<div class="explorer" data-explorer>
+  <form class="filters" data-filters aria-label="Filter publications" role="search">
+    <div class="filters__search">
+      <label for="pub-search" class="filters__search-label">
+        <Icon name="search" size={18} />
+        <span class="visually-hidden">Search publications</span>
+      </label>
+      <input
+        type="search"
+        id="pub-search"
+        name="q"
+        class="filters__search-input"
+        placeholder="Search titles and authors…"
+        autocomplete="off"
+        data-q
+      />
+    </div>
+
+    <div class="filters__facets">
+      <details class="facet" open>
+        <summary class="facet__summary">Year <span class="facet__n">{years.length}</span></summary>
+        <div class="facet__options facet__options--grid" role="group" aria-label="Filter by year">
+          {
+            years.map((y) => (
+              <label class="check">
+                <input type="checkbox" name="year" value={y.value} data-facet="year" />
+                <span class="check__box" aria-hidden="true" />
+                <span class="check__label mono">{y.value}</span>
+                <span class="check__count">{y.count}</span>
+              </label>
+            ))
+          }
+        </div>
+      </details>
+
+      <details class="facet">
+        <summary class="facet__summary">Venue <span class="facet__n">{venues.length}</span></summary
+        >
+        <div class="facet__options" role="group" aria-label="Filter by venue">
+          {
+            venues.map((v) => (
+              <label class="check">
+                <input type="checkbox" name="venue" value={v.value} data-facet="venue" />
+                <span class="check__box" aria-hidden="true" />
+                <span class="check__label mono">{venueShort(v.value)}</span>
+                <span class="check__count">{v.count}</span>
+              </label>
+            ))
+          }
+        </div>
+      </details>
+
+      <details class="facet">
+        <summary class="facet__summary">Topic <span class="facet__n">{topics.length}</span></summary
+        >
+        <div class="facet__options" role="group" aria-label="Filter by research topic">
+          {
+            topics.map((t) => (
+              <label class="check">
+                <input type="checkbox" name="topic" value={t.value} data-facet="topic" />
+                <span class="check__box" aria-hidden="true" />
+                <span class="check__label">
+                  {TOPICS[t.value as keyof typeof TOPICS]?.short ?? t.value}
+                </span>
+                <span class="check__count">{t.count}</span>
+              </label>
+            ))
+          }
+        </div>
+      </details>
+
+      <div class="facet facet--flat">
+        <label class="check check--inline">
+          <input type="checkbox" name="award" value="1" data-award />
+          <span class="check__box" aria-hidden="true"></span>
+          <span class="check__label">Award winners <span class="check__count">{awards}</span></span>
+        </label>
+      </div>
+
+      <div class="facet facet--flat">
+        <label class="member" for="pub-member">Lab member</label>
+        <div class="member__wrap">
+          <select id="pub-member" name="member" class="member__select" data-member>
+            <option value="">Anyone</option>
+            {
+              members.map((m) => (
+                <option value={m.value}>
+                  {people.get(m.value)?.name} ({m.count})
+                </option>
+              ))
+            }
+          </select>
+          <Icon name="chevron-down" size={16} class="member__chevron" />
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="filters__clear" data-clear hidden>
+      <Icon name="close" size={15} /> Clear all filters
+    </button>
+  </form>
+
+  <div class="results">
+    <p class="results__count" data-count role="status" aria-live="polite">
+      {total} publications
+    </p>
+
+    <div class="results__list" data-list>
+      {
+        groups.map((group) => (
+          <section class="year-group" data-year-group={group.year}>
+            <h2 class="year-group__year" aria-label={`Publications from ${group.year}`}>
+              <span class="mono">{group.year}</span>
+              <span class="year-group__rule" aria-hidden="true" />
+              <span class="year-group__count mono">{group.items.length}</span>
+            </h2>
+            <ul class="year-group__list">
+              {group.items.map((pub) => (
+                <li {...attrs(pub)}>
+                  <PublicationItem pub={pub} people={people} headingLevel={3} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="results__empty" data-empty hidden>
+      <p class="results__empty-title">No publications match these filters.</p>
+      <p class="results__empty-text muted">
+        Try removing a filter or clearing the search. The full list has {total} publications.
+      </p>
+      <button type="button" class="btn btn--outline btn--sm" data-clear-2>Clear all filters</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { setupExplorer } from './explorer';
+  setupExplorer();
+  document.addEventListener('astro:after-swap', setupExplorer);
+</script>
+
+<style>
+  .explorer {
+    display: grid;
+    grid-template-columns: 17rem 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  /* Filters ------------------------------------------------ */
+  .filters {
+    position: sticky;
+    top: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+  .filters__search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-s);
+    padding: 0 0.7rem;
+    background: var(--surface);
+  }
+  .filters__search:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-tint);
+  }
+  .filters__search-label {
+    display: inline-flex;
+    color: var(--ink-subtle);
+  }
+  .filters__search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 0.6rem 0;
+    font-size: var(--step--1);
+    color: var(--ink);
+    min-width: 0;
+  }
+  .filters__search-input:focus-visible {
+    outline: none;
+  }
+  .filters__facets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .facet {
+    border-bottom: 1px solid var(--line-hairline);
+  }
+  .facet--flat {
+    padding-block: 0.75rem;
+  }
+  .facet__summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5ch;
+    padding: 0.7rem 0;
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+  }
+  .facet__summary::-webkit-details-marker {
+    display: none;
+  }
+  .facet__summary::after {
+    content: '';
+    margin-left: auto;
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid var(--ink-subtle);
+    border-bottom: 1.5px solid var(--ink-subtle);
+    transform: rotate(45deg);
+    transition: transform var(--dur-1) var(--ease);
+  }
+  .facet[open] .facet__summary::after {
+    transform: rotate(-135deg);
+  }
+  .facet__n {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    font-weight: 400;
+  }
+  .facet__options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding-bottom: 0.75rem;
+    max-height: 15rem;
+    overflow-y: auto;
+  }
+  .facet__options--grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.1rem 0.5rem;
+  }
+
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 0.55ch;
+    padding: 0.28rem 0.3rem;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+  .check:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .check input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .check__box {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 3px;
+    display: inline-grid;
+    place-items: center;
+    background: var(--surface);
+    transition:
+      background var(--dur-1),
+      border-color var(--dur-1);
+  }
+  .check__box::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 1px;
+    background: var(--accent-contrast);
+    transform: scale(0);
+    transition: transform var(--dur-1) var(--ease);
+  }
+  .check input:checked + .check__box {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check input:checked + .check__box::after {
+    transform: scale(1);
+  }
+  .check input:focus-visible + .check__box {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .check__label {
+    flex: 1;
+  }
+  .check__count {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+  }
+  .check--inline {
+    padding: 0;
+  }
+
+  .member {
+    display: block;
+    font-size: var(--step--1);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .member__wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .member__select {
+    appearance: none;
+    width: 100%;
+    padding: 0.5rem 2rem 0.5rem 0.7rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-s);
+    background: var(--surface);
+    font-size: var(--step--1);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .member__chevron {
+    position: absolute;
+    right: 0.6rem;
+    color: var(--ink-subtle);
+    pointer-events: none;
+  }
+
+  .filters__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5ch;
+    margin-top: 0.25rem;
+    padding: 0.55rem 0.8rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-s);
+    background: var(--accent-tint);
+  }
+  .filters__clear:hover {
+    border-color: var(--accent);
+  }
+
+  /* Results ------------------------------------------------ */
+  .results__count {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+    padding-bottom: var(--space-s);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: var(--space-xs);
+  }
+  .year-group {
+    margin-top: var(--space-l);
+  }
+  .year-group:first-child {
+    margin-top: var(--space-s);
+  }
+  .year-group__year {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--step-1);
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+  .year-group__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .year-group__count {
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+  }
+  .year-group__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .year-group__list > li[hidden] {
+    display: none;
+  }
+
+  .results__empty {
+    padding: var(--space-2xl) var(--space-m);
+    text-align: center;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-m);
+    margin-top: var(--space-l);
+  }
+  .results__empty-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    margin-bottom: var(--space-2xs);
+  }
+  .results__empty-text {
+    max-width: 40ch;
+    margin: 0 auto var(--space-m);
+  }
+
+  /* Enhancement-only: hide clear button until JS shows it. */
+  .filters__clear[hidden],
+  .results__empty[hidden] {
+    display: none;
+  }
+
+  /* No-JS: hide the (inert) filters; the complete grouped list remains. */
+  :global(html:not(.js)) .filters {
+    display: none;
+  }
+  :global(html:not(.js)) .explorer {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 60rem) {
+    .explorer {
+      grid-template-columns: 1fr;
+      gap: var(--space-l);
+    }
+    .filters {
+      position: static;
+    }
+    .facet__options--grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

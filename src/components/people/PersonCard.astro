@@ -1,0 +1,208 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import { initials, monogramHue } from '../../lib/people';
+import type { Person } from '../../lib/collections';
+
+interface Props {
+  person: Person;
+  headingLevel?: 2 | 3;
+}
+const { person, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+
+const primaryHref = person.hasDetail
+  ? `/people/${person.id}`
+  : (person.website ?? person.linkedin ?? undefined);
+const primaryExternal = !person.hasDetail && Boolean(primaryHref);
+
+const profiles = [
+  person.website &&
+    !primaryExternal && { href: person.website, icon: 'external', label: 'Website' },
+  person.github && { href: person.github, icon: 'github', label: 'GitHub' },
+  person.scholar && { href: person.scholar, icon: 'scholar', label: 'Google Scholar' },
+  person.orcid && { href: person.orcid, icon: 'orcid', label: 'ORCID' },
+  person.linkedin &&
+    !primaryExternal && { href: person.linkedin, icon: 'linkedin', label: 'LinkedIn' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+const hue = monogramHue(person.name);
+---
+
+<article class="person" style={`--mono-h:${hue}`}>
+  <div class="person__portrait">
+    {
+      person.portrait ? (
+        <Image
+          src={person.portrait}
+          alt={person.portraitAlt ?? `Portrait of ${person.name}`}
+          width={240}
+          height={240}
+          class="person__photo"
+        />
+      ) : (
+        <div class="monogram" aria-hidden="true">
+          <span class="monogram__bracket monogram__bracket--l">[</span>
+          <span class="monogram__initials">{initials(person.name)}</span>
+          <span class="monogram__bracket monogram__bracket--r">]</span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="person__body">
+    <Heading class="person__name">
+      {
+        primaryHref ? (
+          <a
+            href={primaryHref}
+            class="person__name-link"
+            {...(primaryExternal ? { rel: 'noopener noreferrer' } : {})}
+          >
+            {person.name}
+            {primaryExternal && <Icon name="arrow-up-right" size={14} class="person__ext" />}
+          </a>
+        ) : (
+          person.name
+        )
+      }
+    </Heading>
+    <p class="person__role">{person.role}</p>
+    {
+      person.coadvisors.length > 0 && (
+        <p class="person__coadvise subtle">
+          with {person.coadvisors.map((c) => c.name).join(', ')}
+        </p>
+      )
+    }
+    {person.destination && <p class="person__dest">→ {person.destination}</p>}
+
+    {
+      profiles.length > 0 && (
+        <ul class="person__profiles">
+          {profiles.map((p) => (
+            <li>
+              <a href={p.href} rel="noopener noreferrer" aria-label={`${person.name} — ${p.label}`}>
+                <Icon name={p.icon} size={17} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .person {
+    display: flex;
+    gap: var(--space-s);
+    padding: var(--space-s);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+    transition:
+      border-color var(--dur-2) var(--ease),
+      box-shadow var(--dur-2) var(--ease);
+  }
+  .person:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-1);
+  }
+  .person__portrait {
+    flex: 0 0 auto;
+  }
+  .person__photo,
+  .monogram {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-s);
+    object-fit: cover;
+  }
+  .monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.05em;
+    background: hsl(var(--mono-h) 26% 93%);
+    border: 1px solid var(--line);
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    position: relative;
+  }
+  .monogram__initials {
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .monogram__bracket {
+    color: var(--accent);
+    font-size: 1.5rem;
+    line-height: 1;
+    opacity: 0.7;
+  }
+  .person__body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .person__name {
+    font-size: var(--step-0);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.25;
+  }
+  .person__name-link {
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3ch;
+  }
+  .person__name-link:hover {
+    color: var(--accent);
+  }
+  .person__ext {
+    color: var(--ink-subtle);
+  }
+  .person__role {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+  .person__coadvise,
+  .person__dest {
+    font-size: var(--step--2);
+  }
+  .person__dest {
+    font-family: var(--font-mono);
+    color: var(--tech);
+  }
+  .person__profiles {
+    list-style: none;
+    display: flex;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0.35rem 0 0;
+  }
+  .person__profiles a {
+    display: inline-flex;
+    color: var(--ink-subtle);
+    padding: 0.15rem;
+    border-radius: var(--radius-xs);
+  }
+  .person__profiles a:hover {
+    color: var(--accent);
+  }
+
+  :global(:root[data-theme='dark']) .monogram {
+    background: hsl(var(--mono-h) 15% 17%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .monogram {
+      background: hsl(var(--mono-h) 15% 17%);
+    }
+  }
+</style>

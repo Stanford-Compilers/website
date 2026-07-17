@@ -1,0 +1,1298 @@
+- id: "pldi26relations"
+  title: "A Compiler for Fused Relational Operations on Multisets"
+  year: 2026
+  month: 6
+  order: 0
+  authors:
+    - name: "James Dong"
+      id: "james-dong"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  venueDetail: "PACMPL vol. 10, PLDI"
+  status: "published"
+  topics:
+    - "relational"
+    - "compiler-ir"
+  links:
+    pdf: "https://fredrikbk.com/publications/fused-relational-algebra.pdf"
+- id: "pldi26bonsai"
+  title: "Bonsai: Compiling Queries to Pruned Tree Traversals"
+  year: 2026
+  month: 6
+  order: 1
+  authors:
+    - name: "Alexander J Root"
+      id: "alexander-root"
+    - name: "Christophe Gyurgyik"
+      id: "christophe-gyurgyik"
+    - name: "Purvi Goel"
+    - name: "Kayvon Fatahalian"
+    - name: "Jonathan Ragan-Kelley"
+      url: "http://people.csail.mit.edu/jrk/"
+    - name: "Andrew Adams"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  venueDetail: "PACMPL vol. 10, PLDI"
+  status: "published"
+  award: "Distinguished Paper Award"
+  topics:
+    - "relational"
+    - "compiler-ir"
+  links:
+    pdf: "https://fredrikbk.com/publications/bonsai.pdf"
+  featured: true
+- id: "pldi26scion"
+  title: "Decoupling Data Layouts from Bounding Volume Hierarchies"
+  year: 2026
+  month: 6
+  order: 2
+  authors:
+    - name: "Christophe Gyurgyik"
+      id: "christophe-gyurgyik"
+    - name: "Alexander J Root"
+      id: "alexander-root"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  venueDetail: "PACMPL vol. 10, PLDI"
+  status: "published"
+  topics:
+    - "array-programming"
+    - "compiler-ir"
+  links:
+    pdf: "https://fredrikbk.com/publications/scion.pdf"
+- id: "osdi26twill"
+  title: "Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs"
+  year: 2026
+  month: 7
+  order: 3
+  authors:
+    - name: "Rupanshu Soi"
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Alex Aiken"
+      url: "http://theory.stanford.edu/~aiken/"
+    - name: "Maryam Dehnavi"
+    - name: "Michael Garland"
+    - name: "Michael Bauer"
+  venueKey: "osdi"
+  status: "published"
+  topics:
+    - "autoscheduling"
+    - "compiler-ir"
+  links:
+    pdf: "https://fredrikbk.com/publications/twill.pdf"
+- id: "oopsla26deegen"
+  title: "Deegen: A JIT-Capable VM Generator for Dynamic Languages"
+  year: 2026
+  month: 10
+  order: 4
+  authors:
+    - name: "Haoran Xu"
+      id: "haoran-xu"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 10, OOPSLA"
+  status: "to-appear"
+  topics:
+    - "meta-compilation"
+  software:
+    - "deegen"
+  links:
+    pdf: "https://fredrikbk.com/publications/deegen.pdf"
+    doi: "https://doi.org/10.1145/3798246"
+  featured: true
+- id: "asplos2026fuseflow"
+  title: "FuseFlow: A Fusion-Centric Compilation Framework for Sparse Deep Learning on Streaming Dataflow"
+  year: 2026
+  month: 3
+  order: 5
+  authors:
+    - name: "Rubens Lacouture"
+      id: "rubens-lacouture"
+    - name: "Nathan Zhang"
+    - name: "Ritvik Sharma"
+    - name: "Marco Siracusa"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Kunle Olukotun"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+  venueKey: "asplos"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "accelerators"
+    - "compiler-ir"
+  links:
+    pdf: "https://fredrikbk.com/publications/fuseflow.pdf"
+- id: "cgo26scorch"
+  title: "Fast Autoscheduling for Sparse ML Frameworks"
+  year: 2026
+  month: 2
+  order: 6
+  authors:
+    - name: "Bobby Yan"
+      id: "bobby-yan"
+    - name: "Alexander J Root"
+      id: "alexander-root"
+    - name: "Trevor Gale"
+      id: "trevor-gale"
+    - name: "David Broman"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "cgo"
+  status: "published"
+  topics:
+    - "autoscheduling"
+    - "sparse-tensor-algebra"
+  software:
+    - "scorch"
+  links:
+    pdf: "https://fredrikbk.com/publications/scorch.pdf"
+    arxiv: "https://arxiv.org/abs/2405.16883"
+- id: "cgo26ember"
+  title: "Ember: A Compiler for Embedding Operations on Decoupled Access-Execute Architectures"
+  year: 2026
+  month: 2
+  order: 7
+  authors:
+    - name: "Marco Siracusa"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Victor Soria-Pardos"
+    - name: "Joshua Randall"
+    - name: "Arnaud Grasset"
+    - name: "Eric Biscondi"
+    - name: "Doug Joseph"
+    - name: "Randy Allen"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Miquel Moretó Planas"
+    - name: "Adrià Armejach"
+  venueKey: "cgo"
+  status: "published"
+  topics:
+    - "accelerators"
+    - "compiler-ir"
+  links:
+    pdf: "https://fredrikbk.com/publications/ember.pdf"
+- id: "oopsla25"
+  title: "REPTILE: Performant Tiling of Recurrences"
+  year: 2025
+  month: 10
+  order: 8
+  authors:
+    - name: "Muhammad Usman Tariq"
+    - name: "Shiv Sundram"
+      id: "shiv-sundram"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 9, OOPSLA"
+  status: "published"
+  topics:
+    - "recurrences"
+    - "autoscheduling"
+  software:
+    - "recuma"
+  links:
+    pdf: "https://fredrikbk.com/publications/recurrences-tiling.pdf"
+- id: "micro25"
+  title: "A Probabilistic Perspective on Tiling Sparse Tensor Algebra"
+  year: 2025
+  month: 10
+  order: 9
+  authors:
+    - name: "Ritvik Sharma"
+    - name: "Zi Xue"
+    - name: "Nathan Zhang"
+    - name: "Rubens Lacouture"
+      id: "rubens-lacouture"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Sara Achour"
+      url: "https://www.sara-achour.me"
+    - name: "Mark Horowitz"
+  venueKey: "micro"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "accelerators"
+    - "autoscheduling"
+  links:
+    pdf: "https://fredrikbk.com/publications/probabilistic-tiling.pdf"
+- id: "jssc25"
+  title: "Onyx: A 12-nm Programmable Accelerator for Dense and Sparse Applications"
+  year: 2025
+  month: 9
+  order: 10
+  authors:
+    - name: "Kalhan Koul"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Yuchen Mei"
+    - name: "Sai Gautham Ravipati"
+      id: "sai-gautham-ravipati"
+    - name: "Maxwell Strange"
+    - name: "Jackson Melchert"
+    - name: "Alex Carsello"
+    - name: "Taeyoung Kong"
+    - name: "Po-Han Chen"
+    - name: "Huifeng Ke"
+    - name: "Keyi Zhang"
+    - name: "Qiaoyi Liu"
+    - name: "Gedeon Nyengele"
+    - name: "Zhouhua Xie"
+    - name: "Akhilesh Balasingam"
+    - name: "Jayashree Adivarahan"
+    - name: "Ritvik Sharma"
+    - name: "Christopher Torng"
+    - name: "Joel Emer"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Mark Horowitz"
+    - name: "Priyanka Raina"
+  venueKey: "jssc"
+  status: "published"
+  topics:
+    - "accelerators"
+  links: {}
+- id: "ieeemicro24"
+  title: "Designing Programmable Accelerators for Sparse Tensor Algebra"
+  year: 2025
+  month: 4
+  order: 11
+  authors:
+    - name: "Kalhan Koul"
+    - name: "Zhouhua Xie"
+    - name: "Maxwell Strange"
+    - name: "Sai Gautham Ravipati"
+      id: "sai-gautham-ravipati"
+    - name: "Bo Wun Cheng"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Po-Han Chen"
+    - name: "Mark Horowitz"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Priyanka Raina"
+  venueKey: "ieeemicro"
+  status: "published"
+  topics:
+    - "accelerators"
+    - "sparse-tensor-algebra"
+  links: {}
+- id: "asplos25-tracing"
+  title: "Automatic Tracing in Task-Based Runtime Systems"
+  year: 2025
+  month: 4
+  order: 12
+  authors:
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Michael Bauer"
+    - name: "David Broman"
+    - name: "Michael Garland"
+    - name: "Alex Aiken"
+      url: "http://theory.stanford.edu/~aiken/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "asplos"
+  status: "published"
+  topics:
+    - "distributed"
+  links:
+    pdf: "https://fredrikbk.com/publications/automatic-task-tracing.pdf"
+- id: "asplos25-fusion"
+  title: "Composing Distributed Computations Through Task and Kernel Fusion."
+  year: 2025
+  month: 4
+  order: 13
+  authors:
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Shiv Sundram"
+      id: "shiv-sundram"
+    - name: "Wonchan Lee"
+    - name: "Michael Garland"
+    - name: "Michael Bauer"
+    - name: "Alex Aiken"
+      url: "http://theory.stanford.edu/~aiken/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "asplos"
+  status: "published"
+  topics:
+    - "distributed"
+  links:
+    pdf: "https://fredrikbk.com/publications/automatic-task-and-kernel-fusion.pdf"
+- id: "cgo25stardust"
+  title: "Stardust: Compiling Sparse Tensor Algebra to a Reconfigurable Dataflow Architecture"
+  year: 2025
+  month: 3
+  order: 14
+  authors:
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Alexander Rucker"
+    - name: "Tian Zhao"
+    - name: "Varun Desai"
+    - name: "Kunle Olukotun"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "cgo"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "accelerators"
+  software:
+    - "sam"
+  links:
+    pdf: "https://fredrikbk.com/publications/stardust-compiling-ta-to-rdas.pdf"
+- id: "oopsla24recurrences"
+  title: "Compiling Recurrences over Dense and Sparse Arrays"
+  year: 2024
+  month: 10
+  order: 15
+  authors:
+    - name: "Shiv Sundram"
+      id: "shiv-sundram"
+    - name: "Muhammad Usman Tariq"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 8, OOPSLA"
+  status: "published"
+  topics:
+    - "recurrences"
+    - "array-programming"
+  software:
+    - "recuma"
+  links:
+    pdf: "https://fredrikbk.com/publications/recurrences.pdf"
+    doi: "https://doi.org/10.1145/3649820"
+- id: "oopsla24shapes"
+  title: "Compilation of Shape Operators on Sparse Arrays"
+  year: 2024
+  month: 10
+  order: 16
+  authors:
+    - name: "Alexander J Root"
+      id: "alexander-root"
+    - name: "Bobby Yan"
+      id: "bobby-yan"
+    - name: "Peiming Liu"
+    - name: "Christophe Gyurgyik"
+      id: "christophe-gyurgyik"
+    - name: "Aart J.C Bik"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 8, OOPSLA"
+  status: "published"
+  topics:
+    - "array-programming"
+    - "sparse-tensor-algebra"
+  software:
+    - "burrito"
+  links:
+    pdf: "https://fredrikbk.com/publications/burrito.pdf"
+    doi: "https://doi.org/10.1145/3689752"
+- id: "oopsla24convolutions"
+  title: "Compiler Support for Sparse Tensor Convolutions"
+  year: 2024
+  month: 10
+  order: 17
+  authors:
+    - name: "Peiming Liu"
+    - name: "Alexander J Root"
+      id: "alexander-root"
+    - name: "Anlun Xu"
+    - name: "Yinying Li"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Aart J.C Bik"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 8, OOPSLA"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "array-programming"
+  links:
+    pdf: "https://fredrikbk.com/publications/spconv.pdf"
+- id: "isca24dam"
+  title: "The Dataflow Abstract Machine Simulator Framework"
+  year: 2024
+  month: 6
+  order: 18
+  authors:
+    - name: "Nathan Zhang"
+    - name: "Rubens Lacouture"
+      id: "rubens-lacouture"
+    - name: "Gina Sohn"
+    - name: "Paul Mure"
+    - name: "Qizheng Zhang"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Kunle Olukotun"
+  venueKey: "isca"
+  status: "published"
+  award: "ISCA Distinguished Artifact Award"
+  topics:
+    - "accelerators"
+    - "compiler-ir"
+  software:
+    - "dam"
+  links:
+    pdf: "https://fredrikbk.com/publications/dam.pdf"
+    doi: "https://doi.org/10.1109/ISCA59077.2024.00046"
+  featured: true
+- id: "pldi24"
+  title: "Compilation of Modular and General Sparse Workspaces"
+  year: 2024
+  month: 6
+  order: 19
+  authors:
+    - name: "Genghan Zhang"
+      url: "https://zhang677.github.io/"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  venueDetail: "PACMPL vol. 8, PLDI"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "compiler-ir"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/general-workspaces.pdf"
+- id: "vlsi24"
+  title: "Onyx: A 12nm 756 GOPS/W Coarse-Grained Reconfigurable Array for Accelerating Dense and Sparse Applications"
+  year: 2024
+  month: 6
+  order: 20
+  authors:
+    - name: "Kalhan Koul"
+    - name: "Maxwell Strange"
+    - name: "Jackson Melchert"
+    - name: "Alex Carsello"
+    - name: "Yuchen Mei"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Taeyoung Kong"
+    - name: "Po-Han Chen"
+    - name: "Huifeng Ke"
+    - name: "Keyi Zhang"
+    - name: "Qiaoyi Liu"
+    - name: "Gedeon Nyengele"
+    - name: "Akhilesh Balasingam"
+    - name: "Jayashree Adivarahan"
+    - name: "Ritvik Sharma"
+    - name: "Zhouhua Xie"
+    - name: "Christopher Torng"
+    - name: "Joel Emer"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Mark Horowitz"
+    - name: "Priyanka Raina"
+  venueKey: "vlsi"
+  status: "published"
+  topics:
+    - "accelerators"
+  links: {}
+- id: "hpca24"
+  title: "Revet: A Language and Compiler for Dataflow Threads"
+  year: 2024
+  month: 3
+  order: 21
+  authors:
+    - name: "Alexander Rucker"
+    - name: "Shiv Sundram"
+      id: "shiv-sundram"
+    - name: "Coleman Smith"
+    - name: "Matt Vilim"
+    - name: "Raghu Prabhakar"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Kunle Olukotun"
+  venueKey: "hpca"
+  status: "published"
+  topics:
+    - "accelerators"
+    - "dsl"
+  links:
+    pdf: "https://fredrikbk.com/publications/revet.pdf"
+- id: "sc23-legate-sparse"
+  title: "Legate Sparse: Distributed Sparse Computing in Python"
+  year: 2023
+  month: 11
+  order: 22
+  authors:
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Wonchan Lee"
+    - name: "Melih Elibol"
+    - name: "Manolis Papadakis"
+    - name: "Taylor Lee-Patti"
+    - name: "Michael Garland"
+    - name: "Alex Aiken"
+      url: "http://theory.stanford.edu/~aiken/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Michael Bauer"
+  venueKey: "sc"
+  status: "published"
+  topics:
+    - "distributed"
+    - "sparse-tensor-algebra"
+  software:
+    - "legate-sparse"
+  links:
+    pdf: "https://fredrikbk.com/publications/legate-sparse.pdf"
+    doi: "https://doi.org/10.1145/3581784.3607033"
+  featured: true
+- id: "pldi23-etch"
+  title: "Indexed Streams: A Formal Intermediate Representation for the Fused Execution of Contraction Operations"
+  year: 2023
+  month: 6
+  order: 23
+  authors:
+    - name: "Scott Kovach"
+      id: "scott-kovach"
+    - name: "Praneeth Kolichala"
+    - name: "Timothy Gu"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  venueDetail: "PACMPL vol. 7, PLDI"
+  status: "published"
+  topics:
+    - "compiler-ir"
+    - "sparse-tensor-algebra"
+    - "relational"
+  software:
+    - "etch"
+  links:
+    pdf: "https://fredrikbk.com/publications/indexed-streams.pdf"
+    video: "https://youtu.be/BSis3h_A51Y?si=owxeFuHEIeETsLQk&t=2270"
+    doi: "https://doi.org/10.1145/3591268"
+- id: "pldi23-mosaic"
+  title: "Mosaic: An Interoperable Compiler for Tensor Algebra"
+  year: 2023
+  month: 6
+  order: 24
+  authors:
+    - name: "Manya Bansal"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Kunle Olukotun"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  venueDetail: "PACMPL vol. 7, PLDI"
+  status: "published"
+  award: "Distinguished Paper Award"
+  topics:
+    - "sparse-tensor-algebra"
+    - "compiler-ir"
+  software:
+    - "mosaic"
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/mosaic.pdf"
+    doi: "https://doi.org/10.1145/3591236"
+  featured: true
+- id: "asplos23-baco"
+  title: "BaCO: A Fast and Portable Bayesian Compiler Optimization Framework"
+  year: 2023
+  month: 4
+  order: 25
+  authors:
+    - name: "Erik Hellsten"
+    - name: "Artur Souza"
+    - name: "Johannes Lenfers"
+    - name: "Rubens Lacouture"
+      id: "rubens-lacouture"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Adel Ejjeh"
+      url: "https://www.linkedin.com/in/adel-ejjeh"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Michel Steuwer"
+      url: "https://michel.steuwer.info/"
+    - name: "Kunle Olukotun"
+    - name: "Luigi Nardi"
+      url: "https://cs.lth.se/luigi-nardi/"
+  venueKey: "asplos"
+  status: "published"
+  topics:
+    - "autoscheduling"
+  links:
+    pdf: "https://fredrikbk.com/publications/baco.pdf"
+- id: "asplos23-sam"
+  title: "The Sparse Abstract Machine"
+  year: 2023
+  month: 3
+  order: 26
+  authors:
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Maxwell Strange"
+    - name: "Ritvik Sharma"
+    - name: "Jaeyeon Won"
+    - name: "Kunle Olukotun"
+    - name: "Joel Emer"
+    - name: "Mark Horowitz"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "asplos"
+  status: "published"
+  topics:
+    - "accelerators"
+    - "sparse-tensor-algebra"
+    - "compiler-ir"
+  software:
+    - "sam"
+  links:
+    pdf: "https://fredrikbk.com/publications/sam.pdf"
+    video: "https://youtu.be/zCzZKWheizE?si=6jwUl0oVAT6ETJ6N&t=18"
+    doi: "https://doi.org/10.1145/3582016.3582051"
+  featured: true
+- id: "taco23-ubuffer"
+  title: "Unified Buffer: Compiling Image Processing and Machine Learning Applications to Push-Memory Accelerators"
+  year: 2023
+  month: 3
+  order: 27
+  authors:
+    - name: "Qiaoyi Liu"
+    - name: "Jeff Setter"
+    - name: "Dillon Huff"
+    - name: "Maxwell Strange"
+    - name: "Kathleen Feng"
+    - name: "Mark Horowitz"
+    - name: "Priyanka Raina"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "taco"
+  status: "published"
+  topics:
+    - "accelerators"
+  links:
+    pdf: "https://fredrikbk.com/publications/unified-buffer.pdf"
+- id: "cgo23"
+  title: "Looplets: A Language For Structured Coiteration"
+  year: 2023
+  month: 2
+  order: 28
+  authors:
+    - name: "Willow Ahrens"
+      url: "http://willowahrens.io/"
+    - name: "Daniel Donenfeld"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "cgo"
+  status: "published"
+  topics:
+    - "compiler-ir"
+    - "sparse-tensor-algebra"
+  software:
+    - "looplets"
+  links:
+    pdf: "https://fredrikbk.com/publications/looplets.pdf"
+    doi: "https://doi.org/10.1145/3579990.3580020"
+- id: "aha23"
+  title: "AHA: An agile approach to the design of coarse-grained reconfigurable accelerators and compilers"
+  year: 2023
+  month: 1
+  order: 29
+  authors:
+    - name: "Kalhan Koul"
+    - name: "Jackson Melchert"
+    - name: "Kavya Sreedhar"
+    - name: "Leonard Truong"
+    - name: "Gedeon Nyengele"
+    - name: "Keyi Zhang"
+    - name: "Qiaoyi Liu"
+    - name: "Jeff Setter"
+    - name: "Po-Han Chen"
+    - name: "Yuchen Mei"
+    - name: "Maxwell Strange"
+    - name: "Ross Daly"
+    - name: "Caleb Donovick"
+    - name: "Alex Carsello"
+    - name: "Taeyoung Kong"
+    - name: "Kathleen Feng"
+    - name: "Dillon Huff"
+    - name: "Ankita Nayak"
+    - name: "Raj Setaluri"
+    - name: "James Thomas"
+    - name: "Nikhil Bhagdikar"
+    - name: "David Durst"
+    - name: "Zachary Myers"
+    - name: "Nestan Tsiskaridze"
+    - name: "Stephen Richardson"
+    - name: "Rick Bahr"
+    - name: "Kayvon Fatahalian"
+    - name: "Pat Hanrahan"
+    - name: "Clark Barrett"
+    - name: "Mark Horowitz"
+    - name: "Christopher Torng"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Priyanka Raina"
+  venueKey: "tecs"
+  status: "published"
+  topics:
+    - "accelerators"
+  links:
+    pdf: "https://fredrikbk.com/publications/aha-tecs.pdf"
+- id: "sc22-spdistal"
+  title: "SpDISTAL: Compiling Distributed Sparse Tensor Computations"
+  year: 2022
+  month: 11
+  order: 30
+  authors:
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Alex Aiken"
+      url: "http://theory.stanford.edu/~aiken/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "sc"
+  status: "published"
+  topics:
+    - "distributed"
+    - "sparse-tensor-algebra"
+  software:
+    - "distal"
+  links:
+    pdf: "https://fredrikbk.com/publications/spdistal.pdf"
+- id: "taco22-mlir-sparse"
+  title: "Compiler Support for Sparse Tensor Computations in MLIR"
+  year: 2022
+  month: 9
+  order: 31
+  authors:
+    - name: "Aart J.C Bik"
+    - name: "Penporn Koanantakool"
+    - name: "Tatiana Shpeisman"
+    - name: "Nicolas Vasilache"
+    - name: "Bixia Zheng"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "taco"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "compiler-ir"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/mlir-sparse.pdf"
+    video: "https://youtu.be/x-nHc3hBxHM?si=aYuF8sBMRtZZ3MAB&t=14"
+- id: "pldi22-distal"
+  title: "DISTAL: The Distributed Tensor Algebra Compiler"
+  year: 2022
+  month: 6
+  order: 32
+  authors:
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Alex Aiken"
+      url: "http://theory.stanford.edu/~aiken/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "pldi"
+  status: "published"
+  topics:
+    - "distributed"
+    - "sparse-tensor-algebra"
+  software:
+    - "distal"
+  links:
+    pdf: "https://fredrikbk.com/publications/distal.pdf"
+    video: "https://youtu.be/1dYngihnfFU?si=ZqhraHBAgJ573G6v"
+    doi: "https://doi.org/10.1145/3519939.3523437"
+  featured: true
+- id: "pldi22-autoscheduling"
+  title: "Autoscheduling for Sparse Tensor Algebra with an Asymptotic Cost Model"
+  year: 2022
+  month: 6
+  order: 33
+  authors:
+    - name: "Willow Ahrens"
+      url: "http://willowahrens.io/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "pldi"
+  status: "published"
+  topics:
+    - "autoscheduling"
+    - "sparse-tensor-algebra"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/asymptotic-autoscheduling.pdf"
+    video: "https://youtu.be/a5IaZjkKBRA"
+- id: "copy-and-patch"
+  title: "Copy-and-Patch Compilation"
+  year: 2021
+  month: 11
+  order: 34
+  authors:
+    - name: "Haoran Xu"
+      id: "haoran-xu"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 5, OOPSLA"
+  status: "published"
+  award: "Distinguished Paper Award"
+  topics:
+    - "meta-compilation"
+  software:
+    - "copy-and-patch"
+  links:
+    pdf: "https://fredrikbk.com/publications/copy-and-patch.pdf"
+    video: "https://youtu.be/PaQJcBdwG9Y"
+    doi: "https://doi.org/10.1145/3485513"
+  featured: true
+- id: "oopsla21array"
+  title: "Compilation of Sparse Array Programming Models"
+  year: 2021
+  month: 11
+  order: 35
+  authors:
+    - name: "Rawn Henry"
+    - name: "Olivia Hsu"
+      id: "olivia-hsu"
+    - name: "Rohan Yadav"
+      id: "rohan-yadav"
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "Kunle Olukotun"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 5, OOPSLA"
+  status: "published"
+  topics:
+    - "array-programming"
+    - "sparse-tensor-algebra"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/Sparse_Array_Programming.pdf"
+    video: "https://youtu.be/sY_jEfaP8f4"
+- id: "oopsla20"
+  title: "A Sparse Iteration Space Transformation Framework for Sparse Tensor Algebra"
+  year: 2020
+  month: 11
+  order: 36
+  authors:
+    - name: "Ryan Senanayake"
+    - name: "Changwan Hong"
+    - name: "Ziheng Wang"
+    - name: "Amalee Wilson"
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "Shoaib Kamil"
+      url: "http://people.csail.mit.edu/skamil/"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 4, OOPSLA"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "autoscheduling"
+    - "compiler-ir"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco-scheduling.pdf"
+    video: "https://youtu.be/0wJsGWA5pTU"
+- id: "aha20"
+  title: "Creating an Agile Hardware Design Flow"
+  year: 2020
+  month: 7
+  order: 37
+  authors:
+    - name: "Rick Bahr"
+    - name: "Clark Barrett"
+    - name: "Nikhil Bhagdikar"
+    - name: "Alex Carsello"
+    - name: "Ross Daly"
+    - name: "Caleb Donovick"
+    - name: "David Durst"
+    - name: "Kayvon Fatahalian"
+    - name: "Kathleen Feng"
+    - name: "Pat Hanrahan"
+    - name: "Teguh Hofstee"
+    - name: "Mark Horowitz"
+    - name: "Dillon Huff"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Taeyoung Kong"
+    - name: "Qiaoyi Liu"
+    - name: "Makai Mann"
+    - name: "Jackson Melchert"
+    - name: "Ankita Nayak"
+    - name: "Aina Niemetz"
+    - name: "Gedeon Nyengele"
+    - name: "Priyanka Raina"
+    - name: "Stephen Richardson"
+    - name: "Raj Setaluri"
+    - name: "Jeff Setter"
+    - name: "Kavya Sreedhar"
+    - name: "Maxwell Strange"
+    - name: "James Thomas"
+    - name: "Christopher Torng"
+    - name: "Leonard Truong"
+    - name: "Nestan Tsiskaridze"
+    - name: "Keyi Zhang"
+  venueKey: "dac"
+  status: "published"
+  topics:
+    - "accelerators"
+    - "foundations"
+  links:
+    pdf: "https://fredrikbk.com/publications/aha.pdf"
+- id: "spaa20"
+  title: "Sparse Tensor Transpositions"
+  year: 2020
+  month: 7
+  order: 38
+  authors:
+    - name: "Suzanne Mueller"
+    - name: "Willow Ahrens"
+      url: "http://willowahrens.io/"
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "spaa"
+  venueDetail: "brief announcement"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco-transposition.pdf"
+- id: "pldi20"
+  title: "Automatic Generation of Efficient Sparse Tensor Format Conversion Routines"
+  year: 2020
+  month: 6
+  order: 39
+  authors:
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "pldi"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "array-programming"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco-conversion.pdf"
+    video: "https://youtu.be/s6JRY8qcjvA"
+- id: "cgo19"
+  title: "Tensor Algebra Compilation with Workspaces"
+  year: 2019
+  month: 2
+  order: 40
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Willow Ahrens"
+      url: "http://willowahrens.io/"
+    - name: "Shoaib Kamil"
+      url: "http://people.csail.mit.edu/skamil/"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "cgo"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "compiler-ir"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco-workspaces.pdf"
+- id: "oopsla18"
+  title: "Format Abstraction for Sparse Tensor Algebra Compilers"
+  year: 2018
+  month: 10
+  order: 41
+  authors:
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 2, OOPSLA"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+    - "array-programming"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco-formats.pdf"
+    video: "https://youtu.be/sQOq3Ci4tB0"
+- id: "avancees18"
+  title: "Taco: compilation et génération de code d’expressions tensorielles"
+  year: 2018
+  order: 42
+  authors:
+    - name: "David Lugato"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+    - name: "Shoaib Kamil"
+      url: "http://people.csail.mit.edu/skamil/"
+  venueKey: "avancees"
+  venueDetail: "Volume 12"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+  software:
+    - "taco"
+  links:
+    pdf: "https://scholar.google.com/scholar?oi=bibs&cluster=8503015401540923787&btnI=1&hl=en"
+- id: "ase17"
+  title: "taco: A Tool to Generate Tensor Algebra Kernels"
+  year: 2017
+  month: 11
+  order: 43
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "David Lugato"
+    - name: "Shoaib Kamil"
+      url: "http://people.csail.mit.edu/skamil/"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "ase"
+  venueDetail: "tools paper"
+  status: "published"
+  topics:
+    - "sparse-tensor-algebra"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco-tools.pdf"
+    video: "https://youtu.be/eE38PC2ctFs"
+- id: "oopsla17"
+  title: "The Tensor Algebra Compiler"
+  year: 2017
+  month: 10
+  order: 44
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Shoaib Kamil"
+      url: "http://people.csail.mit.edu/skamil/"
+    - name: "Stephen Chou"
+      url: "http://people.csail.mit.edu/s3chou"
+    - name: "David Lugato"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "oopsla"
+  venueDetail: "PACMPL vol. 1, OOPSLA"
+  status: "published"
+  award: "Distinguished Paper Award"
+  topics:
+    - "sparse-tensor-algebra"
+  software:
+    - "taco"
+  links:
+    pdf: "https://fredrikbk.com/publications/taco.pdf"
+    video: "https://youtu.be/Kffbzf9etLE"
+    doi: "https://doi.org/10.1145/3133901"
+  featured: true
+- id: "tog16a"
+  title: "Simit: A Language for Physical Simulation"
+  year: 2016
+  month: 5
+  order: 45
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Shoaib Kamil"
+      url: "http://people.csail.mit.edu/skamil/"
+    - name: "Jonathan Ragan-Kelley"
+      url: "http://people.csail.mit.edu/jrk/"
+    - name: "David I. W. Levin"
+      url: "http://142.93.146.228/researchdb/"
+    - name: "Shinjiro Sueda"
+      url: "https://people.engr.tamu.edu/sueda/index.html"
+    - name: "Desai Chen"
+    - name: "Etienne Vouga"
+      url: "http://www.cs.utexas.edu/users/evouga/"
+    - name: "Danny M. Kaufman"
+      url: "http://www.cs.columbia.edu/~kaufman/"
+    - name: "Gurtej Kanwar"
+      url: "https://www.linkedin.com/in/gurtej-kanwar-9a4b5b56"
+    - name: "Wojciech Matusik"
+      url: "http://people.csail.mit.edu/wojciech/"
+    - name: "Saman Amarasinghe"
+      url: "http://people.csail.mit.edu/saman/"
+  venueKey: "siggraph"
+  venueDetail: "presented at SIGGRAPH 2016"
+  status: "published"
+  topics:
+    - "dsl"
+  software:
+    - "simit"
+  links:
+    pdf: "https://fredrikbk.com/publications/simit.pdf"
+    video: "https://youtu.be/raPkxhHy5ro"
+    doi: "https://doi.org/10.1145/2866569"
+  featured: true
+- id: "tog16b"
+  title: "Why New Programming Languages for Simulation?"
+  year: 2016
+  month: 5
+  order: 46
+  authors:
+    - name: "Gilbert Louis Bernstein"
+      url: "http://www.gilbertbernstein.com"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+  venueKey: "tog"
+  venueDetail: "perspective"
+  status: "published"
+  topics:
+    - "dsl"
+    - "foundations"
+  software:
+    - "simit"
+  links:
+    pdf: "https://fredrikbk.com/publications/why_simulation_languages.pdf"
+- id: "eurompi13"
+  title: "MPI Datatype Processing using Runtime Compilation"
+  year: 2013
+  month: 9
+  order: 47
+  authors:
+    - name: "Timo Schneider"
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Torsten Hoefler"
+      url: "https://htor.inf.ethz.ch"
+  venueKey: "eurompi"
+  status: "published"
+  award: "Best Paper Award"
+  topics:
+    - "foundations"
+    - "meta-compilation"
+  links:
+    pdf: "https://fredrikbk.com/publications/datatype_compilation.pdf"
+- id: "ppopp12"
+  title: "Automatic Datatype Generation and Optimization"
+  year: 2012
+  month: 2
+  order: 48
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Torsten Hoefler"
+      url: "https://htor.inf.ethz.ch"
+    - name: "Marc Snir"
+      url: "http://snir.cs.illinois.edu"
+  venueKey: "ppopp"
+  venueDetail: "short paper"
+  status: "published"
+  topics:
+    - "foundations"
+  links:
+    pdf: "https://fredrikbk.com/publications/datatype_generation.pdf"
+- id: "icse11"
+  title: "Transformation for Class Immutability"
+  year: 2011
+  month: 5
+  order: 49
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Danny Dig"
+      url: "http://web.engr.oregonstate.edu/~digd/"
+    - name: "Gabriel Acevedo"
+    - name: "Marc Snir"
+      url: "http://snir.cs.illinois.edu"
+  venueKey: "icse"
+  status: "published"
+  topics:
+    - "foundations"
+  links:
+    pdf: "https://fredrikbk.com/publications/immutator.pdf"
+- id: "cap10"
+  title: "Bringing the HPC Programmer's IDE into the 21st Century through Refactoring"
+  year: 2010
+  month: 10
+  order: 50
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Danny Dig"
+      url: "http://web.engr.oregonstate.edu/~digd/"
+    - name: "Marc Snir"
+      url: "http://snir.cs.illinois.edu"
+  venueKey: "workshop"
+  venueDetail: "SPLASH 2010 CAP workshop"
+  status: "published"
+  topics:
+    - "foundations"
+  links:
+    pdf: "https://fredrikbk.com/publications/hpc_refactoring.pdf"
+- id: "paraplop10"
+  title: "Ghost Cell Pattern"
+  year: 2010
+  month: 3
+  order: 51
+  authors:
+    - name: "Fredrik Kjolstad"
+      id: "fredrik-kjolstad"
+    - name: "Marc Snir"
+      url: "http://snir.cs.illinois.edu"
+  venueKey: "workshop"
+  venueDetail: "ParaPLoP 2010"
+  status: "published"
+  topics:
+    - "foundations"
+  links:
+    pdf: "https://fredrikbk.com/publications/ghost_cell_pattern.pdf"

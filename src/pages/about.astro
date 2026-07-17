@@ -1,0 +1,273 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import { SITE } from '../config/site';
+import { loadPeopleByCategory, loadPublications, loadSoftware } from '../lib/collections';
+
+const groups = await loadPeopleByCategory();
+const pubs = await loadPublications();
+const software = await loadSoftware();
+const phdCount = groups.phd.length;
+const firstYear = Math.min(...pubs.map((p) => p.year));
+
+const next = [
+  {
+    href: '/research',
+    icon: 'compass',
+    title: 'Research',
+    text: 'The problem we work on and how we approach it.',
+  },
+  {
+    href: '/publications',
+    icon: 'book',
+    title: 'Publications',
+    text: `${pubs.length} papers, searchable and filterable.`,
+  },
+  {
+    href: '/software',
+    icon: 'code',
+    title: 'Software',
+    text: `${software.length} compilers, languages, and libraries.`,
+  },
+  { href: '/people', icon: 'users', title: 'People', text: 'The PI and current PhD students.' },
+  {
+    href: '/join',
+    icon: 'arrow-right',
+    title: 'Join',
+    text: 'For prospective students and collaborators.',
+  },
+];
+---
+
+<PageLayout
+  title="About"
+  kicker="About"
+  lead={`${SITE.name} is the research group of ${SITE.pi.name} in the ${SITE.institution.department} at ${SITE.institution.name}.`}
+  description={`About the ${SITE.name}: a research group in the Stanford Department of Computer Science working on programming languages and compilers for computation across data representations and machines.`}
+>
+  <section class="section">
+    <div class="container container--wide about-grid">
+      <div class="about-main flow">
+        <p class="about-lead">
+          We develop programming languages and compiler systems that make high-level applications
+          portable across different data representations and different machines.
+        </p>
+        <p class="muted">
+          In practice, that means building compilers for sparse and structured computation — tensor
+          algebra, array programming, relational operations, and more — together with the languages
+          and libraries that sit on top of them and the meta-compilers that generate compilers for
+          new languages and targets. The unifying idea is to decouple a computation from how its
+          data is stored and where it runs, so that one program can move across formats and hardware
+          without being rewritten.
+        </p>
+        <p class="muted">
+          The group is not only about any single application area. Sparse computation is a major
+          thread, but the broader project is the separation of computation from representation and
+          target — a principle that reaches from CPUs and GPUs to accelerators and clusters.
+        </p>
+
+        <h2 class="about-h2">The group</h2>
+        <p class="muted">
+          {SITE.name} is led by {SITE.pi.name}, {SITE.pi.title.toLowerCase()}. It includes
+          {' '}{phdCount} PhD students, several co-advised with faculty across programming languages,
+          systems, computer architecture, and graphics. Since {firstYear}, the group and its
+          collaborators have published widely at venues including PLDI, OOPSLA, ASPLOS, ISCA, and
+          SC, and released its work as open-source software.
+        </p>
+
+        <div class="about-contact">
+          <h2 class="about-h2">Find &amp; contact</h2>
+          <ul class="about-contact__list">
+            <li>
+              <span class="about-contact__label mono">Email</span>
+              <a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>
+            </li>
+            <li>
+              <span class="about-contact__label mono">Office</span>
+              <span>{SITE.pi.office}</span>
+            </li>
+            <li>
+              <span class="about-contact__label mono">Mail</span>
+              <span>{SITE.contact.mailing}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <aside class="about-aside">
+        <div class="about-stat">
+          <span class="about-stat__n">{pubs.length}</span>
+          <span class="about-stat__label mono">publications</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat__n">{software.length}</span>
+          <span class="about-stat__label mono">software projects</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat__n">{phdCount}</span>
+          <span class="about-stat__label mono">PhD students</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container container--wide">
+      <p class="kicker">Where to go next</p>
+      <ul class="next-grid">
+        {
+          next.map((n) => (
+            <li>
+              <a href={n.href} class="next">
+                <span class="next__icon">
+                  <Icon name={n.icon} size={20} />
+                </span>
+                <span class="next__body">
+                  <span class="next__title">{n.title}</span>
+                  <span class="next__text">{n.text}</span>
+                </span>
+                <Icon name="arrow-right" size={16} class="next__arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 14rem;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  .about-lead {
+    font-size: var(--step-2);
+    font-family: var(--font-display);
+    line-height: 1.3;
+    color: var(--ink);
+    max-width: 24ch;
+  }
+  .about-h2 {
+    font-size: var(--step-1);
+    margin-top: var(--space-xl) !important;
+    padding-bottom: var(--space-2xs);
+    border-bottom: 1px solid var(--line-hairline);
+  }
+  .about-contact__list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-m) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+  .about-contact__list li {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: var(--space-s);
+    align-items: baseline;
+  }
+  .about-contact__label {
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .about-aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    position: sticky;
+    top: 5.5rem;
+  }
+  .about-stat {
+    padding: var(--space-m);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+    text-align: left;
+  }
+  .about-stat__n {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    color: var(--accent);
+  }
+  .about-stat__label {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .next-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-l) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--space-s);
+  }
+  .next {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--dur-2) var(--ease);
+  }
+  .next:hover {
+    border-color: var(--accent);
+  }
+  .next__icon {
+    flex: none;
+    display: inline-flex;
+    color: var(--tech);
+  }
+  .next__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+  }
+  .next__title {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .next__text {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+  .next__arrow {
+    color: var(--ink-subtle);
+    flex: none;
+  }
+  .next:hover .next__arrow {
+    color: var(--accent);
+  }
+
+  @media (max-width: 52rem) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-l);
+    }
+    .about-aside {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .about-stat {
+      flex: 1 1 8rem;
+    }
+  }
+</style>

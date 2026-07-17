@@ -1,0 +1,303 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Tag from '../../components/ui/Tag.astro';
+import PublicationItem from '../../components/publications/PublicationItem.astro';
+import { initials } from '../../lib/people';
+import { loadPublications, loadSoftware, peopleMap } from '../../lib/collections';
+import { SITE } from '../../config/site';
+
+export const getStaticPaths = (async () => {
+  if (!SITE.features.personDetailPages) return [];
+  const entries = await getCollection('people');
+  return entries
+    .filter((e) => e.data.category === 'pi' || Boolean(e.body && e.body.trim()))
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const p = entry.data;
+const { Content } = await render(entry);
+const hasBio = Boolean(entry.body && entry.body.trim());
+
+const people = await peopleMap();
+const allPubs = await loadPublications();
+const myPubs = allPubs.filter((pub) => pub.authors.some((a) => a.id === entry.id));
+const recentPubs = myPubs.slice(0, 6);
+const allSoftware = await loadSoftware();
+const mySoftware = allSoftware.filter((s) => s.people.some((ref) => ref.id === entry.id));
+
+const profiles = [
+  p.website && { href: p.website, icon: 'external', label: 'Website' },
+  p.github && { href: p.github, icon: 'github', label: 'GitHub' },
+  p.scholar && { href: p.scholar, icon: 'scholar', label: 'Google Scholar' },
+  p.orcid && { href: p.orcid, icon: 'orcid', label: 'ORCID' },
+  p.linkedin && { href: p.linkedin, icon: 'linkedin', label: 'LinkedIn' },
+  p.email && { href: `mailto:${p.email}`, icon: 'mail', label: 'Email' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: p.name,
+  jobTitle: p.role,
+  affiliation: { '@type': 'CollegeOrUniversity', name: SITE.institution.name },
+  ...(p.website ? { url: p.website } : {}),
+  sameAs: [p.website, p.github, p.scholar, p.orcid, p.linkedin].filter(Boolean),
+};
+---
+
+<BaseLayout
+  title={p.name}
+  description={`${p.name} — ${p.role} in the ${SITE.name} at ${SITE.institution.name}.`}
+  ogType="profile"
+  path={`/people/${entry.id}`}
+  jsonld={jsonld}
+>
+  <article class="ppage">
+    <div class="container container--narrow">
+      <Breadcrumbs items={[{ label: 'People', href: '/people' }, { label: p.name }]} />
+
+      <header class="ppage__head">
+        <div class="ppage__mono" aria-hidden="true">
+          <span class="ppage__bracket">[</span>
+          <span class="ppage__initials">{initials(p.name)}</span>
+          <span class="ppage__bracket">]</span>
+        </div>
+        <div class="ppage__id">
+          <h1 class="ppage__name">{p.name}</h1>
+          <p class="ppage__role">{p.role}</p>
+          {
+            p.coadvisors.length > 0 && (
+              <p class="ppage__coadvise subtle">
+                Co-advised with {p.coadvisors.map((c) => c.name).join(', ')}
+              </p>
+            )
+          }
+          {p.destination && <p class="ppage__dest mono">→ {p.destination}</p>}
+          {
+            profiles.length > 0 && (
+              <ul class="ppage__profiles">
+                {profiles.map((pr) => (
+                  <li>
+                    <a href={pr.href} rel="noopener noreferrer" class="ppage__profile">
+                      <Icon name={pr.icon} size={16} /> <span>{pr.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </div>
+      </header>
+
+      {
+        p.interests.length > 0 && (
+          <section class="ppage__section">
+            <h2 class="ppage__h2">Research interests</h2>
+            <p class="cluster" style="--cluster-gap:0.4rem;">
+              {p.interests.map((i) => (
+                <Tag>{i}</Tag>
+              ))}
+            </p>
+          </section>
+        )
+      }
+
+      {
+        hasBio && (
+          <section class="ppage__section rich flow">
+            <Content />
+          </section>
+        )
+      }
+
+      {
+        mySoftware.length > 0 && (
+          <section class="ppage__section">
+            <h2 class="ppage__h2">Software</h2>
+            <ul class="ppage__software">
+              {mySoftware.map((s) => (
+                <li>
+                  <a href={`/software/${s.id}`}>{s.shortName ?? s.name}</a>
+                  <span class="subtle"> — {s.summary}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        recentPubs.length > 0 && (
+          <section class="ppage__section">
+            <div class="ppage__pubs-head">
+              <h2 class="ppage__h2">Publications</h2>
+              <a href={`/publications?member=${entry.id}`} class="ppage__all">
+                All {myPubs.length} <Icon name="arrow-right" size={14} />
+              </a>
+            </div>
+            <div class="ppage__pubs">
+              {recentPubs.map((pub) => (
+                <PublicationItem pub={pub} people={people} headingLevel={3} showTopics={false} />
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <p class="ppage__back">
+        <a href="/people"><Icon name="arrow-right" size={15} class="flip" /> All people</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .ppage {
+    padding-top: var(--space-l);
+  }
+  .ppage__head {
+    margin-top: var(--space-l);
+    padding-bottom: var(--space-l);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: var(--space-l);
+    align-items: flex-start;
+  }
+  .ppage__mono {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface-2);
+    font-family: var(--font-mono);
+  }
+  .ppage__initials {
+    font-size: 1.9rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .ppage__bracket {
+    color: var(--accent);
+    font-size: 2rem;
+    opacity: 0.7;
+  }
+  .ppage__name {
+    font-size: var(--step-4);
+  }
+  .ppage__role {
+    color: var(--ink-muted);
+    margin-top: 0.2rem;
+    font-size: var(--step-0);
+  }
+  .ppage__coadvise,
+  .ppage__dest {
+    margin-top: 0.3rem;
+    font-size: var(--step--1);
+  }
+  .ppage__dest {
+    color: var(--tech);
+  }
+  .ppage__profiles {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-m) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.1rem;
+  }
+  .ppage__profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45ch;
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+  .ppage__profile:hover {
+    color: var(--accent);
+  }
+  .ppage__section {
+    margin-top: var(--space-xl);
+  }
+  .ppage__h2 {
+    font-size: var(--step-1);
+    padding-bottom: var(--space-2xs);
+    border-bottom: 1px solid var(--line-hairline);
+    margin-bottom: var(--space-m);
+  }
+  .ppage__software {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .ppage__software a {
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .ppage__software a:hover {
+    color: var(--accent);
+  }
+  .ppage__pubs-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    border-bottom: 1px solid var(--line-hairline);
+    margin-bottom: var(--space-m);
+    padding-bottom: var(--space-2xs);
+  }
+  .ppage__pubs-head .ppage__h2 {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+  .ppage__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ppage__back {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-hairline);
+  }
+  .ppage__back a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5ch;
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .ppage__back a:hover {
+    color: var(--accent);
+  }
+  .flip {
+    transform: rotate(180deg);
+  }
+  @media (max-width: 34rem) {
+    .ppage__head {
+      flex-direction: column;
+      gap: var(--space-m);
+    }
+  }
+</style>

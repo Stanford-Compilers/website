@@ -1,0 +1,251 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PersonCard from '../components/people/PersonCard.astro';
+import Icon from '../components/ui/Icon.astro';
+import { loadPeopleByCategory } from '../lib/collections';
+import { PEOPLE_CATEGORIES } from '../lib/taxonomy';
+import { SITE } from '../config/site';
+
+const groups = await loadPeopleByCategory();
+const pi = groups.pi[0];
+
+const sections = [
+  { key: 'phd', people: groups.phd },
+  { key: 'member', people: groups.member },
+  { key: 'alumni', people: groups.alumni },
+].filter((s) => s.people.length > 0);
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'People',
+  about: [pi, ...groups.phd, ...groups.member, ...groups.alumni].map((p) => ({
+    '@type': 'Person',
+    name: p.name,
+    ...(p.website ? { url: p.website } : {}),
+  })),
+};
+---
+
+<PageLayout
+  title="People"
+  kicker="People"
+  lead={`The group is led by ${SITE.pi.name} and brings together PhD students working across languages, compilers, systems, and hardware.`}
+  description="The people of the Kjolstad Lab at Stanford — the principal investigator, current PhD students, and alumni."
+  jsonld={jsonld}
+>
+  <div class="section">
+    <div class="container container--wide people-page">
+      {/* PI */}
+      {
+        pi && (
+          <section class="pi" aria-labelledby="pi-heading">
+            <h2 id="pi-heading" class="visually-hidden">
+              Principal investigator
+            </h2>
+            <div class="pi__card">
+              <div class="pi__mono" aria-hidden="true">
+                <span class="pi__bracket">[</span>
+                <span class="pi__initials">FK</span>
+                <span class="pi__bracket">]</span>
+              </div>
+              <div class="pi__body">
+                <p class="kicker">Principal investigator</p>
+                <h3 class="pi__name">
+                  {pi.hasDetail ? <a href={`/people/${pi.id}`}>{pi.name}</a> : pi.name}
+                </h3>
+                <p class="pi__role">{pi.role}</p>
+                <p class="pi__blurb">
+                  Leads the group's research on languages and compilers that make computation
+                  portable across data representations and machines.
+                </p>
+                <div class="pi__links">
+                  {pi.hasDetail && (
+                    <a href={`/people/${pi.id}`} class="pi__more">
+                      Profile <Icon name="arrow-right" size={15} />
+                    </a>
+                  )}
+                  {pi.website && (
+                    <a
+                      href={pi.website}
+                      rel="noopener noreferrer"
+                      aria-label={`${pi.name} — website`}
+                    >
+                      <Icon name="external" size={18} />
+                    </a>
+                  )}
+                  {pi.github && (
+                    <a
+                      href={pi.github}
+                      rel="noopener noreferrer"
+                      aria-label={`${pi.name} — GitHub`}
+                    >
+                      <Icon name="github" size={18} />
+                    </a>
+                  )}
+                  {pi.scholar && (
+                    <a
+                      href={pi.scholar}
+                      rel="noopener noreferrer"
+                      aria-label={`${pi.name} — Google Scholar`}
+                    >
+                      <Icon name="scholar" size={18} />
+                    </a>
+                  )}
+                  <a href={`mailto:${SITE.pi.email}`} aria-label={`Email ${pi.name}`}>
+                    <Icon name="mail" size={18} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        )
+      }
+
+      {
+        sections.map((section) => (
+          <section class="people-section" aria-labelledby={`sec-${section.key}`}>
+            <div class="people-section__head">
+              <h2 class="people-section__title" id={`sec-${section.key}`}>
+                {PEOPLE_CATEGORIES[section.key as keyof typeof PEOPLE_CATEGORIES].plural}
+              </h2>
+              <span class="people-section__count mono">{section.people.length}</span>
+            </div>
+            <ul class="people-grid">
+              {section.people.map((person) => (
+                <li>
+                  <PersonCard person={person} headingLevel={3} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <p class="people-note subtle">
+        Portraits and short biographies are being collected — see the site's content notes. Names
+        link to each person's own page where available.
+      </p>
+    </div>
+  </div>
+</PageLayout>
+
+<style>
+  .people-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+  .pi__card {
+    display: flex;
+    gap: var(--space-l);
+    padding: var(--space-l);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-l);
+    background:
+      radial-gradient(90% 130% at 0% 0%, var(--accent-tint), transparent 55%), var(--surface);
+  }
+  .pi__mono {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface-2);
+    font-family: var(--font-mono);
+  }
+  .pi__initials {
+    font-size: 1.7rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .pi__bracket {
+    color: var(--accent);
+    font-size: 1.9rem;
+    opacity: 0.7;
+  }
+  .pi__name {
+    font-size: var(--step-2);
+    margin-top: 0.2rem;
+  }
+  .pi__name a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .pi__name a:hover {
+    color: var(--accent);
+  }
+  .pi__role {
+    color: var(--ink-muted);
+    margin-top: 0.15rem;
+  }
+  .pi__blurb {
+    margin-top: var(--space-s);
+    color: var(--ink-muted);
+    max-width: 52ch;
+  }
+  .pi__links {
+    margin-top: var(--space-m);
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    color: var(--ink-subtle);
+  }
+  .pi__links a {
+    color: var(--ink-subtle);
+    display: inline-flex;
+  }
+  .pi__links a:hover {
+    color: var(--accent);
+  }
+  .pi__more {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.4ch;
+    font-weight: 600;
+    color: var(--accent) !important;
+    text-decoration: none;
+    margin-right: 0.5rem;
+  }
+
+  .people-section__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding-bottom: var(--space-s);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: var(--space-l);
+  }
+  .people-section__title {
+    font-size: var(--step-2);
+  }
+  .people-section__count {
+    color: var(--ink-subtle);
+    font-size: var(--step--1);
+  }
+  .people-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: var(--space-s);
+  }
+  .people-note {
+    font-size: var(--step--1);
+    max-width: 60ch;
+  }
+
+  @media (max-width: 40rem) {
+    .pi__card {
+      flex-direction: column;
+      gap: var(--space-m);
+    }
+    .people-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

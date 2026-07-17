@@ -1,0 +1,456 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Tag from '../../components/ui/Tag.astro';
+import { loadPublications, peopleMap, softwareMap, resolveAuthor } from '../../lib/collections';
+import { venueShort, venueFull, TOPICS, VENUES } from '../../lib/taxonomy';
+import { toBibtex, citationString } from '../../lib/citation';
+
+export const getStaticPaths = (async () => {
+  const pubs = await loadPublications();
+  return pubs.filter((p) => p.detail).map((pub) => ({ params: { slug: pub.id }, props: { pub } }));
+}) satisfies GetStaticPaths;
+
+const { pub } = Astro.props;
+const people = await peopleMap();
+const sw = await softwareMap();
+
+const authors = pub.authors.map((a) => resolveAuthor(a, people));
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+const dateStr = pub.month ? `${MONTHS[pub.month - 1]} ${pub.year}` : String(pub.year);
+const bibtex = toBibtex(pub, pub.links);
+const citation = citationString(pub);
+const relatedSoftware = pub.software.map((id) => sw.get(id)).filter(Boolean);
+const kind = VENUES[pub.venueKey]?.kind ?? 'conference';
+
+const actions = [
+  pub.links.pdf && { href: pub.links.pdf, icon: 'pdf', label: 'Read PDF' },
+  pub.links.doi && { href: pub.links.doi, icon: 'doi', label: 'DOI' },
+  pub.links.arxiv && { href: pub.links.arxiv, icon: 'book', label: 'arXiv' },
+  pub.links.code && { href: pub.links.code, icon: 'code', label: 'Code' },
+  pub.links.project && { href: pub.links.project, icon: 'project', label: 'Project' },
+  pub.links.video && { href: pub.links.video, icon: 'video', label: 'Video' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+// Scholarly citation meta (Highwire) for indexing by Google Scholar.
+const citationMeta = [
+  { name: 'citation_title', content: pub.title },
+  ...pub.authors.map((a) => ({ name: 'citation_author', content: a.name })),
+  {
+    name: 'citation_publication_date',
+    content: pub.month ? `${pub.year}/${String(pub.month).padStart(2, '0')}/01` : String(pub.year),
+  },
+  {
+    name: kind === 'journal' ? 'citation_journal_title' : 'citation_conference_title',
+    content: venueFull(pub.venueKey),
+  },
+  ...(pub.links.pdf && pub.links.pdf.endsWith('.pdf')
+    ? [{ name: 'citation_pdf_url', content: pub.links.pdf }]
+    : []),
+  ...(pub.links.doi
+    ? [
+        {
+          name: 'citation_doi',
+          content: pub.links.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//, ''),
+        },
+      ]
+    : []),
+];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'ScholarlyArticle',
+  headline: pub.title,
+  name: pub.title,
+  author: pub.authors.map((a) => ({ '@type': 'Person', name: a.name })),
+  datePublished: pub.month ? `${pub.year}-${String(pub.month).padStart(2, '0')}` : String(pub.year),
+  isPartOf: { '@type': 'Periodical', name: venueFull(pub.venueKey) },
+  ...(pub.links.doi ? { sameAs: pub.links.doi } : {}),
+  ...(pub.links.pdf ? { url: pub.links.pdf } : {}),
+  publisher: { '@type': 'Organization', name: 'Kjolstad Lab, Stanford University' },
+};
+---
+
+<BaseLayout
+  title={pub.title}
+  description={`${authors.map((a) => a.name).join(', ')}. ${venueShort(pub.venueKey)}, ${pub.year}.`}
+  ogType="article"
+  path={`/publications/${pub.id}`}
+  citation={citationMeta}
+  jsonld={jsonld}
+>
+  <article class="pubpage">
+    <div class="container container--narrow">
+      <Breadcrumbs
+        items={[{ label: 'Publications', href: '/publications' }, { label: pub.title }]}
+      />
+
+      <header class="pubpage__head">
+        <p class="pubpage__venue kicker">
+          {venueShort(pub.venueKey)} · {dateStr}
+        </p>
+        <h1 class="pubpage__title">{pub.title}</h1>
+        <p class="pubpage__authors">
+          {
+            authors.map((a, i) => (
+              <>
+                {a.href ? (
+                  <a
+                    href={a.href}
+                    class:list={['pubpage__author', a.isPI && 'is-pi']}
+                    {...(a.internal ? {} : { rel: 'noopener noreferrer' })}
+                  >
+                    {a.name}
+                  </a>
+                ) : (
+                  <span class:list={['pubpage__author', a.isPI && 'is-pi']}>{a.name}</span>
+                )}
+                {i < authors.length - 1 && <span aria-hidden="true">, </span>}
+              </>
+            ))
+          }
+        </p>
+        <p class="pubpage__meta">
+          <span>{venueFull(pub.venueKey)}</span>
+          {pub.venueDetail && <span class="subtle">· {pub.venueDetail}</span>}
+          {pub.status === 'to-appear' && <span class="pubpage__toappear">To appear</span>}
+        </p>
+        {
+          pub.award && (
+            <p class="pubpage__award">
+              <Icon name="check" size={16} /> {pub.award}
+            </p>
+          )
+        }
+      </header>
+
+      {
+        actions.length > 0 && (
+          <div class="pubpage__actions">
+            {actions.map((a) => (
+              <a class="pubpage__action" href={a.href} rel="noopener noreferrer">
+                <Icon name={a.icon} size={17} />
+                <span>{a.label}</span>
+              </a>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        pub.topics.length > 0 && (
+          <div class="pubpage__topics">
+            <span class="pubpage__topics-label kicker">Topics</span>
+            <span class="cluster" style="--cluster-gap:0.4rem;">
+              {pub.topics.map((t) => (
+                <Tag href={`/publications?topic=${t}`}>
+                  {TOPICS[t as keyof typeof TOPICS]?.label ?? t}
+                </Tag>
+              ))}
+            </span>
+          </div>
+        )
+      }
+
+      {
+        relatedSoftware.length > 0 && (
+          <section class="pubpage__section">
+            <h2 class="pubpage__h2">Related software</h2>
+            <ul class="pubpage__software">
+              {relatedSoftware.map((s) => (
+                <li>
+                  <a href={`/software/${s!.id}`} class="rel-sw">
+                    <span class="rel-sw__name">{s!.name}</span>
+                    <span class="rel-sw__summary">{s!.summary}</span>
+                    <Icon name="arrow-right" size={16} class="rel-sw__arrow" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <section class="pubpage__section">
+        <h2 class="pubpage__h2">Cite this paper</h2>
+        <div class="cite">
+          <div class="cite__block">
+            <div class="cite__head">
+              <span class="cite__label mono">Citation</span>
+              <button
+                type="button"
+                class="cite__copy"
+                data-copy-target={`cite-${pub.id}`}
+                data-copy-label="Citation"
+              >
+                <Icon name="copy" size={14} />
+                <span>Copy</span>
+              </button>
+            </div>
+            <p id={`cite-${pub.id}`} class="cite__text">{citation}</p>
+          </div>
+          <div class="cite__block">
+            <div class="cite__head">
+              <span class="cite__label mono">BibTeX</span>
+              <button
+                type="button"
+                class="cite__copy"
+                data-copy-target={`bib-${pub.id}`}
+                data-copy-label="BibTeX"
+              >
+                <Icon name="copy" size={14} />
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre id={`bib-${pub.id}`} class="cite__code scroll-x">{bibtex}</pre>
+          </div>
+        </div>
+      </section>
+
+      <p class="pubpage__back">
+        <a href="/publications"
+          ><Icon name="arrow-right" size={15} class="flip" /> All publications</a
+        >
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .pubpage {
+    padding-top: var(--space-l);
+  }
+  .pubpage__head {
+    margin-top: var(--space-l);
+    padding-bottom: var(--space-l);
+    border-bottom: 1px solid var(--line);
+  }
+  .pubpage__venue {
+    margin-bottom: var(--space-s);
+  }
+  .pubpage__title {
+    font-size: var(--step-4);
+    line-height: 1.08;
+  }
+  .pubpage__authors {
+    margin-top: var(--space-m);
+    font-size: var(--step-1);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+  .pubpage__author {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  a.pubpage__author:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  .pubpage__author.is-pi {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .pubpage__meta {
+    margin-top: var(--space-s);
+    color: var(--ink-subtle);
+    font-size: var(--step-0);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5ch;
+    align-items: center;
+  }
+  .pubpage__toappear {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--tech);
+    border: 1px solid var(--tech-line);
+    background: var(--tech-tint);
+    border-radius: var(--radius-xs);
+    padding: 0.1em 0.5em;
+  }
+  .pubpage__award {
+    margin-top: var(--space-s);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: var(--step-0);
+  }
+  .pubpage__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin-top: var(--space-l);
+  }
+  .pubpage__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5ch;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-s);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+    background: var(--surface);
+  }
+  .pubpage__action:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .pubpage__action:first-child {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-color: var(--accent);
+  }
+  .pubpage__action:first-child:hover {
+    background: var(--accent-strong);
+    color: var(--accent-contrast);
+  }
+  .pubpage__topics {
+    margin-top: var(--space-l);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+  }
+  .pubpage__section {
+    margin-top: var(--space-xl);
+  }
+  .pubpage__h2 {
+    font-size: var(--step-1);
+    padding-bottom: var(--space-2xs);
+    border-bottom: 1px solid var(--line-hairline);
+    margin-bottom: var(--space-m);
+  }
+  .pubpage__software {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-2xs);
+  }
+  .rel-sw {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    padding: var(--space-s) var(--space-m);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    background: var(--surface);
+    text-decoration: none;
+  }
+  .rel-sw:hover {
+    border-color: var(--accent);
+  }
+  .rel-sw__name {
+    font-weight: 600;
+    color: var(--ink);
+    grid-column: 1;
+  }
+  .rel-sw__summary {
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+    grid-column: 2;
+  }
+  .rel-sw__arrow {
+    color: var(--ink-subtle);
+    grid-column: 3;
+  }
+  .cite {
+    display: grid;
+    gap: var(--space-m);
+  }
+  .cite__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  .cite__label {
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .cite__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-muted);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-xs);
+    padding: 0.3em 0.7em;
+    background: var(--surface);
+  }
+  .cite__copy:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+  .cite__text {
+    padding: var(--space-s) var(--space-m);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    color: var(--ink);
+  }
+  .cite__code {
+    padding: var(--space-m);
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.7;
+    white-space: pre;
+    margin: 0;
+  }
+  .pubpage__back {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-hairline);
+  }
+  .pubpage__back a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5ch;
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .pubpage__back a:hover {
+    color: var(--accent);
+  }
+  .flip {
+    transform: rotate(180deg);
+  }
+  @media (max-width: 34rem) {
+    .rel-sw {
+      grid-template-columns: 1fr auto;
+    }
+    .rel-sw__summary {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
