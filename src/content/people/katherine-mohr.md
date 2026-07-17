@@ -2,6 +2,7 @@
 name: Katherine Mohr
 role: PhD student
 category: phd
+portrait: ../../assets/people/katherine-mohr.png
 website: https://cs.stanford.edu/~kmohr/
 github: https://github.com/katherinemohr
 scholar: https://scholar.google.com/citations?user=5GfR8KQAAAAJ

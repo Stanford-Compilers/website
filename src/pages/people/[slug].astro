@@ -123,7 +123,6 @@ const jsonld = {
               {mySoftware.map((s) => (
                 <li>
                   <a href={`/software/${s.id}`}>{s.shortName ?? s.name}</a>
-                  <span class="subtle"> — {s.summary}</span>
                 </li>
               ))}
             </ul>
@@ -240,11 +239,21 @@ const jsonld = {
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: baseline;
+    row-gap: 0.3rem;
+  }
+  .ppage__software li {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .ppage__software li:not(:first-child)::before {
+    content: '·';
+    color: var(--ink-subtle);
+    margin: 0 0.7ch;
   }
   .ppage__software a {
-    font-weight: 600;
+    font-weight: 500;
     color: var(--ink);
     text-decoration: none;
   }

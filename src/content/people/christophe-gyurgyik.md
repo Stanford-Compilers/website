@@ -2,6 +2,7 @@
 name: Christophe Gyurgyik
 role: PhD student
 category: phd
+portrait: ../../assets/people/christophe-gyurgyik.png
 website: https://cgyurgyik.github.io
 github: https://github.com/cgyurgyik
 scholar: https://scholar.google.com/citations?user=JRpLpTAAAAAJ

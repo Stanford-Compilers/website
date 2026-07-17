@@ -1,5 +1,6 @@
 ---
-name: Burrito
+name: 'Burrito: Compilation of Shape Operators on Sparse Arrays'
+shortName: Burrito
 summary: A compiler for a sparse array language that supports shape operators — such as reshaping and concatenating sparse arrays — alongside compute operators, generating fused code over reshaped views.
 category: sparse-compilation
 status: The OOPSLA 2024 research artifact is available.

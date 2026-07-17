@@ -2,6 +2,7 @@
 name: Rohan Yadav
 role: PhD alum
 category: alumni
+portrait: ../../assets/people/rohan-yadav.png
 website: https://rohany.github.io/
 github: https://github.com/rohany
 scholar: https://scholar.google.com/citations?user=75t_IX8AAAAJ&hl=en

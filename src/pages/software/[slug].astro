@@ -48,7 +48,7 @@ const jsonld = {
 
 <BaseLayout title={s.name} description={s.summary} path={`/software/${entry.id}`} jsonld={jsonld}>
   <article class="swpage">
-    <div class="container container--narrow">
+    <div class="container">
       <Breadcrumbs
         items={[{ label: 'Software', href: '/software' }, { label: s.shortName ?? s.name }]}
       />
@@ -270,6 +270,11 @@ const jsonld = {
   }
   .swpage__section {
     margin-top: var(--space-xl);
+  }
+  /* The heading already carries its own bottom rule; drop the first pub's top
+     hairline so the two don't stack into a doubled line. */
+  .swpage__pubs :global(.pub:first-child) {
+    border-top: none;
   }
   .swpage__aside {
     display: flex;

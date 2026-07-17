@@ -2,6 +2,7 @@
 name: Alexander Root
 role: PhD student
 category: phd
+portrait: ../../assets/people/alexander-root.png
 website: https://ajroot.pl/
 github: https://github.com/rootjalex
 scholar: https://scholar.google.com/citations?user=ePuWx50AAAAJ
