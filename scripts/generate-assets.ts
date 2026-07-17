@@ -52,7 +52,7 @@ const ogSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"
   </g>
   ${markSvg(78, 170, 3.1, CARDINAL, INK)}
   <g font-family="Georgia,'Times New Roman',serif" fill="${INK}">
-    <text x="80" y="330" font-size="120" font-weight="600" letter-spacing="-2">Kjolstad Lab</text>
+    <text x="80" y="322" font-size="86" font-weight="600" letter-spacing="-2">Stanford Compilers Lab</text>
   </g>
   <g font-family="Georgia,'Times New Roman',serif" fill="${INK}" fill-opacity="0.82">
     <text x="82" y="410" font-size="46">Languages and compilers across</text>

@@ -25,7 +25,7 @@ for (const path of routes) {
     const resp = await page.goto(path);
     expect(resp?.status()).toBe(200);
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page).toHaveTitle(/Kjolstad Lab/);
+    await expect(page).toHaveTitle(/Stanford Compilers Lab/);
     expect(errors, `console errors on ${path}`).toEqual([]);
   });
 }

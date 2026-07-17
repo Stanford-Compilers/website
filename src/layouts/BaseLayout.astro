@@ -106,6 +106,34 @@ const allJsonLd = [orgJsonLd, ...pageJsonLd];
     <Footer />
     <ClipboardScript />
 
+    <script is:inline>
+      // Focus modality: only show the keyboard focus ring during genuine
+      // keyboard navigation. Marks .using-mouse on pointer input so CSS can
+      // suppress the ring the browser's :focus-visible heuristic otherwise
+      // resurrects when a modifier key (Shift, etc.) is pressed after a click.
+      // Bound once, survives view transitions; no-op degrades to native focus.
+      (function () {
+        if (window.__focusModalityBound) return;
+        window.__focusModalityBound = true;
+        var root = document.documentElement;
+        // Modifier keys alone are not navigation — they must not restore the ring.
+        var MODIFIERS = {
+          Shift: 1, Control: 1, Alt: 1, Meta: 1, CapsLock: 1,
+          NumLock: 1, ScrollLock: 1, Hyper: 1, Super: 1, Fn: 1, FnLock: 1,
+        };
+        function pointer() {
+          root.classList.add('using-mouse');
+        }
+        function keyboard(e) {
+          if (!MODIFIERS[e.key]) root.classList.remove('using-mouse');
+        }
+        window.addEventListener('pointerdown', pointer, true);
+        window.addEventListener('mousedown', pointer, true);
+        window.addEventListener('touchstart', pointer, true);
+        window.addEventListener('keydown', keyboard, true);
+      })();
+    </script>
+
     <style>
       .site-main {
         display: block;

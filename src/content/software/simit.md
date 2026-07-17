@@ -22,8 +22,8 @@ tags:
   - C++
   - LLVM
   - CUDA
-featured: true
-order: 2
+featured: false
+order: 12
 ---
 
 Simit is an early expression of the group's recurring theme: decoupling how a

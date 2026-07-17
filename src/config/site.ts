@@ -34,7 +34,7 @@ export interface SiteConfig {
   tagline: string;
   /** Longer plain-language description used for meta + hero support copy. */
   description: string;
-  /** Canonical production origin, no trailing slash. PLACEHOLDER — see CONTENT_REVIEW.md. */
+  /** Canonical production origin, no trailing slash. */
   url: string;
   /** Default social-card image path (relative to site root). */
   defaultOgImage: string;
@@ -95,14 +95,14 @@ export interface SiteConfig {
 }
 
 export const SITE: SiteConfig = {
-  name: 'Kjolstad Lab',
-  shortName: 'Kjolstad Lab',
+  name: 'Stanford Compilers Lab',
+  shortName: 'Stanford Compilers Lab',
   tagline: 'Languages and compilers across data forms and machines.',
   description:
     'We develop programming languages and compiler systems that let the same high-level ' +
     'computation run across different data representations and different machines — from ' +
     'sparse and structured data to CPUs, GPUs, accelerators, and distributed clusters.',
-  url: 'https://kjolstad-lab.stanford.edu',
+  url: 'https://compilers.stanford.edu',
   defaultOgImage: '/og/default.png',
   locale: 'en',
 

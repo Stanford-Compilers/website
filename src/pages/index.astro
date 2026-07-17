@@ -4,47 +4,36 @@ import HeroPipeline from '../components/home/HeroPipeline.astro';
 import TransformStack from '../components/research/TransformStack.astro';
 import SectionHead from '../components/ui/SectionHead.astro';
 import PublicationItem from '../components/publications/PublicationItem.astro';
-import PersonCard from '../components/people/PersonCard.astro';
 import SoftwareCard from '../components/software/SoftwareCard.astro';
 import Button from '../components/ui/Button.astro';
 import Icon from '../components/ui/Icon.astro';
 import { SITE } from '../config/site';
-import {
-  loadFeaturedPublications,
-  loadFeaturedSoftware,
-  loadPeopleByCategory,
-  peopleMap,
-} from '../lib/collections';
+import { loadFeaturedPublications, loadFeaturedSoftware, peopleMap } from '../lib/collections';
 
 const featuredPubs = (await loadFeaturedPublications()).slice(0, 5);
 const featuredSoftware = await loadFeaturedSoftware(6);
-const people = await loadPeopleByCategory();
 const pMap = await peopleMap();
-
-const pi = people.pi[0];
-const previewPeople = people.phd.slice(0, 5);
-const memberCount = people.phd.length + people.member.length + 1;
 
 const themes = [
   {
     n: '01',
     icon: 'layers',
     title: 'Portability across data representations',
-    body: 'Decoupling what a program computes from how its data is stored, so one expression runs over many dense and sparse formats.',
+    body: 'Programs should move between dense, sparse, graph, and custom layouts without being rewritten around each representation.',
     href: '/research#representation',
   },
   {
     n: '02',
     icon: 'compass',
     title: 'One program, many machines',
-    body: 'Mapping the same computation onto CPUs, GPUs, accelerators, and distributed clusters through explicit schedules.',
+    body: 'Mapping the same high-level intent onto CPUs, GPUs, accelerators, distributed clusters, and heterogeneous systems.',
     href: '/research#machines',
   },
   {
     n: '03',
     icon: 'chip',
     title: 'Compilers that generate compilers',
-    body: 'Meta-compilers, fast baseline JITs, and virtual-machine generators that build compilers instead of writing them by hand.',
+    body: 'Meta-compilers, VM generators. Instead of building one compiler at a time, we build methods and generators for creating whole compiler families.',
     href: '/research#meta',
   },
   {
@@ -79,13 +68,8 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
       <div class="hero__lower">
         <div class="hero__deck">
           <p class="hero__lead">
-            We develop programming languages and compiler systems that run the same high-level
-            computation across different data representations — dense and sparse, tensors and
-            relations — and different machines, from CPUs and GPUs to accelerators and clusters.
-          </p>
-          <p class="hero__sub">
-            The recurring idea: separate <em>what</em> a program computes from <em>how</em> its data is
-            stored and <em>where</em> it runs, and let a compiler bridge the gap.
+            We build programming languages and compilers that make sophisticated software fast and
+            portable across changing data representations and hardware.
           </p>
           <div class="hero__cta">
             <Button href="/research" variant="primary" iconRight="arrow-right"
@@ -97,8 +81,8 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
 
         <figure class="hero__figure">
           <figcaption class="hero__figcaption">
-            <span>Fig. 01 — Computation, re-formed</span>
-            <span aria-hidden="true">source → machine</span>
+            <span>Fig. 01 — Sparse Tensor Algebra</span>
+            <span aria-hidden="true">Abstraction → Execution</span>
           </figcaption>
           <HeroPipeline />
         </figure>
@@ -202,38 +186,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
       />
       <div class="pub-list">
         {featuredPubs.map((pub) => <PublicationItem pub={pub} people={pMap} headingLevel={3} />)}
-      </div>
-    </div>
-  </section>
-
-  {/* ---------------- People ---------------- */}
-  <section class="section" aria-labelledby="people-title">
-    <div class="container container--wide">
-      <SectionHead
-        kicker="People"
-        title="Who works here"
-        description={`The group is led by ${SITE.pi.name} and includes ${memberCount - 1} PhD students and members.`}
-        id="people-title"
-        href="/people"
-        linkLabel="Everyone"
-      />
-      <div class="people-preview">
-        {
-          pi && (
-            <div class="people-preview__pi">
-              <PersonCard person={pi} />
-            </div>
-          )
-        }
-        <ul class="people-preview__list">
-          {
-            previewPeople.map((person) => (
-              <li>
-                <PersonCard person={person} />
-              </li>
-            ))
-          }
-        </ul>
       </div>
     </div>
   </section>
@@ -346,23 +298,15 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
     padding-top: 1.1rem;
     border-top: 1px solid var(--line-strong);
   }
+  /* Tagline styled after the editorial-atlas hero deck: a large, light Fraunces
+     serif line in full ink with tight leading — not muted body sans. */
   .hero__lead {
     margin: 0;
-    font-size: var(--step-0);
-    line-height: 1.55;
-    color: var(--ink-muted);
-    max-width: 44ch;
-  }
-  .hero__sub {
-    margin-top: var(--space-s);
-    max-width: 42ch;
-    color: var(--ink-subtle);
-    font-size: var(--step--1);
-    line-height: 1.55;
-  }
-  .hero__sub em,
-  .hero__lead em {
-    font-style: italic;
+    max-width: 32ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.05rem + 0.85vw, 1.625rem);
+    font-weight: 390;
+    line-height: 1.24;
     color: var(--ink);
   }
   .hero__cta {
@@ -524,22 +468,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
     border-bottom: 1px solid var(--line-hairline);
   }
 
-  /* ---------------- People ---------------- */
-  .people-preview {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: var(--space-l);
-    align-items: start;
-  }
-  .people-preview__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-s);
-  }
-
   /* ---------------- Join CTA ---------------- */
   .join-cta {
     text-align: center;
@@ -585,9 +513,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
     .stack-band {
       grid-template-columns: 1fr;
       gap: var(--space-xl);
-    }
-    .people-preview {
-      grid-template-columns: 1fr;
     }
   }
   @media (max-width: 40rem) {

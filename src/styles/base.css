@@ -126,6 +126,15 @@ summary:focus-visible {
   outline-offset: 3px;
 }
 
+/* The browser's :focus-visible heuristic re-shows the ring when a modifier key
+   (e.g. Shift) is pressed while a mouse-focused control still holds focus. The
+   focus-modality script marks pointer use with .using-mouse so we can suppress
+   that ghost ring; keyboard navigation clears the class and restores the ring.
+   Without JS this rule never matches, so native :focus-visible is unaffected. */
+:root.using-mouse :focus-visible {
+  outline: none;
+}
+
 /* --- Forms --- */
 button,
 input,

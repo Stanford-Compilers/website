@@ -1,12 +1,11 @@
-# Kjolstad Lab website
+# Stanford Compilers Lab website
 
 The website for Fredrik Kjolstad's research group in the Stanford University Department of
 Computer Science. A fast, accessible, statically-generated site that presents the group's
 research, people, publications, and software.
 
-> **"Kjolstad Lab" is a temporary name** and the canonical URL is a placeholder. Both — and
-> everything else about the lab's identity — live in a single file, `src/config/site.ts`.
-> See [Renaming the lab](#renaming-the-lab) and [`CONTENT_REVIEW.md`](./CONTENT_REVIEW.md).
+> The lab's identity — display name, tagline, canonical URL, nav, and more — lives in a
+> single file, `src/config/site.ts`. See [Renaming the lab](#renaming-the-lab).
 
 ---
 
@@ -110,10 +109,10 @@ Edit **one file** — `src/config/site.ts`:
 
 ```ts
 export const SITE = {
-  name: 'Kjolstad Lab', // ← the display name
-  shortName: 'Kjolstad Lab', // ← used in the wordmark & nav
+  name: 'Stanford Compilers Lab', // ← the display name
+  shortName: 'Stanford Compilers Lab', // ← used in the wordmark & nav
   tagline: '…',
-  url: 'https://…', // ← canonical domain
+  url: 'https://compilers.stanford.edu', // ← canonical domain
   // …
 };
 ```

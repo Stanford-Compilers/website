@@ -82,7 +82,7 @@ const jsonld = {
   isPartOf: { '@type': 'Periodical', name: venueFull(pub.venueKey) },
   ...(pub.links.doi ? { sameAs: pub.links.doi } : {}),
   ...(pub.links.pdf ? { url: pub.links.pdf } : {}),
-  publisher: { '@type': 'Organization', name: 'Kjolstad Lab, Stanford University' },
+  publisher: { '@type': 'Organization', name: 'Stanford Compilers Lab, Stanford University' },
 };
 ---
 

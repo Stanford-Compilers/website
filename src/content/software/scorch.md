@@ -1,5 +1,6 @@
 ---
-name: Scorch
+name: 'Scorch: An Optimized Sparse PyTorch'
+shortName: Scorch
 summary: A library that adds sparse tensors and JIT-compiled kernels to PyTorch with a compatible API, automating loop ordering, tiling, and format inference for sparse machine-learning workloads.
 category: sparse-compilation
 status: Open-source research prototype.
@@ -19,7 +20,8 @@ publications:
 tags:
   - Python
   - C++
-order: 12
+featured: true
+order: 2
 ---
 
 Scorch connects the group's sparse compilation research to mainstream

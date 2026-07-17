@@ -50,105 +50,169 @@ function attrs(pub: Pub) {
 
 <div class="explorer" data-explorer>
   <form class="filters" data-filters aria-label="Filter publications" role="search">
-    <div class="filters__search">
-      <label for="pub-search" class="filters__search-label">
-        <Icon name="search" size={18} />
-        <span class="visually-hidden">Search publications</span>
-      </label>
-      <input
-        type="search"
-        id="pub-search"
-        name="q"
-        class="filters__search-input"
-        placeholder="Search titles and authors…"
-        autocomplete="off"
-        data-q
-      />
-    </div>
-
-    <div class="filters__facets">
-      <details class="facet" open>
-        <summary class="facet__summary">Year <span class="facet__n">{years.length}</span></summary>
-        <div class="facet__options facet__options--grid" role="group" aria-label="Filter by year">
-          {
-            years.map((y) => (
-              <label class="check">
-                <input type="checkbox" name="year" value={y.value} data-facet="year" />
-                <span class="check__box" aria-hidden="true" />
-                <span class="check__label mono">{y.value}</span>
-                <span class="check__count">{y.count}</span>
-              </label>
-            ))
-          }
+    <details class="filters__panel" open data-filters-panel>
+      <summary class="filters__toggle">
+        <Icon name="filter" size={16} />
+        <span class="filters__toggle-label">Filters</span>
+        <span class="filters__toggle-active mono" data-active-count hidden></span>
+        <Icon name="chevron-down" size={16} class="filters__toggle-chevron" />
+      </summary>
+      <div class="filters__panel-body">
+        <div class="filters__search">
+          <label for="pub-search" class="filters__search-label">
+            <Icon name="search" size={18} />
+            <span class="visually-hidden">Search publications</span>
+          </label>
+          <input
+            type="search"
+            id="pub-search"
+            name="q"
+            class="filters__search-input"
+            placeholder="Search titles and authors…"
+            autocomplete="off"
+            data-q
+          />
         </div>
-      </details>
 
-      <details class="facet">
-        <summary class="facet__summary">Venue <span class="facet__n">{venues.length}</span></summary
-        >
-        <div class="facet__options" role="group" aria-label="Filter by venue">
-          {
-            venues.map((v) => (
-              <label class="check">
-                <input type="checkbox" name="venue" value={v.value} data-facet="venue" />
-                <span class="check__box" aria-hidden="true" />
-                <span class="check__label mono">{venueShort(v.value)}</span>
-                <span class="check__count">{v.count}</span>
-              </label>
-            ))
-          }
+        <div class="filters__facets">
+          <details class="facet" open>
+            <summary class="facet__summary"
+              >Year <span class="facet__n">{years.length}</span></summary
+            >
+            <div
+              class="facet__options facet__options--grid"
+              role="group"
+              aria-label="Filter by year"
+            >
+              {
+                years.map((y) => (
+                  <label class="check">
+                    <input type="checkbox" name="year" value={y.value} data-facet="year" />
+                    <span class="check__box" aria-hidden="true" />
+                    <span class="check__label mono">{y.value}</span>
+                    <span class="check__count">{y.count}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </details>
+
+          <details class="facet">
+            <summary class="facet__summary"
+              >Venue <span class="facet__n">{venues.length}</span></summary
+            >
+            <div class="facet__options" role="group" aria-label="Filter by venue">
+              {
+                venues.map((v) => (
+                  <label class="check">
+                    <input type="checkbox" name="venue" value={v.value} data-facet="venue" />
+                    <span class="check__box" aria-hidden="true" />
+                    <span class="check__label mono">{venueShort(v.value)}</span>
+                    <span class="check__count">{v.count}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </details>
+
+          <details class="facet">
+            <summary class="facet__summary"
+              >Topic <span class="facet__n">{topics.length}</span></summary
+            >
+            <div class="facet__options" role="group" aria-label="Filter by research topic">
+              {
+                topics.map((t) => (
+                  <label class="check">
+                    <input type="checkbox" name="topic" value={t.value} data-facet="topic" />
+                    <span class="check__box" aria-hidden="true" />
+                    <span class="check__label">
+                      {TOPICS[t.value as keyof typeof TOPICS]?.short ?? t.value}
+                    </span>
+                    <span class="check__count">{t.count}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </details>
+
+          <div class="facet facet--flat">
+            <label class="check check--inline">
+              <input type="checkbox" name="award" value="1" data-award />
+              <span class="check__box" aria-hidden="true"></span>
+              <span class="check__label"
+                >Award winners <span class="check__count">{awards}</span></span
+              >
+            </label>
+          </div>
+
+          <div class="facet facet--flat">
+            <span class="member__label" id="pub-member-label">Lab member</span>
+            <div class="member" data-member-root>
+              <button
+                type="button"
+                class="member__button member__button--placeholder"
+                data-member-button
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-labelledby="pub-member-label pub-member-value"
+              >
+                <span class="member__value" id="pub-member-value" data-member-value>Anyone</span>
+                <Icon name="chevron-down" size={16} class="member__chevron" />
+              </button>
+              <ul
+                class="member__list"
+                role="listbox"
+                tabindex="-1"
+                aria-labelledby="pub-member-label"
+                data-member-list
+                hidden
+              >
+                <li
+                  class="member__option"
+                  role="option"
+                  data-value=""
+                  data-label="Anyone"
+                  aria-selected="true"
+                >
+                  <span class="member__option-check" aria-hidden="true"></span>
+                  <span class="member__option-name">Anyone</span>
+                </li>
+                {
+                  members.map((m) => (
+                    <li
+                      class="member__option"
+                      role="option"
+                      data-value={m.value}
+                      data-label={people.get(m.value)?.name}
+                      aria-selected="false"
+                    >
+                      <span class="member__option-check" aria-hidden="true" />
+                      <span class="member__option-name">{people.get(m.value)?.name}</span>
+                      <span class="member__option-count mono">{m.count}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+              <input type="hidden" name="member" data-member value="" />
+            </div>
+          </div>
         </div>
-      </details>
 
-      <details class="facet">
-        <summary class="facet__summary">Topic <span class="facet__n">{topics.length}</span></summary
-        >
-        <div class="facet__options" role="group" aria-label="Filter by research topic">
-          {
-            topics.map((t) => (
-              <label class="check">
-                <input type="checkbox" name="topic" value={t.value} data-facet="topic" />
-                <span class="check__box" aria-hidden="true" />
-                <span class="check__label">
-                  {TOPICS[t.value as keyof typeof TOPICS]?.short ?? t.value}
-                </span>
-                <span class="check__count">{t.count}</span>
-              </label>
-            ))
-          }
-        </div>
-      </details>
-
-      <div class="facet facet--flat">
-        <label class="check check--inline">
-          <input type="checkbox" name="award" value="1" data-award />
-          <span class="check__box" aria-hidden="true"></span>
-          <span class="check__label">Award winners <span class="check__count">{awards}</span></span>
-        </label>
+        <button type="button" class="filters__clear" data-clear hidden>
+          <Icon name="close" size={15} /> Clear all filters
+        </button>
       </div>
-
-      <div class="facet facet--flat">
-        <label class="member" for="pub-member">Lab member</label>
-        <div class="member__wrap">
-          <select id="pub-member" name="member" class="member__select" data-member>
-            <option value="">Anyone</option>
-            {
-              members.map((m) => (
-                <option value={m.value}>
-                  {people.get(m.value)?.name} ({m.count})
-                </option>
-              ))
-            }
-          </select>
-          <Icon name="chevron-down" size={16} class="member__chevron" />
-        </div>
-      </div>
-    </div>
-
-    <button type="button" class="filters__clear" data-clear hidden>
-      <Icon name="close" size={15} /> Clear all filters
-    </button>
+    </details>
   </form>
+
+  <script is:inline>
+    // Collapse the filter panel by default on small screens, before first paint,
+    // so the listing isn't pushed far down. Desktop keeps it open (summary hidden).
+    (function () {
+      const p = document.querySelector('[data-filters-panel]');
+      if (p) p.open = !window.matchMedia('(max-width: 60rem)').matches;
+    })();
+  </script>
 
   <div class="results">
     <p class="results__count" data-count role="status" aria-live="polite">
@@ -204,9 +268,42 @@ function attrs(pub: Pub) {
   .filters {
     position: sticky;
     top: 5.5rem;
+    /* Pin the rail to the viewport and let it scroll as one unit, so every
+       control stays reachable no matter how many facets are expanded. The
+       6px inset gives focus rings and the scrollbar room without clipping;
+       the matching negative margin keeps content flush with the column. */
+    max-height: calc(100dvh - 7rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 6px;
+    margin: -6px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .filters::-webkit-scrollbar {
+    width: 6px;
+  }
+  .filters::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .filters::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+  .filters:hover::-webkit-scrollbar-thumb {
+    background: var(--ink-subtle);
+    background-clip: padding-box;
+  }
+  .filters__panel-body {
     display: flex;
     flex-direction: column;
     gap: var(--space-s);
+  }
+  /* Collapse toggle is desktop-hidden; the panel is always open there. */
+  .filters__toggle {
+    display: none;
   }
   .filters__search {
     display: flex;
@@ -287,8 +384,6 @@ function attrs(pub: Pub) {
     flex-direction: column;
     gap: 0.1rem;
     padding-bottom: 0.75rem;
-    max-height: 15rem;
-    overflow-y: auto;
   }
   .facet__options--grid {
     display: grid;
@@ -349,6 +444,9 @@ function attrs(pub: Pub) {
     outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
+  :global(:root.using-mouse) .check input:focus-visible + .check__box {
+    outline: none;
+  }
   .check__label {
     flex: 1;
   }
@@ -361,33 +459,140 @@ function attrs(pub: Pub) {
     padding: 0;
   }
 
-  .member {
+  .member__label {
     display: block;
     font-size: var(--step--1);
     font-weight: 600;
     margin-bottom: 0.4rem;
   }
-  .member__wrap {
+  .member {
     position: relative;
+  }
+  /* Trigger — mirrors the search field's box so the rail reads as one system. */
+  .member__button {
     display: flex;
     align-items: center;
-  }
-  .member__select {
-    appearance: none;
+    gap: 0.5rem;
     width: 100%;
-    padding: 0.5rem 2rem 0.5rem 0.7rem;
+    padding: 0.5rem 0.7rem;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-s);
     background: var(--surface);
+    font-family: var(--font-sans);
     font-size: var(--step--1);
     color: var(--ink);
+    text-align: left;
     cursor: pointer;
   }
+  .member__button:hover {
+    border-color: var(--ink-subtle);
+  }
+  .member__button:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-tint);
+  }
+  :global(:root.using-mouse) .member__button:focus-visible {
+    border-color: var(--line-strong);
+    box-shadow: none;
+  }
+  .member__value {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .member__button--placeholder .member__value {
+    color: var(--ink-muted);
+  }
   .member__chevron {
-    position: absolute;
-    right: 0.6rem;
+    flex: none;
     color: var(--ink-subtle);
-    pointer-events: none;
+    transition: transform var(--dur-1) var(--ease);
+  }
+  .member__button[aria-expanded='true'] .member__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Popup listbox. Fixed (not absolute) so it escapes the filter rail's
+     `overflow-y: auto` clipping — the rail scrolls, and an absolute popup on
+     the last facet would be cut off at the rail's bottom edge. JS sets
+     left/width/top-or-bottom from the trigger's rect and flips it upward when
+     there isn't room below. */
+  .member__list {
+    position: fixed;
+    z-index: 30;
+    max-height: 15rem;
+    margin: 0;
+    padding: 0.3rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-s);
+    box-shadow: var(--shadow-2);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .member__list[hidden] {
+    display: none;
+  }
+  .member__list::-webkit-scrollbar {
+    width: 6px;
+  }
+  .member__list::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 999px;
+  }
+  .member__option {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--radius-xs);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    cursor: pointer;
+    scroll-margin: 0.3rem;
+  }
+  /* Keyboard/pointer focus highlight — one option "active" at a time. */
+  .member__option.is-active {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .member__option[aria-selected='true'] {
+    color: var(--ink);
+  }
+  .member__option-check {
+    flex: none;
+    position: relative;
+    width: 13px;
+    height: 13px;
+  }
+  .member__option[aria-selected='true'] .member__option-check::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: -1px;
+    width: 5px;
+    height: 9px;
+    border: solid var(--accent);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .member__option-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .member__option-count {
+    flex: none;
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
   }
 
   .filters__clear {
@@ -409,19 +614,20 @@ function attrs(pub: Pub) {
   }
 
   /* Results ------------------------------------------------ */
+  /* A quiet caption above the list; the first year's rule is the divider, so
+     this needs no border of its own (that would stack a second line under it). */
   .results__count {
     font-family: var(--font-mono);
     font-size: var(--step--1);
     color: var(--ink-subtle);
-    padding-bottom: var(--space-s);
-    border-bottom: 1px solid var(--line);
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-s);
   }
+  /* Every year heading — including the first — sits a full step below the
+     caption above it. This keeps the default listing's "52 publications → 2026"
+     gap identical to the filtered "Showing … → 2025" gap, where the first
+     visible group is never the DOM :first-child. */
   .year-group {
     margin-top: var(--space-l);
-  }
-  .year-group:first-child {
-    margin-top: var(--space-s);
   }
   .year-group__year {
     display: flex;
@@ -449,6 +655,17 @@ function attrs(pub: Pub) {
   }
   .year-group__list > li[hidden] {
     display: none;
+  }
+  /* The year heading's rule already divides each group, so the first shown
+     item shouldn't draw its own full-width hairline right beneath it (two
+     stacked lines). Strip every item's top border, then re-add it only to a
+     shown item that follows another shown item — i.e. every one except the
+     first visible. `visible ~ visible` keeps this correct under any filter. */
+  .year-group__list > li > :global(.pub) {
+    border-top: none;
+  }
+  .year-group__list > li:not([hidden]) ~ li:not([hidden]) > :global(.pub) {
+    border-top: 1px solid var(--line-hairline);
   }
 
   .results__empty {
@@ -489,9 +706,59 @@ function attrs(pub: Pub) {
     }
     .filters {
       position: static;
+      max-height: none;
+      overflow: visible;
+      padding: 0;
+      margin: 0;
     }
     .facet__options--grid {
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Filters collapse behind a tap target so the listing stays reachable. */
+    .filters__toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6ch;
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      font-family: var(--font-sans);
+      font-size: var(--step--1);
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-s);
+      cursor: pointer;
+      list-style: none;
+    }
+    .filters__toggle::-webkit-details-marker {
+      display: none;
+    }
+    .filters__toggle-active {
+      display: inline-grid;
+      place-items: center;
+      min-width: 1.3rem;
+      height: 1.3rem;
+      padding: 0 0.4rem;
+      font-size: var(--step--2);
+      color: var(--accent-contrast);
+      background: var(--accent);
+      border-radius: 999px;
+    }
+    .filters__toggle-active[hidden] {
+      display: none;
+    }
+    .filters__toggle-chevron {
+      margin-left: auto;
+      color: var(--ink-subtle);
+      transition: transform var(--dur-1) var(--ease);
+    }
+    .filters__panel[open] .filters__toggle-chevron {
+      transform: rotate(180deg);
+    }
+    .filters__panel[open] .filters__panel-body {
+      padding-top: var(--space-s);
     }
   }
 </style>

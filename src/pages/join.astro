@@ -68,23 +68,26 @@ const faqs = [
   title="Join"
   kicker="Join & collaborate"
   lead="We’re glad you’re interested. Here is how prospective students, current Stanford students, and collaborators can get involved — and what to expect."
-  description="How to get involved with the Kjolstad Lab at Stanford: guidance for prospective PhD students, current Stanford students, postdocs, and collaborators."
+  description="How to get involved with the Stanford Compilers Lab: guidance for prospective PhD students, current Stanford students, postdocs, and collaborators."
 >
   <section class="section">
     <div class="container container--wide">
-      <ul class="audiences">
+      <ol class="audiences">
         {
-          audiences.map((a) => (
+          audiences.map((a, i) => (
             <li class="audience">
-              <span class="audience__icon">
-                <Icon name={a.icon} size={22} />
-              </span>
-              <h2 class="audience__title">{a.title}</h2>
+              <div class="audience__head">
+                <span class="audience__index mono">{String(i + 1).padStart(2, '0')}</span>
+                <span class="audience__icon">
+                  <Icon name={a.icon} size={20} />
+                </span>
+                <h2 class="audience__title">{a.title}</h2>
+              </div>
               <p class="audience__body muted">{a.body}</p>
             </li>
           ))
         }
-      </ul>
+      </ol>
 
       <div class="admissions-note" role="note">
         <Icon name="doi" size={20} class="admissions-note__icon" />
@@ -160,29 +163,51 @@ const faqs = [
     list-style: none;
     padding: 0;
     margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--space-s);
+    border-top: 1px solid var(--line);
   }
   .audience {
-    padding: var(--space-l);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    background: var(--surface);
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: var(--space-m) var(--space-2xl);
+    align-items: start;
+    padding: var(--space-l) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .audience__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: var(--space-s);
+    row-gap: var(--space-2xs);
+  }
+  .audience__index {
+    grid-row: 1 / 3;
+    align-self: start;
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    color: var(--ink-subtle);
+    padding-top: 0.15rem;
   }
   .audience__icon {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
     color: var(--tech);
-    margin-bottom: var(--space-s);
+    background: var(--tech-tint);
+    border: 1px solid var(--tech-line);
+    border-radius: var(--radius-s);
   }
   .audience__title {
+    grid-column: 2;
     font-size: var(--step-1);
-    line-height: 1.15;
+    line-height: 1.2;
   }
   .audience__body {
-    margin-top: var(--space-2xs);
-    font-size: var(--step--1);
-    line-height: 1.55;
+    font-size: var(--step-0);
+    line-height: 1.6;
+    max-width: 58ch;
   }
   .admissions-note {
     display: flex;
@@ -299,6 +324,10 @@ const faqs = [
     .join-contact {
       grid-template-columns: 1fr;
       gap: var(--space-l);
+    }
+    .audience {
+      grid-template-columns: 1fr;
+      gap: var(--space-s);
     }
   }
 </style>
