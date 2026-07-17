@@ -1,27 +1,35 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import Icon from '../components/ui/Icon.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
 import { SITE } from '../config/site';
 
 const audiences = [
   {
-    icon: 'compass',
+    id: 'phd-students',
+    note: 'For applicants',
+    nav: 'PhD applicants',
     title: 'Prospective PhD students',
     body: 'Apply through the Stanford Computer Science PhD program. In your application, it helps to say which research you connect with and why. Admission is decided by the department, not by individual emails.',
+    admissions: true,
   },
   {
-    icon: 'users',
+    id: 'stanford-students',
+    note: 'If you’re at Stanford',
+    nav: 'Stanford students',
     title: 'Current Stanford students',
-    body: 'Graduate and undergraduate students at Stanford who want to work on languages, compilers, or systems are welcome to get in touch using the format below.',
+    body: 'Graduate and undergraduate students at Stanford who want to work on languages, compilers, or systems are welcome to get in touch.',
   },
   {
-    icon: 'chip',
+    id: 'postdocs-staff',
+    note: 'Official listings',
+    nav: 'Postdocs & staff',
     title: 'Postdocs & research staff',
     body: 'Any open positions are posted through Stanford. If you are interested, check official Stanford listings and reach out with your background and interests.',
   },
   {
-    icon: 'external',
+    id: 'collaborators',
+    note: 'For collaborators',
+    nav: 'Collaborators',
     title: 'Visitors & collaborators',
     body: 'Researchers and engineers in industry or academia are welcome to propose collaborations related to the group’s work.',
   },
@@ -64,262 +72,540 @@ const faqs = [
 ];
 ---
 
-<PageLayout
+<BaseLayout
   title="Join"
-  kicker="Join & collaborate"
-  lead="We’re glad you’re interested. Here is how prospective students, current Stanford students, and collaborators can get involved — and what to expect."
   description="How to get involved with the Stanford Compilers Lab: guidance for prospective PhD students, current Stanford students, postdocs, and collaborators."
+  mainClass="join-page"
 >
-  <section class="section">
-    <div class="container container--wide">
-      <ol class="audiences">
+  <header class="join-hero">
+    <div class="container container--wide join-hero__inner">
+      <p class="kicker">Join & collaborate</p>
+      <h1 class="join-hero__title">Join.</h1>
+      <p class="join-hero__deck">A note on joining and collaborating.</p>
+      <p class="lead join-hero__lead">
+        We’re glad you’re interested. Here is how prospective students, current Stanford students,
+        and collaborators can get involved — and what to expect.
+      </p>
+    </div>
+  </header>
+
+  <section class="letter-section" aria-label="Ways to get involved">
+    <div class="container container--wide letter-layout">
+      <aside class="letter-index">
+        <p class="letter-index__label mono">In this note</p>
+        <nav aria-label="Letter sections">
+          <ol>
+            {
+              audiences.map((audience, index) => (
+                <li>
+                  <a href={`#${audience.id}`}>
+                    <span class="letter-index__number">{String(index + 1).padStart(2, '0')}</span>
+                    <span>{audience.nav}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+      </aside>
+
+      <article class="letter">
+        <p class="letter__salutation">Hello—</p>
+        <p class="letter__opening">
+          Different routes apply depending on how you hope to get involved.
+        </p>
+
         {
-          audiences.map((a, i) => (
-            <li class="audience">
-              <div class="audience__head">
-                <span class="audience__index mono">{String(i + 1).padStart(2, '0')}</span>
-                <span class="audience__icon">
-                  <Icon name={a.icon} size={20} />
-                </span>
-                <h2 class="audience__title">{a.title}</h2>
-              </div>
-              <p class="audience__body muted">{a.body}</p>
+          audiences.map((audience) => (
+            <section class="letter__chapter" id={audience.id}>
+              <p class="letter__chapter-note mono">{audience.note}</p>
+              <h2>{audience.title}</h2>
+              <p>{audience.body}</p>
+
+              {audience.admissions && (
+                <aside class="admissions-footnote" role="note" aria-label="Admissions note">
+                  <p class="admissions-footnote__label mono">Admissions note</p>
+                  <p>
+                    Admissions decisions are made by the {SITE.institution.department} through its
+                    official process. Contacting the group does not guarantee review or admission.
+                    Please use the official{' '}
+                    <a href={SITE.institution.admissionsUrl} rel="noopener noreferrer">
+                      Stanford CS PhD admissions
+                    </a>{' '}
+                    pages for requirements and deadlines.
+                  </p>
+                </aside>
+              )}
+            </section>
+          ))
+        }
+
+        <p class="letter__signoff">
+          With thanks,<br />
+          {SITE.name}
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="reply-section" aria-labelledby="reply-title">
+    <div class="container container--wide reply-layout">
+      <div class="reply-intro">
+        <p class="kicker">Getting in touch</p>
+        <h2 id="reply-title">If you email, make it easy to respond</h2>
+        <p>
+          A short, specific message is best. Including the details on the right helps us understand
+          how your interests line up with the group’s work.
+        </p>
+        <div class="reply-intro__cta">
+          <Button href={`mailto:${SITE.contact.email}`} variant="primary" iconRight="mail">
+            Compose email
+          </Button>
+        </div>
+      </div>
+
+      <section class="email-sheet" aria-labelledby="email-example-title">
+        <h3 id="email-example-title" class="sr-only">Suggested email structure</h3>
+        <dl class="email-sheet__fields">
+          <div class="email-sheet__field">
+            <dt>To</dt>
+            <dd>{SITE.contact.email}</dd>
+          </div>
+          <div class="email-sheet__field">
+            <dt>Example subject</dt>
+            <dd>Your program · research topic · specific connection</dd>
+          </div>
+        </dl>
+        <div class="email-sheet__body">
+          <p class="email-sheet__hello">Hello,</p>
+          <ul>
+            {contactFormat.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="email-sheet__signature">
+            Best,<br />
+            Your name
+          </p>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="questions-section" aria-labelledby="questions-title">
+    <div class="container container--wide">
+      <header class="questions-head">
+        <div>
+          <p class="kicker">P.S.</p>
+          <h2 id="questions-title">Questions</h2>
+        </div>
+        <p>Questions about background, applications, projects, positions, and collaboration.</p>
+      </header>
+
+      <ol class="questions-list">
+        {
+          faqs.map((faq) => (
+            <li>
+              <article class="question">
+                <h3>{faq.q}</h3>
+                <p>{faq.a}</p>
+              </article>
             </li>
           ))
         }
       </ol>
-
-      <div class="admissions-note" role="note">
-        <Icon name="doi" size={20} class="admissions-note__icon" />
-        <p>
-          Admissions decisions are made by the {SITE.institution.department} through its official process.
-          Contacting the group does not guarantee review or admission. Please use the official
-          {' '}<a href={SITE.institution.admissionsUrl} rel="noopener noreferrer"
-            >Stanford CS PhD admissions</a
-          >
-          {' '}pages for requirements and deadlines.
-        </p>
-      </div>
     </div>
   </section>
-
-  <section class="section band">
-    <div class="container container--wide join-contact">
-      <div class="join-contact__intro">
-        <p class="kicker">Getting in touch</p>
-        <h2 class="join-contact__title">If you email, make it easy to respond</h2>
-        <p class="muted">
-          A short, specific message is best. Including the details on the right helps us understand
-          how your interests line up with the group’s work.
-        </p>
-        <div class="join-contact__cta">
-          <Button href={`mailto:${SITE.contact.email}`} variant="primary" iconRight="mail">
-            {SITE.contact.email}
-          </Button>
-        </div>
-      </div>
-      <div class="join-contact__list">
-        <p class="join-contact__list-label kicker">Please include</p>
-        <ul>
-          {
-            contactFormat.map((item) => (
-              <li>
-                <Icon name="check" size={16} class="join-check" />
-                <span>{item}</span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container container--wide">
-      <h2 class="faq-title">Questions</h2>
-      <div class="faq">
-        {
-          faqs.map((f) => (
-            <details class="faq__item">
-              <summary class="faq__q">
-                <span>{f.q}</span>
-                <Icon name="plus" size={18} class="faq__plus" />
-              </summary>
-              <p class="faq__a">{f.a}</p>
-            </details>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-</PageLayout>
+</BaseLayout>
 
 <style>
-  .audiences {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid var(--line);
+  .join-hero {
+    position: relative;
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7.5rem) clamp(3rem, 1.8rem + 4vw, 5.5rem);
+    border-bottom: 1px solid var(--line-hairline);
+    text-align: center;
   }
-  .audience {
-    display: grid;
-    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
-    gap: var(--space-m) var(--space-2xl);
-    align-items: start;
-    padding: var(--space-l) 0;
-    border-bottom: 1px solid var(--line);
+  .join-hero::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--line-strong) 0,
+      var(--line-strong) 1px,
+      transparent 1px,
+      transparent 28px
+    );
+    opacity: 0.5;
   }
-  .audience__head {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    column-gap: var(--space-s);
-    row-gap: var(--space-2xs);
-  }
-  .audience__index {
-    grid-row: 1 / 3;
-    align-self: start;
-    font-size: var(--step--2);
-    letter-spacing: 0.08em;
-    color: var(--ink-subtle);
-    padding-top: 0.15rem;
-  }
-  .audience__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    color: var(--tech);
-    background: var(--tech-tint);
-    border: 1px solid var(--tech-line);
-    border-radius: var(--radius-s);
-  }
-  .audience__title {
-    grid-column: 2;
-    font-size: var(--step-1);
-    line-height: 1.2;
-  }
-  .audience__body {
-    font-size: var(--step-0);
-    line-height: 1.6;
-    max-width: 58ch;
-  }
-  .admissions-note {
-    display: flex;
-    gap: var(--space-s);
-    margin-top: var(--space-l);
-    padding: var(--space-m) var(--space-l);
-    border: 1px solid var(--accent-line);
-    border-left-width: 3px;
-    border-radius: var(--radius-s);
-    background: var(--accent-tint);
-  }
-  .admissions-note__icon {
-    flex: none;
-    color: var(--accent);
-    margin-top: 0.15rem;
-  }
-  .admissions-note p {
-    font-size: var(--step--1);
-    color: var(--ink);
-  }
-
-  .join-contact {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: var(--space-2xl);
-    align-items: start;
-  }
-  .join-contact__title {
-    font-size: var(--step-2);
-    margin-top: var(--space-s);
-    max-width: 18ch;
-  }
-  .join-contact__intro > .muted {
-    margin-top: var(--space-m);
-  }
-  .join-contact__cta {
-    margin-top: var(--space-l);
-  }
-  .join-contact__list {
-    padding: var(--space-l);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    background: var(--surface);
-  }
-  .join-contact__list-label {
-    margin-bottom: var(--space-s);
-  }
-  .join-contact__list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .join-hero__inner {
     display: flex;
     flex-direction: column;
-    gap: var(--space-s);
+    align-items: center;
   }
-  .join-contact__list li {
-    display: flex;
-    gap: 0.6rem;
-    align-items: flex-start;
-    font-size: var(--step--1);
-    color: var(--ink-muted);
+  .join-hero__title {
+    margin-top: var(--space-s);
+    font-size: var(--step-6);
+    font-style: italic;
+    font-weight: 450;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
   }
-  .join-check {
-    flex: none;
-    color: var(--accent);
-    margin-top: 0.15rem;
+  .join-hero__deck {
+    margin-top: var(--space-m);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-style: italic;
+    line-height: 1.25;
+  }
+  .join-hero__lead {
+    max-width: 60ch;
+    margin-top: var(--space-m);
   }
 
-  .faq-title {
-    font-size: var(--step-2);
-    margin-bottom: var(--space-m);
+  .letter-section {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7rem);
   }
-  .faq {
+  .letter-layout {
+    display: grid;
+    grid-template-columns: minmax(9rem, 12rem) minmax(0, 47rem);
+    justify-content: center;
+    gap: clamp(var(--space-xl), 5vw, var(--space-3xl));
+  }
+  .letter-index {
+    position: sticky;
+    top: 6.25rem;
+    align-self: start;
+  }
+  .letter-index__label {
+    color: var(--ink-subtle);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .letter-index nav {
+    margin-top: var(--space-s);
+    padding-top: var(--space-s);
     border-top: 1px solid var(--line);
   }
-  .faq__item {
-    border-bottom: 1px solid var(--line);
-  }
-  .faq__q {
+  .letter-index ol {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-s);
-    padding: var(--space-m) 0;
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: var(--step-0);
-    color: var(--ink);
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0;
+    padding: 0;
     list-style: none;
   }
-  .faq__q::-webkit-details-marker {
-    display: none;
-  }
-  .faq__plus {
-    flex: none;
-    color: var(--accent);
-    transition: transform var(--dur-2) var(--ease);
-  }
-  .faq__item[open] .faq__plus {
-    transform: rotate(45deg);
-  }
-  .faq__a {
-    padding-bottom: var(--space-m);
+  .letter-index a {
+    display: grid;
+    grid-template-columns: 1.8rem 1fr;
+    gap: var(--space-2xs);
+    padding-block: 0.35rem;
     color: var(--ink-muted);
-    line-height: 1.6;
+    font-size: var(--step--2);
+    line-height: 1.4;
+    text-decoration: none;
+  }
+  .letter-index a:hover {
+    color: var(--accent);
+  }
+  .letter-index__number {
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    letter-spacing: 0.06em;
   }
 
-  @media (max-width: 52rem) {
-    .join-contact {
-      grid-template-columns: 1fr;
-      gap: var(--space-l);
+  .letter {
+    min-width: 0;
+  }
+  .letter__salutation {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-style: italic;
+    line-height: 1;
+  }
+  .letter__opening {
+    max-width: 38ch;
+    margin-top: var(--space-m);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+  .letter__chapter {
+    position: relative;
+    margin-top: clamp(var(--space-2xl), 6vw, var(--space-3xl));
+  }
+  .letter__chapter-note {
+    margin-bottom: var(--space-xs);
+    color: var(--accent);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .letter__chapter h2 {
+    max-width: 17ch;
+    font-size: var(--step-3);
+  }
+  .letter__chapter > p:not(.letter__chapter-note) {
+    max-width: 61ch;
+    margin-top: var(--space-m);
+    color: var(--ink-muted);
+    line-height: 1.75;
+  }
+  .admissions-footnote {
+    margin-top: var(--space-l);
+    padding: var(--space-m) 0 0 var(--space-m);
+    border-top: 1px solid var(--accent-line);
+    border-left: 2px solid var(--accent);
+  }
+  .admissions-footnote__label {
+    margin-bottom: var(--space-2xs);
+    color: var(--accent);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .admissions-footnote p:last-child {
+    max-width: 62ch;
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  .letter__signoff {
+    margin-top: var(--space-3xl);
+    color: var(--ink-muted);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .reply-section {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7rem);
+    border-block: 1px solid var(--line);
+    background: var(--paper-2);
+  }
+  .reply-layout {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(var(--space-xl), 6vw, var(--space-3xl));
+    align-items: start;
+  }
+  .reply-intro h2 {
+    max-width: 13ch;
+    margin-top: var(--space-s);
+    font-size: var(--step-3);
+  }
+  .reply-intro > p:not(.kicker) {
+    max-width: 38ch;
+    margin-top: var(--space-m);
+    color: var(--ink-muted);
+  }
+  .reply-intro__cta {
+    margin-top: var(--space-l);
+  }
+  .email-sheet {
+    min-width: 0;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    box-shadow: var(--shadow-2);
+  }
+  .email-sheet__field {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: var(--space-s);
+    padding: 0.85rem var(--space-m);
+    border-bottom: 1px solid var(--line);
+    font-size: var(--step--1);
+  }
+  .email-sheet__field dt {
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  .email-sheet__field dd {
+    min-width: 0;
+    color: var(--ink-muted);
+    overflow-wrap: anywhere;
+  }
+  .email-sheet__body {
+    padding: var(--space-l);
+  }
+  .email-sheet__hello,
+  .email-sheet__signature {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    font-style: italic;
+  }
+  .email-sheet__body ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-s) var(--space-l);
+    margin: var(--space-l) 0;
+    padding: 0;
+    list-style: none;
+  }
+  .email-sheet__body li {
+    position: relative;
+    padding-left: 1.25rem;
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .email-sheet__body li::before {
+    content: '↳';
+    position: absolute;
+    left: 0;
+    color: var(--tech);
+    font-family: var(--font-mono);
+  }
+  .email-sheet__signature {
+    color: var(--ink-subtle);
+  }
+
+  .questions-section {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7rem);
+  }
+  .questions-head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(18rem, 1.3fr);
+    gap: var(--space-xl);
+    align-items: end;
+    margin-bottom: var(--space-xl);
+  }
+  .questions-head h2 {
+    margin-top: var(--space-s);
+    font-size: var(--step-4);
+  }
+  .questions-head > p {
+    max-width: 40ch;
+    color: var(--ink-muted);
+  }
+  .questions-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--space-xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: question;
+  }
+  .questions-list > li {
+    position: relative;
+    padding: var(--space-l) 0 var(--space-xl);
+    border-top: 1px solid var(--line-strong);
+    counter-increment: question;
+  }
+  .questions-list > li::before {
+    content: counter(question) '.';
+    display: block;
+    margin-bottom: var(--space-m);
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-style: italic;
+    line-height: 1;
+  }
+  .question h3 {
+    max-width: 28ch;
+    font-size: var(--step-1);
+  }
+  .question p {
+    max-width: 60ch;
+    margin-top: var(--space-s);
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.65;
+  }
+
+  @media (min-width: 68.01rem) {
+    .letter__chapter-note {
+      position: absolute;
+      top: 0.35rem;
+      right: calc(100% + var(--space-xl));
+      width: 10rem;
+      margin: 0;
+      text-align: right;
     }
-    .audience {
+  }
+
+  @media (max-width: 68rem) {
+    .letter-layout {
+      grid-template-columns: minmax(0, 47rem);
+    }
+    .letter-index {
+      display: none;
+    }
+    .reply-layout {
       grid-template-columns: 1fr;
-      gap: var(--space-s);
+    }
+    .reply-intro h2,
+    .reply-intro > p:not(.kicker) {
+      max-width: 42rem;
+    }
+  }
+
+  @media (max-width: 44rem) {
+    .join-hero {
+      text-align: left;
+    }
+    .join-hero__inner {
+      align-items: flex-start;
+    }
+    .join-hero__title {
+      font-size: var(--step-5);
+    }
+    .join-hero__deck {
+      font-size: var(--step-1);
+    }
+    .email-sheet__field,
+    .questions-head,
+    .questions-list {
+      grid-template-columns: 1fr;
+    }
+    .email-sheet__field {
+      gap: var(--space-3xs);
+    }
+    .email-sheet__body ul {
+      grid-template-columns: 1fr;
+    }
+    .questions-head {
+      gap: var(--space-m);
+    }
+    .questions-head > p {
+      min-width: 0;
+    }
+  }
+
+  @media print {
+    .join-hero,
+    .letter-section,
+    .reply-section,
+    .questions-section {
+      padding-block: 1.5rem;
+    }
+    .letter-layout,
+    .reply-layout {
+      display: block;
+    }
+    .letter-index {
+      display: none;
+    }
+    .letter__chapter,
+    .admissions-footnote,
+    .email-sheet,
+    .questions-list > li {
+      break-inside: avoid;
+    }
+    .email-sheet {
+      margin-top: 1.5rem;
+      box-shadow: none;
     }
   }
 </style>
