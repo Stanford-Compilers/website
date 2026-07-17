@@ -9,9 +9,9 @@
     // Mark JS availability early so progressive-enhancement CSS can key off it.
     document.documentElement.classList.add('js');
     // Keep the mobile browser-chrome color in sync with the active theme.
-    var CHROME = { light: '#faf6ee', dark: '#171310' };
+    const CHROME = { light: '#faf6ee', dark: '#171310' };
     function syncChrome(t) {
-      var meta = document.querySelector('meta[name="theme-color"]');
+      const meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute('content', CHROME[t] || CHROME.light);
     }
     function apply() {

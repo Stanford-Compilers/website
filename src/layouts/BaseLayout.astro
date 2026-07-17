@@ -116,11 +116,20 @@ const allJsonLd = [orgJsonLd, ...pageJsonLd];
       (function () {
         if (window.__focusModalityBound) return;
         window.__focusModalityBound = true;
-        var root = document.documentElement;
+        const root = document.documentElement;
         // Modifier keys alone are not navigation — they must not restore the ring.
-        var MODIFIERS = {
-          Shift: 1, Control: 1, Alt: 1, Meta: 1, CapsLock: 1,
-          NumLock: 1, ScrollLock: 1, Hyper: 1, Super: 1, Fn: 1, FnLock: 1,
+        const MODIFIERS = {
+          Shift: 1,
+          Control: 1,
+          Alt: 1,
+          Meta: 1,
+          CapsLock: 1,
+          NumLock: 1,
+          ScrollLock: 1,
+          Hyper: 1,
+          Super: 1,
+          Fn: 1,
+          FnLock: 1,
         };
         function pointer() {
           root.classList.add('using-mouse');

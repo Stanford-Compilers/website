@@ -11,10 +11,10 @@ Legend: 🟥 decide before public launch · 🟧 confirm when convenient · 🟩
 
 ## 1. Identity & placeholders
 
-| #   | Item                                                                                                                   | Where                                            | Action                                                                                                                                        |
-| --- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🟧  | **Mailing address** uses the standard Stanford CS address (353 Jane Stanford Way)                                      | `src/config/site.ts` → `SITE.contact.mailing`    | Confirm it is the address the group wants shown.                                                                                              |
-| 🟩  | **Tagline** "Languages and compilers across data forms and machines." is the temporary tagline supplied for this build | `src/config/site.ts` → `SITE.tagline`            | Approve or replace.                                                                                                                           |
+| #   | Item                                                                                                                   | Where                                         | Action                                           |
+| --- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------ |
+| 🟧  | **Mailing address** uses the standard Stanford CS address (353 Jane Stanford Way)                                      | `src/config/site.ts` → `SITE.contact.mailing` | Confirm it is the address the group wants shown. |
+| 🟩  | **Tagline** "Languages and compilers across data forms and machines." is the temporary tagline supplied for this build | `src/config/site.ts` → `SITE.tagline`         | Approve or replace.                              |
 
 ## 2. People — portraits, bios, interests
 
