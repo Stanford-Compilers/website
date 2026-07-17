@@ -55,38 +55,53 @@ const themes = [
     href: '/publications?topic=sparse-tensor-algebra',
   },
 ];
+
+// Highlight a key phrase of the tagline in cardinal italic. Falls back to the
+// plain tagline if the phrase ever changes in the config.
+const HERO_HIGHLIGHT = 'data forms';
+const hlIndex = SITE.tagline.indexOf(HERO_HIGHLIGHT);
+const heroBefore = hlIndex >= 0 ? SITE.tagline.slice(0, hlIndex) : SITE.tagline;
+const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.length) : '';
 ---
 
 <BaseLayout title="Home" isHome path="/">
   {/* ---------------- Hero ---------------- */}
   <section class="hero" aria-labelledby="hero-title">
     <div class="container container--wide">
-      <div class="hero__intro">
-        <p class="hero__eyebrow">
-          <span class="hero__lab">{SITE.name}</span>
-          <span class="hero__affil mono">{SITE.institution.affiliationLine}</span>
-        </p>
-        <h1 class="hero__title" id="hero-title">{SITE.tagline}</h1>
-        <p class="hero__lead">
-          We develop programming languages and compiler systems that let the same high-level
-          computation run across different data representations — dense and sparse, tensors and
-          relations — and different machines, from CPUs and GPUs to accelerators and clusters.
-        </p>
-        <p class="hero__sub">
-          The recurring idea is to separate <em>what</em> a program computes from <em>how</em> its data
-          is stored and <em>where</em> it runs, and to let a compiler bridge the gap.
-        </p>
-        <div class="hero__cta">
-          <Button href="/research" variant="primary" iconRight="arrow-right"
-            >Read the research</Button
-          >
-          <Button href="/publications" variant="outline">Browse publications</Button>
-        </div>
+      <div class="hero__masthead">
+        <p class="kicker hero__kicker">Programming Languages × Systems</p>
+        <p class="hero__folio" aria-hidden="true">Stanford Computer Science · 37.428° N</p>
+        <h1 class="hero__title" id="hero-title">
+          {heroBefore}<em>{HERO_HIGHLIGHT}</em>{heroAfter}
+        </h1>
       </div>
 
-      <div class="hero__viz">
-        <p class="hero__viz-label kicker kicker--tech">Computation, re-formed</p>
-        <HeroPipeline />
+      <div class="hero__lower">
+        <div class="hero__deck">
+          <p class="hero__lead">
+            We develop programming languages and compiler systems that run the same high-level
+            computation across different data representations — dense and sparse, tensors and
+            relations — and different machines, from CPUs and GPUs to accelerators and clusters.
+          </p>
+          <p class="hero__sub">
+            The recurring idea: separate <em>what</em> a program computes from <em>how</em> its data is
+            stored and <em>where</em> it runs, and let a compiler bridge the gap.
+          </p>
+          <div class="hero__cta">
+            <Button href="/research" variant="primary" iconRight="arrow-right"
+              >Read the research</Button
+            >
+            <Button href="/publications" variant="outline">Browse publications</Button>
+          </div>
+        </div>
+
+        <figure class="hero__figure">
+          <figcaption class="hero__figcaption">
+            <span>Fig. 01 — Computation, re-formed</span>
+            <span aria-hidden="true">source → machine</span>
+          </figcaption>
+          <HeroPipeline />
+        </figure>
       </div>
     </div>
   </section>
@@ -262,53 +277,88 @@ const themes = [
 <style>
   /* ---------------- Hero ---------------- */
   .hero {
-    padding-top: clamp(2rem, 1rem + 4vw, 4.5rem);
-    padding-bottom: clamp(2rem, 1rem + 4vw, 4rem);
+    padding-top: clamp(2rem, 1rem + 4vw, 4.25rem);
+    padding-bottom: clamp(2.75rem, 1.5rem + 4.5vw, 5.5rem);
   }
-  .hero__intro {
-    max-width: 46rem;
+
+  /* Masthead: a ruled kicker (top-left) and a vertical folio (right edge) frame
+     a wide serif headline — the composition that gives the hero its balance. */
+  .hero__masthead {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(1rem, 0.4rem + 2vw, 2.5rem);
   }
-  .hero__eyebrow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.6rem 1rem;
-    margin-bottom: var(--space-m);
-  }
-  .hero__lab {
-    font-family: var(--font-mono);
-    font-size: var(--step--1);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--accent);
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--accent-line);
-    border-radius: var(--radius-xs);
-    background: var(--accent-tint);
-  }
-  .hero__affil {
-    font-size: var(--step--2);
-    color: var(--ink-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+  .hero__kicker {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    justify-self: start;
+    margin: 0;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--ink);
   }
   .hero__title {
-    font-size: var(--step-6);
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    max-width: 16ch;
+    grid-column: 1;
+    grid-row: 2;
+    margin: clamp(1.4rem, 0.6rem + 3vw, 2.75rem) 0 0;
+    max-width: 20ch;
+    font-size: clamp(2.9rem, 1.25rem + 6.7vw, 6rem);
+    font-weight: 420;
+    line-height: 0.94;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  .hero__title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .hero__folio {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    align-self: stretch;
+    margin: 0;
+    padding-left: 0.85rem;
+    border-left: 1px solid var(--line);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    color: var(--ink-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Lower zone: supporting copy + CTAs on the left, the pipeline figure on the
+     right, both hung from a shared hairline rule. */
+  .hero__lower {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    column-gap: clamp(1.5rem, 0.6rem + 3vw, 4rem);
+    row-gap: var(--space-xl);
+    align-items: start;
+    margin-top: clamp(2.5rem, 1.4rem + 4vw, 4.75rem);
+  }
+  .hero__deck {
+    grid-column: 1;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line-strong);
   }
   .hero__lead {
-    margin-top: var(--space-l);
-    font-size: var(--step-1);
-    line-height: 1.5;
+    margin: 0;
+    font-size: var(--step-0);
+    line-height: 1.55;
     color: var(--ink-muted);
-    max-width: 60ch;
+    max-width: 44ch;
   }
   .hero__sub {
     margin-top: var(--space-s);
+    max-width: 42ch;
     color: var(--ink-subtle);
-    max-width: 58ch;
+    font-size: var(--step--1);
+    line-height: 1.55;
   }
   .hero__sub em,
   .hero__lead em {
@@ -321,11 +371,45 @@ const themes = [
     flex-wrap: wrap;
     gap: var(--space-s);
   }
-  .hero__viz {
-    margin-top: var(--space-2xl);
+  .hero__figure {
+    grid-column: 2;
+    margin: 0;
   }
-  .hero__viz-label {
+  .hero__figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: var(--space-s);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-subtle);
+  }
+
+  @media (max-width: 62rem) {
+    .hero__lower {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-l);
+    }
+    .hero__deck,
+    .hero__figure {
+      grid-column: 1;
+    }
+  }
+  @media (max-width: 48rem) {
+    .hero__masthead {
+      grid-template-columns: 1fr;
+    }
+    .hero__folio {
+      display: none;
+    }
+    .hero__title {
+      grid-column: 1;
+      max-width: 16ch;
+    }
   }
 
   /* ---------------- Themes ---------------- */

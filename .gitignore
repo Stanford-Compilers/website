@@ -17,6 +17,9 @@ coverage/
 .env.*
 !.env.example
 
+# local design exploration (not part of the built site)
+design-previews/
+
 # os / editor
 .DS_Store
 Thumbs.db

@@ -6,9 +6,10 @@
 
 :root {
   /* --- Type families --- */
-  /* Display headings use the same grotesk as body (IBM Plex Sans); a heavier
-     weight (see base.css) sets them apart rather than a contrasting family. */
-  --font-display: 'Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Editorial display serif for hero + major headings + wordmark; a variable
+     font whose optical-size axis gives large headings their high-contrast cut.
+     Body & interface stay on the Plex Sans grotesk for a technical, legible base. */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-sans: 'Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Plex Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
 

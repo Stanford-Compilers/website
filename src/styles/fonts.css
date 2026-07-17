@@ -1,8 +1,29 @@
 /* Self-hosted, Latin-subset web fonts. No third-party runtime requests.
- * Two families:
- *   IBM Plex Sans — display headings, body & interface (weight sets headings apart)
+ * Three families:
+ *   Fraunces      — editorial display serif: hero, major headings, wordmark
+ *   IBM Plex Sans — body & interface (running text, navigation, controls)
  *   IBM Plex Mono — technical labels, years, venues, tags, motifs
+ *
+ * Fraunces is a variable font (optical size 9–144, weight 100–900); a single
+ * file per style covers the whole range. `font-optical-sizing: auto` (base.css)
+ * lets large headings pick up the high-contrast display cut automatically.
  */
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/fraunces-var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/fraunces-var-italic.woff2') format('woff2');
+}
 
 @font-face {
   font-family: 'Plex Sans';

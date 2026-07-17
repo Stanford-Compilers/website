@@ -75,9 +75,13 @@ const allJsonLd = [orgJsonLd, ...pageJsonLd];
     <meta name="theme-color" content="#171310" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
 
-    {/* Preload the two critical fonts; the rest use font-display: swap. */}
+    {
+      /* Preload the critical fonts; the rest use font-display: swap. Fraunces is
+        the hero headline (the LCP text), so it is preloaded alongside body Plex. */
+    }
     <link rel="preload" href="/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/plex-sans-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/fraunces-var.woff2" as="font" type="font/woff2" crossorigin />
 
     <SEO
       title={title}
