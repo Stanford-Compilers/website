@@ -19,6 +19,7 @@ coverage/
 
 # local design exploration (not part of the built site)
 design-previews/
+mockups/
 
 # os / editor
 .DS_Store

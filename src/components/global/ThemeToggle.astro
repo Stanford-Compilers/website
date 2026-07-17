@@ -30,8 +30,8 @@ import Icon from '../ui/Icon.astro';
     background: var(--surface-2);
   }
 
-  /* Show moon in light mode (action: go dark), sun in dark mode (action: go light).
-     Covers both explicit choice and system preference. */
+  /* Moon in light mode (action: go dark), sun in dark mode (action: go light).
+     Light is the default, so the moon shows until dark is explicitly chosen. */
   .theme-toggle__sun {
     display: none;
   }
@@ -43,13 +43,5 @@ import Icon from '../ui/Icon.astro';
   }
   :global(:root[data-theme='dark']) .theme-toggle__moon {
     display: none;
-  }
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme='light'])) .theme-toggle__sun {
-      display: inline-flex;
-    }
-    :global(:root:not([data-theme='light'])) .theme-toggle__moon {
-      display: none;
-    }
   }
 </style>

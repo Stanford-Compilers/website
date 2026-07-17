@@ -97,47 +97,8 @@
   color-scheme: light;
 }
 
-/* System dark preference, unless the user explicitly chose light. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --paper: hsl(30 11% 8.5%);
-    --paper-2: hsl(30 10% 11%);
-    --surface: hsl(30 9% 12%);
-    --surface-2: hsl(30 8% 15.5%);
-    --surface-inset: hsl(30 8% 17.5%);
-
-    --ink: hsl(40 22% 92%);
-    --ink-muted: hsl(38 11% 71%);
-    --ink-subtle: hsl(36 9% 60%);
-
-    --line: hsl(32 8% 23%);
-    --line-strong: hsl(32 7% 34%);
-    --line-hairline: hsl(32 8% 19%);
-
-    --accent: hsl(2 78% 68%);
-    --accent-strong: hsl(2 85% 76%);
-    --accent-contrast: hsl(30 12% 9%);
-    --accent-tint: hsl(2 30% 18%);
-    --accent-line: hsl(2 35% 34%);
-
-    --tech: hsl(190 48% 64%);
-    --tech-strong: hsl(190 55% 74%);
-    --tech-tint: hsl(197 30% 18%);
-    --tech-line: hsl(197 24% 30%);
-
-    --focus: hsl(2 85% 74%);
-    --selection: hsl(2 40% 26%);
-
-    --code-bg: hsl(30 9% 14%);
-
-    --shadow-1: 0 1px 2px hsl(0 0% 0% / 0.3), 0 1px 1px hsl(0 0% 0% / 0.24);
-    --shadow-2: 0 6px 20px hsl(0 0% 0% / 0.4), 0 2px 8px hsl(0 0% 0% / 0.3);
-
-    color-scheme: dark;
-  }
-}
-
-/* Explicit user choice (theme toggle stamps data-theme on <html>). */
+/* Dark applies only on explicit user choice — the toggle stamps data-theme on
+   <html>. Light is always the default, regardless of the OS color-scheme. */
 :root[data-theme='dark'] {
   --paper: hsl(30 11% 8.5%);
   --paper-2: hsl(30 10% 11%);

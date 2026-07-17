@@ -8,6 +8,12 @@
   (function () {
     // Mark JS availability early so progressive-enhancement CSS can key off it.
     document.documentElement.classList.add('js');
+    // Keep the mobile browser-chrome color in sync with the active theme.
+    var CHROME = { light: '#faf6ee', dark: '#171310' };
+    function syncChrome(t) {
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', CHROME[t] || CHROME.light);
+    }
     function apply() {
       document.documentElement.classList.add('js');
       try {
@@ -18,19 +24,19 @@
           document.documentElement.removeAttribute('data-theme');
         }
       } catch (e) {}
+      syncChrome(effective());
     }
     function effective() {
-      const attr = document.documentElement.getAttribute('data-theme');
-      if (attr === 'light' || attr === 'dark') return attr;
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
+      // Light is the default; dark only when explicitly chosen. The OS
+      // prefers-color-scheme is intentionally not consulted here.
+      return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
     }
     function setTheme(t) {
       document.documentElement.setAttribute('data-theme', t);
       try {
         localStorage.setItem('theme', t);
       } catch (e) {}
+      syncChrome(t);
       document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
         b.setAttribute(
           'aria-label',

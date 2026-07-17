@@ -205,9 +205,4 @@ const hue = monogramHue(person.name);
   :global(:root[data-theme='dark']) .monogram {
     background: hsl(var(--mono-h) 15% 17%);
   }
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme='light'])) .monogram {
-      background: hsl(var(--mono-h) 15% 17%);
-    }
-  }
 </style>
