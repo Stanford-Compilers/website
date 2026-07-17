@@ -8,7 +8,6 @@ problem: Sparse compilers have focused on arithmetic, but real programs also res
 idea: Treat shape operators as first-class in the compiler, so it can iterate over reshaped views of sparse data structures and fuse them with computation without materializing intermediates.
 links:
   repo: https://github.com/rootjalex/burrito-artifact
-  site: https://ajroot.pl/oopsla2024burrito.html
   paper: https://doi.org/10.1145/3689752
 people:
   - alexander-root
@@ -20,7 +19,8 @@ publications:
 tags:
   - C++
   - MLIR
-order: 11
+featured: true
+order: 1
 ---
 
 Burrito widens what a sparse compiler can express. By handling shape operators, not

@@ -30,7 +30,7 @@ tags:
   - C++
   - C
   - CUDA
-featured: true
+featured: false
 order: 1
 ---
 

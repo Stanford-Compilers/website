@@ -8,7 +8,6 @@ const groups = await loadPeopleByCategory();
 const pubs = await loadPublications();
 const software = await loadSoftware();
 const phdCount = groups.phd.length;
-const firstYear = Math.min(...pubs.map((p) => p.year));
 
 const next = [
   {
@@ -68,11 +67,11 @@ const next = [
 
         <h2 class="about-h2">The group</h2>
         <p class="muted">
-          {SITE.name} is led by {SITE.pi.name}, {SITE.pi.title.toLowerCase()}. It includes
-          {' '}{phdCount} PhD students, several co-advised with faculty across programming languages,
-          systems, computer architecture, and graphics. Since {firstYear}, the group and its
-          collaborators have published widely at venues including PLDI, OOPSLA, ASPLOS, ISCA, and
-          SC, and released its work as open-source software.
+          The Stanford Compilers Lab was established in 2021 and is directed by Fredrik Kjolstad,
+          assistant professor of computer science. Currently, the group comprises 10 PhD students,
+          several of whom are jointly advised by faculty in programming languages, systems, computer
+          architecture, and graphics. The group’s research has appeared at PLDI, OOPSLA, ASPLOS,
+          ISCA, CGO, and SC, and its software is released as open source.
         </p>
 
         <div class="about-contact">
