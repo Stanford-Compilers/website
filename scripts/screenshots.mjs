@@ -18,7 +18,6 @@ const routes = [
   ['pub-detail', '/publications/oopsla17'],
   ['join', '/join'],
   ['about', '/about'],
-  ['accessibility', '/accessibility'],
   ['notfound', '/nope-404'],
 ];
 

@@ -2,6 +2,7 @@
 name: Trevor Gale
 role: PhD alum
 category: alumni
+portrait: ../../assets/people/trevor-gale.png
 website: https://research.google/people/trevorgale/
 github: https://github.com/tgale96
 linkedin: https://www.linkedin.com/in/trevorgale/

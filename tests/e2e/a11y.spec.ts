@@ -12,7 +12,6 @@ const pages = [
   '/publications/oopsla17',
   '/join',
   '/about',
-  '/accessibility',
 ];
 
 test.describe('axe accessibility scan (WCAG 2.1 A/AA)', () => {

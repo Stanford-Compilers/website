@@ -94,8 +94,6 @@ These are conservative and grounded in the group's public work, but should be re
   (`src/pages/research.astro`). It describes observable practice (systems + artifacts +
   collaborations) and claims no unverified culture or values.
 - 🟧 About-page mission (`src/pages/about.astro`).
-- 🟩 Accessibility statement "last reviewed" date (`src/pages/accessibility.astro`) — update
-  when re-reviewed.
 
 ---
 

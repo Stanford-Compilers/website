@@ -68,8 +68,6 @@ export interface SiteConfig {
   social: SocialLink[];
   /** Primary navigation, in order. */
   nav: NavItem[];
-  /** Secondary links surfaced only in the footer. */
-  footerNav: NavItem[];
   /**
    * Analytics configuration. Disabled by default (privacy-respecting static site).
    * To enable a privacy-preserving analytics script later, set `enabled: true`
@@ -158,8 +156,6 @@ export const SITE: SiteConfig = {
     { label: 'About', href: '/about', description: 'The group and its research narrative.' },
     { label: 'Join', href: '/join', description: 'For prospective students and collaborators.' },
   ],
-
-  footerNav: [{ label: 'Accessibility', href: '/accessibility' }],
 
   analytics: {
     enabled: false,

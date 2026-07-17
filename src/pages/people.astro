@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import PersonCard from '../components/people/PersonCard.astro';
 import Icon from '../components/ui/Icon.astro';
@@ -44,11 +45,21 @@ const jsonld = {
               Principal investigator
             </h2>
             <div class="pi__card">
-              <div class="pi__mono" aria-hidden="true">
-                <span class="pi__bracket">[</span>
-                <span class="pi__initials">FK</span>
-                <span class="pi__bracket">]</span>
-              </div>
+              {pi.portrait ? (
+                <Image
+                  src={pi.portrait}
+                  alt={pi.portraitAlt ?? `Portrait of ${pi.name}`}
+                  width={184}
+                  height={184}
+                  class="pi__photo"
+                />
+              ) : (
+                <div class="pi__mono" aria-hidden="true">
+                  <span class="pi__bracket">[</span>
+                  <span class="pi__initials">FK</span>
+                  <span class="pi__bracket">]</span>
+                </div>
+              )}
               <div class="pi__body">
                 <p class="kicker">Principal investigator</p>
                 <h3 class="pi__name">
@@ -161,6 +172,14 @@ const jsonld = {
     font-size: 1.7rem;
     color: var(--ink);
     font-weight: 500;
+  }
+  .pi__photo {
+    flex: 0 0 auto;
+    width: 92px;
+    height: 92px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    object-fit: cover;
   }
   .pi__bracket {
     color: var(--accent);

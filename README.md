@@ -126,7 +126,7 @@ Targets **WCAG 2.2 AA**. Semantic landmarks, a logical heading order, a skip lin
 focus states, full keyboard operation, `prefers-reduced-motion` support, AA-contrast light
 **and** dark themes, and a no-JavaScript fallback for the publication list (the complete
 grouped list is always present; only live filtering needs JS). Verified with automated
-axe-core scans in Playwright plus manual review; see `/accessibility` and the
+axe-core scans in Playwright plus manual review; see the
 [testing notes](./ARCHITECTURE.md#testing).
 
 ## Performance approach

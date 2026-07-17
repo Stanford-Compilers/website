@@ -4,7 +4,7 @@ import Wordmark from './Wordmark.astro';
 import Icon from '../ui/Icon.astro';
 
 const year = 2026; // Build year; static site.
-const allNav = [...SITE.nav, ...SITE.footerNav];
+const allNav = SITE.nav;
 ---
 
 <footer class="site-footer">
@@ -65,11 +65,9 @@ const allNav = [...SITE.nav, ...SITE.footerNav];
     <div class="site-footer__base">
       <p class="subtle mono">
         © {year}
-        {SITE.name}. Built as a static site — no trackers, no cookies for analytics.
+        {SITE.name}.
       </p>
       <p class="subtle mono">
-        <a href="/accessibility">Accessibility</a>
-        <span aria-hidden="true"> · </span>
         <a href={SITE.institution.url} rel="noopener noreferrer">{SITE.institution.name}</a>
       </p>
     </div>

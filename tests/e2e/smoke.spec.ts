@@ -11,7 +11,6 @@ const routes = [
   '/publications/oopsla17',
   '/join',
   '/about',
-  '/accessibility',
 ];
 
 for (const path of routes) {

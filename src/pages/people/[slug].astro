@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
@@ -62,11 +63,23 @@ const jsonld = {
       <Breadcrumbs items={[{ label: 'People', href: '/people' }, { label: p.name }]} />
 
       <header class="ppage__head">
-        <div class="ppage__mono" aria-hidden="true">
-          <span class="ppage__bracket">[</span>
-          <span class="ppage__initials">{initials(p.name)}</span>
-          <span class="ppage__bracket">]</span>
-        </div>
+        {
+          p.portrait ? (
+            <Image
+              src={p.portrait}
+              alt={p.portraitAlt ?? `Portrait of ${p.name}`}
+              width={192}
+              height={192}
+              class="ppage__photo"
+            />
+          ) : (
+            <div class="ppage__mono" aria-hidden="true">
+              <span class="ppage__bracket">[</span>
+              <span class="ppage__initials">{initials(p.name)}</span>
+              <span class="ppage__bracket">]</span>
+            </div>
+          )
+        }
         <div class="ppage__id">
           <h1 class="ppage__name">{p.name}</h1>
           <p class="ppage__role">{p.role}</p>
@@ -183,6 +196,14 @@ const jsonld = {
     font-size: 1.9rem;
     color: var(--ink);
     font-weight: 500;
+  }
+  .ppage__photo {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 96px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    object-fit: cover;
   }
   .ppage__bracket {
     color: var(--accent);

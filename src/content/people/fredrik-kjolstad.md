@@ -2,6 +2,7 @@
 name: Fredrik Kjolstad
 role: Assistant Professor of Computer Science
 category: pi
+portrait: ../../assets/people/fredrik-kjolstad.png
 website: https://fredrikbk.com/
 email: kjolstad@cs.stanford.edu
 github: https://github.com/fredrikbk

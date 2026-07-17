@@ -155,7 +155,7 @@
     - "scorch"
   links:
     pdf: "https://fredrikbk.com/publications/scorch.pdf"
-    arxiv: "https://arxiv.org/abs/2405.16883"
+    doi: "https://doi.org/10.1109/CGO68049.2026.11394842"
 - id: "cgo26ember"
   title: "Ember: A Compiler for Embedding Operations on Decoupled Access-Execute Architectures"
   year: 2026

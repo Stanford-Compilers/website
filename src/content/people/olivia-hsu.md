@@ -2,6 +2,7 @@
 name: Olivia Hsu
 role: PhD alum
 category: alumni
+portrait: ../../assets/people/olivia-hsu.png
 website: https://weiya711.github.io/
 github: https://github.com/weiya711
 scholar: https://scholar.google.com/citations?user=t67CRMYAAAAJ&hl=en
