@@ -127,7 +127,7 @@ const citeId = `cite-${pub.id}`;
               <span>BibTeX</span>
             </summary>
             <div class="pub__panel">
-              <pre id={bibId} class="pub__code scroll-x">{bibtex}</pre>
+              <pre id={bibId} class="pub__code scroll-x" set:text={bibtex} />
               <button
                 type="button"
                 class="pub__copy"
@@ -144,7 +144,7 @@ const citeId = `cite-${pub.id}`;
               <span>Cite</span>
             </summary>
             <div class="pub__panel">
-              <p id={citeId} class="pub__citation">{citation}</p>
+              <p id={citeId} class="pub__citation" set:text={citation} />
               <button
                 type="button"
                 class="pub__copy"

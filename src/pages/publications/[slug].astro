@@ -202,7 +202,7 @@ const jsonld = {
                 <span>Copy</span>
               </button>
             </div>
-            <p id={`cite-${pub.id}`} class="cite__text">{citation}</p>
+            <p id={`cite-${pub.id}`} class="cite__text" set:text={citation} />
           </div>
           <div class="cite__block">
             <div class="cite__head">
@@ -217,7 +217,7 @@ const jsonld = {
                 <span>Copy</span>
               </button>
             </div>
-            <pre id={`bib-${pub.id}`} class="cite__code scroll-x">{bibtex}</pre>
+            <pre id={`bib-${pub.id}`} class="cite__code scroll-x" set:text={bibtex} />
           </div>
         </div>
       </section>
