@@ -1,4 +1,6 @@
 ---
+import { absoluteUrl } from '../../config/site';
+
 interface Crumb {
   label: string;
   href?: string;
@@ -8,7 +10,25 @@ interface Props {
   class?: string;
 }
 const { items, class: className } = Astro.props;
+
+// BreadcrumbList structured data for search results. The trail always starts
+// at the site root; the final crumb (current page) carries no item URL.
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+    ...items.map((crumb, i) => ({
+      '@type': 'ListItem',
+      position: i + 2,
+      name: crumb.label,
+      ...(crumb.href && i < items.length - 1 ? { item: absoluteUrl(crumb.href) } : {}),
+    })),
+  ],
+};
 ---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonld)} />
 
 <nav aria-label="Breadcrumb" class:list={['breadcrumbs', className]}>
   <ol>

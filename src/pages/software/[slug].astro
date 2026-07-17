@@ -8,6 +8,7 @@ import Tag from '../../components/ui/Tag.astro';
 import PublicationItem from '../../components/publications/PublicationItem.astro';
 import { SOFTWARE_CATEGORIES } from '../../lib/taxonomy';
 import { loadPublications, peopleMap, softwareMap } from '../../lib/collections';
+import { SITE } from '../../config/site';
 
 export const getStaticPaths = (async () => {
   const entries = await getCollection('software');
@@ -46,7 +47,14 @@ const jsonld = {
 };
 ---
 
-<BaseLayout title={s.name} description={s.summary} path={`/software/${entry.id}`} jsonld={jsonld}>
+<BaseLayout
+  title={s.name}
+  description={s.summary}
+  path={`/software/${entry.id}`}
+  image={`/og/software/${entry.id}.png`}
+  imageAlt={`${s.name} — software from the ${SITE.name}`}
+  jsonld={jsonld}
+>
   <article class="swpage">
     <div class="container">
       <Breadcrumbs

@@ -13,6 +13,7 @@ interface Props {
   description?: string;
   path?: string;
   image?: string;
+  imageAlt?: string;
   ogType?: 'website' | 'article' | 'profile';
   noindex?: boolean;
   jsonld?: Record<string, unknown> | Record<string, unknown>[];
@@ -26,6 +27,7 @@ const {
   description,
   path,
   image,
+  imageAlt,
   ogType,
   noindex,
   jsonld,
@@ -89,6 +91,7 @@ const allJsonLd = [orgJsonLd, ...pageJsonLd];
       description={description}
       path={path}
       image={image}
+      imageAlt={imageAlt}
       ogType={ogType}
       noindex={noindex}
       jsonld={allJsonLd}

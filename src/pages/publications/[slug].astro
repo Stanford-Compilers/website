@@ -91,6 +91,8 @@ const jsonld = {
   description={`${authors.map((a) => a.name).join(', ')}. ${venueShort(pub.venueKey)}, ${pub.year}.`}
   ogType="article"
   path={`/publications/${pub.id}`}
+  image={`/og/publications/${pub.id}.png`}
+  imageAlt={`${pub.title} — ${venueShort(pub.venueKey)} ${pub.year}`}
   citation={citationMeta}
   jsonld={jsonld}
 >
