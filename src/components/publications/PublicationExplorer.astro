@@ -29,146 +29,169 @@ const total = pubs.length;
 
 <div class="explorer" data-explorer>
   <form class="toolbar" data-filters role="search" aria-label="Filter publications">
-    <div class="search">
-      <label class="search__label" for="pub-search">
-        <Icon name="search" size={18} />
-        <span class="visually-hidden">Search publications</span>
-      </label>
-      <input
-        type="search"
-        id="pub-search"
-        name="q"
-        class="search__input"
-        placeholder="Search titles and authors…"
-        autocomplete="off"
-        data-q
-      />
-    </div>
-
-    <div class="dd">
-      <button type="button" class="chip" data-dd="year" aria-expanded="false" aria-haspopup="true">
-        <span>Year</span>
-        <Icon name="chevron-down" size={16} class="chip__chev" />
-      </button>
-      <div class="dd__panel dd__panel--grid" hidden>
-        {
-          years.map((y) => (
-            <label class="opt">
-              <input type="checkbox" name="year" value={y.value} data-facet="year" />
-              <span class="opt__box" aria-hidden="true" />
-              <span class="opt__label mono">{y.value}</span>
-              <span class="opt__count">{y.count}</span>
-            </label>
-          ))
-        }
+    <div class="toolbar__filters">
+      <div class="search">
+        <label class="search__label" for="pub-search">
+          <Icon name="search" size={18} />
+          <span class="visually-hidden">Search publications</span>
+        </label>
+        <input
+          type="search"
+          id="pub-search"
+          name="q"
+          class="search__input"
+          placeholder="Search titles and authors…"
+          autocomplete="off"
+          data-q
+        />
       </div>
-    </div>
 
-    <div class="dd">
-      <button type="button" class="chip" data-dd="venue" aria-expanded="false" aria-haspopup="true">
-        <span>Venue</span>
-        <Icon name="chevron-down" size={16} class="chip__chev" />
-      </button>
-      <div class="dd__panel" hidden>
-        {
-          venues.map((v) => (
-            <label class="opt">
-              <input type="checkbox" name="venue" value={v.value} data-facet="venue" />
-              <span class="opt__box" aria-hidden="true" />
-              <span class="opt__label mono">{venueShort(v.value)}</span>
-              <span class="opt__count">{v.count}</span>
-            </label>
-          ))
-        }
-      </div>
-    </div>
-
-    <div class="dd">
-      <button type="button" class="chip" data-dd="topic" aria-expanded="false" aria-haspopup="true">
-        <span>Topic</span>
-        <Icon name="chevron-down" size={16} class="chip__chev" />
-      </button>
-      <div class="dd__panel" hidden>
-        {
-          topics.map((t) => (
-            <label class="opt">
-              <input type="checkbox" name="topic" value={t.value} data-facet="topic" />
-              <span class="opt__box" aria-hidden="true" />
-              <span class="opt__label">
-                {TOPICS[t.value as keyof typeof TOPICS]?.short ?? t.value}
-              </span>
-              <span class="opt__count">{t.count}</span>
-            </label>
-          ))
-        }
-      </div>
-    </div>
-
-    <div class="dd dd--member" data-member-root>
-      <span class="visually-hidden" id="pub-member-label">Lab member</span>
-      <button
-        type="button"
-        class="chip chip--member"
-        data-member-button
-        aria-haspopup="listbox"
-        aria-expanded="false"
-        aria-labelledby="pub-member-label pub-member-value"
-      >
-        <span class="chip__value" id="pub-member-value" data-member-value data-placeholder="Member"
-          >Member</span
+      <div class="dd">
+        <button
+          type="button"
+          class="chip"
+          data-dd="year"
+          aria-expanded="false"
+          aria-haspopup="true"
         >
-        <Icon name="chevron-down" size={16} class="chip__chev" />
-      </button>
-      <ul
-        class="member__list"
-        role="listbox"
-        tabindex="-1"
-        aria-labelledby="pub-member-label"
-        data-member-list
-        hidden
-      >
-        <li
-          class="member__option"
-          role="option"
-          data-value=""
-          data-label="Anyone"
-          aria-selected="true"
+          <span>Year</span>
+          <Icon name="chevron-down" size={16} class="chip__chev" />
+        </button>
+        <div class="dd__panel dd__panel--grid" hidden>
+          {
+            years.map((y) => (
+              <label class="opt">
+                <input type="checkbox" name="year" value={y.value} data-facet="year" />
+                <span class="opt__box" aria-hidden="true" />
+                <span class="opt__label mono">{y.value}</span>
+                <span class="opt__count">{y.count}</span>
+              </label>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="dd">
+        <button
+          type="button"
+          class="chip"
+          data-dd="venue"
+          aria-expanded="false"
+          aria-haspopup="true"
         >
-          <span class="member__option-check" aria-hidden="true"></span>
-          <span class="member__option-name">Anyone</span>
-        </li>
-        {
-          members.map((m) => (
-            <li
-              class="member__option"
-              role="option"
-              data-value={m.value}
-              data-label={people.get(m.value)?.name}
-              aria-selected="false"
-            >
-              <span class="member__option-check" aria-hidden="true" />
-              <span class="member__option-name">{people.get(m.value)?.name}</span>
-              <span class="member__option-count mono">{m.count}</span>
-            </li>
-          ))
-        }
-      </ul>
-      <input type="hidden" name="member" data-member value="" />
+          <span>Venue</span>
+          <Icon name="chevron-down" size={16} class="chip__chev" />
+        </button>
+        <div class="dd__panel" hidden>
+          {
+            venues.map((v) => (
+              <label class="opt">
+                <input type="checkbox" name="venue" value={v.value} data-facet="venue" />
+                <span class="opt__box" aria-hidden="true" />
+                <span class="opt__label mono">{venueShort(v.value)}</span>
+                <span class="opt__count">{v.count}</span>
+              </label>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="dd">
+        <button
+          type="button"
+          class="chip"
+          data-dd="topic"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <span>Topic</span>
+          <Icon name="chevron-down" size={16} class="chip__chev" />
+        </button>
+        <div class="dd__panel" hidden>
+          {
+            topics.map((t) => (
+              <label class="opt">
+                <input type="checkbox" name="topic" value={t.value} data-facet="topic" />
+                <span class="opt__box" aria-hidden="true" />
+                <span class="opt__label">
+                  {TOPICS[t.value as keyof typeof TOPICS]?.short ?? t.value}
+                </span>
+                <span class="opt__count">{t.count}</span>
+              </label>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="dd dd--member" data-member-root>
+        <span class="visually-hidden" id="pub-member-label">Lab member</span>
+        <button
+          type="button"
+          class="chip chip--member"
+          data-member-button
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-labelledby="pub-member-label pub-member-value"
+        >
+          <span
+            class="chip__value"
+            id="pub-member-value"
+            data-member-value
+            data-placeholder="Member">Member</span
+          >
+          <Icon name="chevron-down" size={16} class="chip__chev" />
+        </button>
+        <ul
+          class="member__list"
+          role="listbox"
+          tabindex="-1"
+          aria-labelledby="pub-member-label"
+          data-member-list
+          hidden
+        >
+          <li
+            class="member__option"
+            role="option"
+            data-value=""
+            data-label="Anyone"
+            aria-selected="true"
+          >
+            <span class="member__option-check" aria-hidden="true"></span>
+            <span class="member__option-name">Anyone</span>
+          </li>
+          {
+            members.map((m) => (
+              <li
+                class="member__option"
+                role="option"
+                data-value={m.value}
+                data-label={people.get(m.value)?.name}
+                aria-selected="false"
+              >
+                <span class="member__option-check" aria-hidden="true" />
+                <span class="member__option-name">{people.get(m.value)?.name}</span>
+                <span class="member__option-count mono">{m.count}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <input type="hidden" name="member" data-member value="" />
+      </div>
+
+      <button type="button" class="chip chip--award" data-award-chip aria-pressed="false">
+        <Icon name="check" size={15} />
+        <span>Awards</span>
+        <span class="opt__count">{awards}</span>
+      </button>
     </div>
 
-    <button type="button" class="chip chip--award" data-award-chip aria-pressed="false">
-      <Icon name="check" size={15} />
-      <span>Awards</span>
-      <span class="opt__count">{awards}</span>
-    </button>
-
-    <div class="toolbar__end">
-      <button type="button" class="clear" data-clear hidden>
-        <Icon name="close" size={15} /> Clear
-      </button>
+    <div class="toolbar__meta">
       <span class="toolbar__count mono" data-count role="status" aria-live="polite">
         {total} publications
       </span>
+      <button type="button" class="clear" data-clear hidden>
+        <Icon name="close" size={15} /> Clear all
+      </button>
     </div>
   </form>
 
@@ -214,16 +237,23 @@ const total = pubs.length;
   }
 
   /* ---- Toolbar ------------------------------------------------ */
+  /* Sticky column: the filter row never reflows; the count/clear meta
+     row sits beneath it so revealing "Clear" or growing the count can't
+     shift the pills sideways. */
   .toolbar {
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
+    flex-direction: column;
     position: sticky;
     top: 4.25rem;
     z-index: 40;
     padding-block: var(--space-s);
     background: var(--paper);
+  }
+  .toolbar__filters {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
   }
 
   .search {
@@ -447,11 +477,15 @@ const total = pubs.length;
     color: var(--ink-subtle);
   }
 
-  .toolbar__end {
+  .toolbar__meta {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    margin-left: auto;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 1.9rem;
+    margin-top: 0.7rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--line);
   }
   .clear {
     display: inline-flex;
@@ -610,12 +644,9 @@ const total = pubs.length;
   @media (max-width: 46rem) {
     .toolbar {
       top: 3.75rem;
-      gap: 0.5rem;
     }
-    .toolbar__end {
-      margin-left: 0;
-      width: 100%;
-      justify-content: space-between;
+    .toolbar__filters {
+      gap: 0.5rem;
     }
     .dd__panel--grid {
       grid-template-columns: 1fr 1fr 1fr;
