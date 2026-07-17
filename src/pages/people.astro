@@ -46,21 +46,23 @@ const jsonld = {
               Principal investigator
             </h2>
             <div class="pi__card">
-              {pi.portrait ? (
-                <Image
-                  src={pi.portrait}
-                  alt={pi.portraitAlt ?? `Portrait of ${pi.name}`}
-                  width={184}
-                  height={184}
-                  class="pi__photo"
-                />
-              ) : (
-                <div class="pi__mono" aria-hidden="true">
-                  <span class="pi__bracket">[</span>
-                  <span class="pi__initials">FK</span>
-                  <span class="pi__bracket">]</span>
-                </div>
-              )}
+              <div class="pi__ring">
+                {pi.portrait ? (
+                  <Image
+                    src={pi.portrait}
+                    alt={pi.portraitAlt ?? `Portrait of ${pi.name}`}
+                    width={320}
+                    height={320}
+                    class="pi__photo"
+                  />
+                ) : (
+                  <div class="pi__mono" aria-hidden="true">
+                    <span class="pi__bracket">[</span>
+                    <span class="pi__initials">FK</span>
+                    <span class="pi__bracket">]</span>
+                  </div>
+                )}
+              </div>
               <div class="pi__body">
                 <p class="kicker">Principal investigator</p>
                 <h3 class="pi__name">
@@ -157,15 +159,22 @@ const jsonld = {
     background:
       radial-gradient(90% 130% at 0% 0%, var(--accent-tint), transparent 55%), var(--surface);
   }
-  .pi__mono {
+  .pi__ring {
     flex: 0 0 auto;
+    width: 160px;
+    height: 160px;
+    padding: 4px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--accent-line);
+  }
+  .pi__mono {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 92px;
-    height: 92px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     background: var(--surface-2);
     font-family: var(--font-mono);
   }
@@ -175,11 +184,10 @@ const jsonld = {
     font-weight: 500;
   }
   .pi__photo {
-    flex: 0 0 auto;
-    width: 92px;
-    height: 92px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
+    display: block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     object-fit: cover;
   }
   .pi__bracket {
