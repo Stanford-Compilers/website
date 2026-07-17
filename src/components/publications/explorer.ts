@@ -6,8 +6,12 @@
  * complete grouped list is already present and the toolbar is hidden.
  *
  * The toolbar's Year / Venue / Topic filters are multi-select checkbox
- * dropdowns, "Lab member" is a single-select ARIA listbox, and "Awards" is a
- * toggle. Each ledger row's BibTeX / Cite disclosures are wired here too.
+ * dropdowns and "Awards" is a toggle. Authors are filtered from the search box
+ * itself: typing surfaces matching lab members in an autocomplete popup, and
+ * picking one adds a removable chip to the active-filters row. Multiple authors
+ * combine with AND (papers co-authored by all of them), and every byline bolds
+ * the authors currently being filtered by. Each ledger row's BibTeX / Cite
+ * disclosures are wired here too.
  */
 
 interface State {
@@ -16,220 +20,24 @@ interface State {
   venues: string[];
   topics: string[];
   award: boolean;
-  member: string;
+  authors: string[];
+}
+
+/** A searchable lab-member author, injected as JSON by the component. */
+interface Author {
+  id: string;
+  name: string;
+  count: number;
+  norm: string;
+  words: string[];
 }
 
 const DIAC = /[\u0300-\u036f]/g;
 const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(DIAC, '');
 
-/** Minimal controller for the member widget: what the explorer reads from it. */
-interface MemberControl {
-  get value(): string;
-  set value(v: string);
-  close(): void;
-}
-
-/**
- * Custom themed dropdown replacing a native <select> for "Lab member".
- * Implements the ARIA listbox pattern — a trigger button plus a popup list —
- * with keyboard navigation (arrows, Home/End, type-ahead, Enter/Escape),
- * outside-click dismissal, and a hidden input that carries the value so the
- * rest of the explorer reads it like a plain field. Calls onChange only on
- * user-driven selection; programmatic .value assignment stays silent.
- */
-function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberControl {
-  const wrap = root.querySelector<HTMLElement>('[data-member-root]');
-  const button = root.querySelector<HTMLButtonElement>('[data-member-button]');
-  const list = root.querySelector<HTMLElement>('[data-member-list]');
-  const valueEl = root.querySelector<HTMLElement>('[data-member-value]');
-  const hidden = root.querySelector<HTMLInputElement>('[data-member]');
-  if (!wrap || !button || !list || !valueEl || !hidden) {
-    // Degrade to a bare value store; the explorer keeps working without member filtering.
-    return {
-      get value() {
-        return hidden?.value ?? '';
-      },
-      set value(_v: string) {},
-      close() {},
-    };
-  }
-  const h = hidden;
-  const placeholder = valueEl.dataset.placeholder ?? 'Anyone';
-  const options = Array.from(list.querySelectorAll<HTMLElement>('[role="option"]'));
-  options.forEach((o, i) => {
-    if (!o.id) o.id = `pub-member-opt-${i}`;
-  });
-
-  let open = false;
-  let activeIndex = 0;
-
-  const labelFor = (v: string) => {
-    const opt = options.find((o) => o.dataset.value === v) ?? options[0];
-    return opt?.dataset.label ?? opt?.textContent?.trim() ?? placeholder;
-  };
-
-  const setValue = (v: string, fire: boolean) => {
-    h.value = v;
-    valueEl.textContent = v === '' ? placeholder : labelFor(v);
-    for (const o of options) o.setAttribute('aria-selected', String(o.dataset.value === v));
-    button.classList.toggle('is-on', v !== '');
-    if (fire) onChange();
-  };
-
-  const setActive = (i: number) => {
-    activeIndex = Math.max(0, Math.min(i, options.length - 1));
-    options.forEach((o, idx) => o.classList.toggle('is-active', idx === activeIndex));
-    const el = options[activeIndex];
-    if (el) {
-      list.setAttribute('aria-activedescendant', el.id);
-      el.scrollIntoView({ block: 'nearest' });
-    }
-  };
-
-  const onDocPointer = (e: Event) => {
-    if (!wrap.contains(e.target as Node)) closeList(false);
-  };
-
-  // The list is `position: fixed`, so place it against the trigger's viewport
-  // rect every time it opens (and re-place while open, since the page scrolls).
-  // Flip upward when there isn't room below, and cap the height to the space
-  // actually available so it never runs off-screen.
-  const GAP = 6;
-  const MAX_H = 240; // 15rem, mirrors the CSS max-height
-  const MARGIN = 8; // keep clear of the viewport edge
-  const positionList = () => {
-    const r = button.getBoundingClientRect();
-    const vh = window.innerHeight;
-    const below = vh - r.bottom - GAP - MARGIN;
-    const above = r.top - GAP - MARGIN;
-    const wanted = Math.min(MAX_H, list.scrollHeight);
-    const up = below < wanted && above > below;
-    const avail = Math.max(96, up ? above : below);
-    list.style.left = `${Math.round(r.left)}px`;
-    list.style.minWidth = `${Math.round(r.width)}px`;
-    list.style.maxHeight = `${Math.round(Math.min(MAX_H, avail))}px`;
-    if (up) {
-      list.style.top = 'auto';
-      list.style.bottom = `${Math.round(vh - r.top + GAP)}px`;
-    } else {
-      list.style.bottom = 'auto';
-      list.style.top = `${Math.round(r.bottom + GAP)}px`;
-    }
-  };
-
-  const openList = () => {
-    if (open) return;
-    open = true;
-    list.hidden = false;
-    positionList();
-    button.setAttribute('aria-expanded', 'true');
-    const sel = options.findIndex((o) => o.dataset.value === h.value);
-    setActive(sel < 0 ? 0 : sel);
-    list.focus();
-    document.addEventListener('pointerdown', onDocPointer, true);
-    window.addEventListener('scroll', positionList, true);
-    window.addEventListener('resize', positionList);
-  };
-
-  const closeList = (focusButton = true) => {
-    if (!open) return;
-    open = false;
-    list.hidden = true;
-    button.setAttribute('aria-expanded', 'false');
-    list.removeAttribute('aria-activedescendant');
-    document.removeEventListener('pointerdown', onDocPointer, true);
-    window.removeEventListener('scroll', positionList, true);
-    window.removeEventListener('resize', positionList);
-    if (focusButton) button.focus();
-  };
-
-  // Type-ahead: jump to the next option whose label starts with the typed run.
-  let typed = '';
-  let typeTimer: number | undefined;
-  const typeahead = (key: string) => {
-    if (key.length !== 1 || key === ' ') return;
-    window.clearTimeout(typeTimer);
-    typed += key.toLowerCase();
-    typeTimer = window.setTimeout(() => (typed = ''), 500);
-    for (let n = 1; n <= options.length; n++) {
-      const idx = (activeIndex + (typed.length > 1 ? 0 : n)) % options.length;
-      const label = (options[idx].dataset.label ?? '').toLowerCase();
-      if (label.startsWith(typed)) {
-        setActive(idx);
-        return;
-      }
-    }
-  };
-
-  button.addEventListener('click', () => (open ? closeList() : openList()));
-  button.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      openList();
-    }
-  });
-
-  list.addEventListener('keydown', (e) => {
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setActive(activeIndex + 1);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setActive(activeIndex - 1);
-        break;
-      case 'Home':
-        e.preventDefault();
-        setActive(0);
-        break;
-      case 'End':
-        e.preventDefault();
-        setActive(options.length - 1);
-        break;
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        setValue(options[activeIndex]?.dataset.value ?? '', true);
-        closeList();
-        break;
-      case 'Escape':
-        e.preventDefault();
-        closeList();
-        break;
-      case 'Tab':
-        closeList(false);
-        break;
-      default:
-        typeahead(e.key);
-    }
-  });
-
-  options.forEach((opt, i) => {
-    opt.addEventListener('click', () => {
-      setActive(i);
-      setValue(opt.dataset.value ?? '', true);
-      closeList();
-    });
-    opt.addEventListener('mousemove', () => {
-      if (i !== activeIndex) setActive(i);
-    });
-  });
-
-  setValue(h.value, false);
-
-  return {
-    get value() {
-      return h.value;
-    },
-    set value(v: string) {
-      setValue(v, false);
-    },
-    close() {
-      closeList(false);
-    },
-  };
-}
+// Close glyph for an author chip; static markup, so innerHTML is safe.
+const X_SVG =
+  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
 export function setupExplorer(): void {
   const root = document.querySelector<HTMLElement>('[data-explorer]');
@@ -238,9 +46,13 @@ export function setupExplorer(): void {
 
   const form = root.querySelector<HTMLFormElement>('[data-filters]');
   const qInput = root.querySelector<HTMLInputElement>('[data-q]');
+  const suggestEl = root.querySelector<HTMLElement>('[data-suggest]');
+  const tagsEl = root.querySelector<HTMLElement>('[data-author-tags]');
+  const activeRow = root.querySelector<HTMLElement>('[data-active-filters]');
   const awardChip = root.querySelector<HTMLButtonElement>('[data-award-chip]');
   const items = Array.from(root.querySelectorAll<HTMLElement>('[data-pub-item]'));
   const groups = Array.from(root.querySelectorAll<HTMLElement>('[data-year-group]'));
+  const bylineAuthors = Array.from(root.querySelectorAll<HTMLElement>('[data-author-id]'));
   const countEl = root.querySelector<HTMLElement>('[data-count]');
   const emptyEl = root.querySelector<HTMLElement>('[data-empty]');
   const clearBtn = root.querySelector<HTMLElement>('[data-clear]');
@@ -248,13 +60,145 @@ export function setupExplorer(): void {
   const list = root.querySelector<HTMLElement>('[data-list]');
   const ddButtons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dd]'));
   const total = items.length;
-  if (!form || !qInput) return;
+  if (!form || !qInput || !suggestEl || !tagsEl || !activeRow) return;
 
-  // Custom themed listbox in place of a native <select> for "Lab member".
-  const memberDropdown = setupMemberDropdown(root, apply);
+  // Author suggestion index (lab members that appear on a paper).
+  let authorList: { id: string; name: string; count: number }[] = [];
+  try {
+    authorList = JSON.parse(root.querySelector<HTMLElement>('[data-authors]')?.textContent || '[]');
+  } catch {
+    authorList = [];
+  }
+  const authors: Author[] = authorList.map((a) => {
+    const norm = normalize(a.name);
+    return { ...a, norm, words: norm.split(/\s+/).filter(Boolean) };
+  });
+  const authorById = new Map(authors.map((a) => [a.id, a]));
+
+  // Active author-filter ids: the source of truth for the chips + author facet.
+  let selectedAuthors: string[] = [];
 
   const checks = (facet: string) =>
     Array.from(form.querySelectorAll<HTMLInputElement>(`input[data-facet="${facet}"]`));
+
+  /* ---- author autocomplete (search box) -------------------------- */
+  let suggestOptions: { el: HTMLElement; id: string }[] = [];
+  let suggestActive = -1;
+
+  const openSuggest = () => {
+    suggestEl.hidden = false;
+    qInput.setAttribute('aria-expanded', 'true');
+  };
+  const closeSuggest = () => {
+    if (suggestEl.hidden) return;
+    suggestEl.hidden = true;
+    suggestEl.textContent = '';
+    suggestOptions = [];
+    suggestActive = -1;
+    qInput.setAttribute('aria-expanded', 'false');
+    qInput.removeAttribute('aria-activedescendant');
+  };
+  const setActiveSuggestion = (i: number) => {
+    if (!suggestOptions.length) return;
+    suggestActive = (i + suggestOptions.length) % suggestOptions.length;
+    suggestOptions.forEach((o, idx) => {
+      const on = idx === suggestActive;
+      o.el.classList.toggle('is-active', on);
+      o.el.setAttribute('aria-selected', String(on));
+    });
+    const el = suggestOptions[suggestActive].el;
+    qInput.setAttribute('aria-activedescendant', el.id);
+    el.scrollIntoView({ block: 'nearest' });
+  };
+  const renderSuggestions = () => {
+    const query = normalize(qInput.value.trim());
+    if (!query) {
+      closeSuggest();
+      return;
+    }
+    const chosen = new Set(selectedAuthors);
+    const matches = authors
+      .filter((a) => !chosen.has(a.id) && a.norm.includes(query))
+      .sort((a, b) => {
+        // Names with a word starting on the query rank first, then by frequency.
+        const aw = a.words.some((w) => w.startsWith(query)) ? 0 : 1;
+        const bw = b.words.some((w) => w.startsWith(query)) ? 0 : 1;
+        if (aw !== bw) return aw - bw;
+        return b.count - a.count || a.name.localeCompare(b.name);
+      })
+      .slice(0, 8);
+    if (!matches.length) {
+      closeSuggest();
+      return;
+    }
+    suggestEl.textContent = '';
+    suggestOptions = matches.map((a, i) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.className = 'suggest__opt';
+      li.id = `pub-suggest-opt-${i}`;
+      li.dataset.value = a.id;
+      li.setAttribute('aria-selected', 'false');
+      const name = document.createElement('span');
+      name.className = 'suggest__name';
+      name.textContent = a.name;
+      const count = document.createElement('span');
+      count.className = 'suggest__count';
+      count.textContent = String(a.count);
+      li.append(name, count);
+      suggestEl.append(li);
+      return { el: li, id: a.id };
+    });
+    suggestActive = -1;
+    openSuggest();
+  };
+
+  /* ---- active author chips + byline emphasis --------------------- */
+  const renderAuthorTags = () => {
+    tagsEl.textContent = '';
+    for (const id of selectedAuthors) {
+      const name = authorById.get(id)?.name ?? id;
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'filter-tag';
+      btn.dataset.authorTag = id;
+      btn.setAttribute('aria-label', `Remove author filter: ${name}`);
+      const label = document.createElement('span');
+      label.textContent = name;
+      const x = document.createElement('span');
+      x.className = 'filter-tag__x';
+      x.innerHTML = X_SVG;
+      btn.append(label, x);
+      li.append(btn);
+      tagsEl.append(li);
+    }
+    activeRow.classList.toggle('is-shown', selectedAuthors.length > 0);
+  };
+
+  // Bold every byline author currently in the active filter set.
+  const syncBylineEmphasis = () => {
+    const set = new Set(selectedAuthors);
+    for (const el of bylineAuthors) {
+      el.classList.toggle('is-filtered', set.has(el.dataset.authorId ?? ''));
+    }
+  };
+
+  const selectAuthor = (id: string) => {
+    if (!id || !authorById.has(id)) return;
+    if (!selectedAuthors.includes(id)) selectedAuthors.push(id);
+    qInput.value = '';
+    closeSuggest();
+    renderAuthorTags();
+    apply();
+    qInput.focus();
+  };
+
+  const removeAuthor = (id: string) => {
+    selectedAuthors = selectedAuthors.filter((a) => a !== id);
+    renderAuthorTags();
+    apply();
+  };
 
   /* ---- dropdown open/close --------------------------------------- */
   const closeDropdowns = () => {
@@ -271,7 +215,7 @@ export function setupExplorer(): void {
       if (!panel) return;
       const willOpen = panel.hidden;
       closeDropdowns();
-      memberDropdown.close();
+      closeSuggest();
       if (willOpen) {
         panel.hidden = false;
         btn.setAttribute('aria-expanded', 'true');
@@ -298,13 +242,13 @@ export function setupExplorer(): void {
         .filter((c) => c.checked)
         .map((c) => c.value),
       award: awardChip?.getAttribute('aria-pressed') === 'true',
-      member: memberDropdown.value,
+      authors: [...selectedAuthors],
     };
   }
 
   function isActive(s: State): boolean {
     return Boolean(
-      s.q || s.years.length || s.venues.length || s.topics.length || s.award || s.member
+      s.q || s.years.length || s.venues.length || s.topics.length || s.award || s.authors.length
     );
   }
 
@@ -317,7 +261,10 @@ export function setupExplorer(): void {
       if (!s.topics.some((x) => t.includes(x))) return false;
     }
     if (s.award && d.award !== '1') return false;
-    if (s.member && !(d.members || '').split(' ').includes(s.member)) return false;
+    if (s.authors.length) {
+      const mem = (d.members || '').split(' ');
+      if (!s.authors.every((id) => mem.includes(id))) return false;
+    }
     if (tokens.length) {
       const text = d.text || '';
       if (!tokens.every((tok) => text.includes(tok))) return false;
@@ -332,7 +279,7 @@ export function setupExplorer(): void {
     if (s.venues.length) p.set('venue', s.venues.join(','));
     if (s.topics.length) p.set('topic', s.topics.join(','));
     if (s.award) p.set('award', '1');
-    if (s.member) p.set('member', s.member);
+    if (s.authors.length) p.set('author', s.authors.join(','));
     const qs = p.toString();
     history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname);
   }
@@ -381,6 +328,7 @@ export function setupExplorer(): void {
     syncChip('venue', s.venues.length);
     syncChip('topic', s.topics.length);
     if (awardChip) awardChip.classList.toggle('is-on', s.award);
+    syncBylineEmphasis();
 
     syncUrl(s);
   }
@@ -396,7 +344,9 @@ export function setupExplorer(): void {
     setChecks('venue', p.get('venue'));
     setChecks('topic', p.get('topic'));
     if (awardChip) awardChip.setAttribute('aria-pressed', String(p.get('award') === '1'));
-    memberDropdown.value = p.get('member') ?? '';
+    // Keep only ids we actually know, so a stale URL can't leave a dangling chip.
+    selectedAuthors = (p.get('author') ?? '').split(',').filter((id) => id && authorById.has(id));
+    renderAuthorTags();
     apply();
   }
 
@@ -405,8 +355,10 @@ export function setupExplorer(): void {
     for (const facet of ['year', 'venue', 'topic'])
       checks(facet).forEach((c) => (c.checked = false));
     if (awardChip) awardChip.setAttribute('aria-pressed', 'false');
-    memberDropdown.value = '';
+    selectedAuthors = [];
+    renderAuthorTags();
     closeDropdowns();
+    closeSuggest();
     apply();
     qInput!.focus();
   }
@@ -444,9 +396,65 @@ export function setupExplorer(): void {
 
   let debounce: number | undefined;
   qInput.addEventListener('input', () => {
+    renderSuggestions();
     window.clearTimeout(debounce);
     debounce = window.setTimeout(apply, 120);
   });
+  qInput.addEventListener('focus', () => {
+    if (qInput.value.trim()) renderSuggestions();
+  });
+  qInput.addEventListener('blur', () => closeSuggest());
+  qInput.addEventListener('keydown', (e) => {
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        if (suggestEl.hidden) {
+          renderSuggestions();
+          if (!suggestEl.hidden) setActiveSuggestion(0);
+        } else {
+          setActiveSuggestion(suggestActive + 1);
+        }
+        break;
+      case 'ArrowUp':
+        if (!suggestEl.hidden) {
+          e.preventDefault();
+          setActiveSuggestion(suggestActive - 1);
+        }
+        break;
+      case 'Enter':
+        if (!suggestEl.hidden && suggestActive >= 0) {
+          e.preventDefault();
+          selectAuthor(suggestOptions[suggestActive].id);
+        }
+        break;
+      case 'Escape':
+        if (!suggestEl.hidden) {
+          e.preventDefault();
+          closeSuggest();
+        }
+        break;
+    }
+  });
+
+  // Keep focus in the input on mousedown so blur doesn't close the popup before
+  // the option's click fires; then select on click, and follow the pointer.
+  suggestEl.addEventListener('mousedown', (e) => e.preventDefault());
+  suggestEl.addEventListener('click', (e) => {
+    const li = (e.target as HTMLElement).closest<HTMLElement>('.suggest__opt');
+    if (li?.dataset.value) selectAuthor(li.dataset.value);
+  });
+  suggestEl.addEventListener('mousemove', (e) => {
+    const li = (e.target as HTMLElement).closest<HTMLElement>('.suggest__opt');
+    if (!li) return;
+    const idx = suggestOptions.findIndex((o) => o.el === li);
+    if (idx >= 0 && idx !== suggestActive) setActiveSuggestion(idx);
+  });
+
+  tagsEl.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-author-tag]');
+    if (btn?.dataset.authorTag) removeAuthor(btn.dataset.authorTag);
+  });
+
   form.addEventListener('change', apply);
   awardChip?.addEventListener('click', () => {
     const on = awardChip.getAttribute('aria-pressed') === 'true';
@@ -455,10 +463,6 @@ export function setupExplorer(): void {
   });
   clearBtn?.addEventListener('click', clearAll);
   clearBtn2?.addEventListener('click', clearAll);
-  // Opening the member listbox collapses any open checkbox dropdown.
-  root.querySelector<HTMLButtonElement>('[data-member-button]')?.addEventListener('click', () => {
-    closeDropdowns();
-  });
 
   applyFromUrl();
 }

@@ -36,12 +36,12 @@ export interface FilterState {
   topics: string[];
   /** Only awarded papers. */
   award: boolean;
-  /** A single lab-member author id, or null. */
-  member: string | null;
+  /** Lab-member author ids the results must all include (AND across authors). */
+  authors: string[];
 }
 
 export function emptyFilterState(): FilterState {
-  return { q: '', years: [], venues: [], topics: [], award: false, member: null };
+  return { q: '', years: [], venues: [], topics: [], award: false, authors: [] };
 }
 
 /* ----------------------------- sorting ----------------------------- */
@@ -103,7 +103,8 @@ export function matchesFilters(pub: PubRecord, state: FilterState): boolean {
   if (state.venues.length && !state.venues.includes(pub.venueKey)) return false;
   if (state.topics.length && !state.topics.some((t) => pub.topics.includes(t))) return false;
   if (state.award && !pub.award) return false;
-  if (state.member && !pub.authors.some((a) => a.id === state.member)) return false;
+  if (state.authors.length && !state.authors.every((id) => pub.authors.some((a) => a.id === id)))
+    return false;
   return true;
 }
 
@@ -122,7 +123,7 @@ export function countActiveFilters(state: FilterState): number {
   if (state.venues.length) n += 1;
   if (state.topics.length) n += 1;
   if (state.award) n += 1;
-  if (state.member) n += 1;
+  if (state.authors.length) n += 1;
   return n;
 }
 
@@ -204,7 +205,8 @@ export function filterStateFromParams(params: URLSearchParams): FilterState {
   const topic = params.get('topic');
   if (topic) state.topics = CSV(topic);
   state.award = params.get('award') === '1';
-  state.member = params.get('member') || null;
+  const author = params.get('author');
+  if (author) state.authors = CSV(author);
   return state;
 }
 
@@ -216,7 +218,7 @@ export function filterStateToParams(state: FilterState): URLSearchParams {
   if (state.venues.length) params.set('venue', state.venues.join(','));
   if (state.topics.length) params.set('topic', state.topics.join(','));
   if (state.award) params.set('award', '1');
-  if (state.member) params.set('member', state.member);
+  if (state.authors.length) params.set('author', state.authors.join(','));
   return params;
 }
 

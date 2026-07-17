@@ -30,12 +30,67 @@ test.describe('publication explorer (with JavaScript)', () => {
     for (let i = 0; i < n; i++) {
       await expect(visible.nth(i)).toHaveAttribute('data-topics', /distributed/);
     }
-    // Clear all.
+    // Close the open dropdown first (as a user would — its panel overlays the
+    // toolbar below it), then Clear all.
+    await page.locator('[data-dd="topic"]').click();
     await page.locator('[data-clear]').click();
     await expect(page).toHaveURL(/\/publications$/);
     await expect(page.locator('[data-pub-item]:visible')).toHaveCount(
       await page.locator('[data-pub-item]').count()
     );
+  });
+
+  test('search suggests authors; picking one filters, chips it, and bolds bylines', async ({
+    page,
+  }) => {
+    await page.goto('/publications');
+    const q = page.locator('[data-q]');
+    const total = await page.locator('[data-pub-item]').count();
+
+    // Typing surfaces matching lab members in the autocomplete popup.
+    await q.fill('bob');
+    const suggest = page.locator('[data-suggest]');
+    await expect(suggest).toBeVisible();
+    const option = suggest.locator('.suggest__opt', { hasText: 'Bobby Yan' });
+    await expect(option).toBeVisible();
+    await option.click();
+
+    // Picking an author clears the query, adds a chip, and syncs to the URL.
+    await expect(q).toHaveValue('');
+    const tag = page.locator('[data-author-tags] .filter-tag', { hasText: 'Bobby Yan' });
+    await expect(tag).toBeVisible();
+    await expect(page).toHaveURL(/author=bobby-yan/);
+
+    // Only that author's papers remain, and their name is bolded in each byline.
+    const visible = page.locator('[data-pub-item]:visible');
+    const n = await visible.count();
+    expect(n).toBeGreaterThan(0);
+    expect(n).toBeLessThan(total);
+    for (let i = 0; i < n; i++) {
+      await expect(visible.nth(i)).toHaveAttribute('data-members', /bobby-yan/);
+    }
+    await expect(
+      page.locator('.ledger__author.is-filtered[data-author-id="bobby-yan"]')
+    ).toHaveCount(n);
+
+    // Removing the chip restores the full list and clears the URL.
+    await tag.click();
+    await expect(page.locator('[data-author-tags] .filter-tag')).toHaveCount(0);
+    await expect(page).toHaveURL(/\/publications$/);
+    await expect(page.locator('[data-pub-item]:visible')).toHaveCount(total);
+  });
+
+  test('deep-links an author filter from the URL on load', async ({ page }) => {
+    await page.goto('/publications?author=bobby-yan');
+    await expect(
+      page.locator('[data-author-tags] .filter-tag', { hasText: 'Bobby Yan' })
+    ).toBeVisible();
+    const visible = page.locator('[data-pub-item]:visible');
+    const n = await visible.count();
+    expect(n).toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      await expect(visible.nth(i)).toHaveAttribute('data-members', /bobby-yan/);
+    }
   });
 
   test('deep-links from a URL apply filters on load', async ({ page }) => {

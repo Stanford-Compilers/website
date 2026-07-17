@@ -28,10 +28,12 @@ test('author byline links to a lab-member profile', async ({ page }) => {
 
 test('person page deep-links to their filtered publications', async ({ page }) => {
   await page.goto('/people/fredrik-kjolstad');
-  const all = page.locator('a[href*="/publications?member=fredrik-kjolstad"]').first();
+  const all = page.locator('a[href*="/publications?author=fredrik-kjolstad"]').first();
   await expect(all).toBeVisible();
   await all.click();
-  await expect(page).toHaveURL(/member=fredrik-kjolstad/);
-  // The filter is applied.
-  await expect(page.locator('[data-member]')).toHaveValue('fredrik-kjolstad');
+  await expect(page).toHaveURL(/author=fredrik-kjolstad/);
+  // The author filter is applied as an active chip.
+  await expect(
+    page.locator('[data-author-tags] .filter-tag', { hasText: 'Fredrik Kjolstad' })
+  ).toBeVisible();
 });

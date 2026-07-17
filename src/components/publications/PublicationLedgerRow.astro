@@ -24,7 +24,7 @@ interface Props {
 }
 const { pub, people } = Astro.props;
 
-const authors = pub.authors.map((a) => resolveAuthor(a, people));
+const authors = pub.authors.map((a) => ({ ...resolveAuthor(a, people), id: a.id }));
 const venue = venueShort(pub.venueKey);
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const dateStr = pub.month ? `${MONTHS[pub.month - 1]} ${pub.year}` : String(pub.year);
@@ -68,10 +68,11 @@ const escHtml = (s: string) =>
 // Build the byline as a whitespace-tight HTML string. Astro follows HTML
 // whitespace rules, so a multi-line JSX byline injects a stray space before
 // each comma; concatenating keeps "A, B, and C" clean. The `.ledger__author`
-// styles are :global so they still apply to this injected markup.
+// styles are :global so they still apply to this injected markup. Lab-member
+// authors carry `data-author-id` so the explorer island can bold the ones the
+// reader is currently filtering by (see `is-filtered` in the styles below).
 const authorsHtml = authors
   .map((a, i) => {
-    const cls = a.isPI ? 'ledger__author is-pi' : 'ledger__author';
     const sep =
       i < authors.length - 2
         ? ', '
@@ -80,9 +81,10 @@ const authorsHtml = authors
             ? ', and '
             : ' and '
           : '';
+    const idAttr = a.id ? ` data-author-id="${escHtml(a.id)}"` : '';
     const el = a.href
-      ? `<a href="${escHtml(a.href)}" class="${cls}"${a.internal ? '' : ' rel="noopener noreferrer"'}>${escHtml(a.name)}</a>`
-      : `<span class="${cls}">${escHtml(a.name)}</span>`;
+      ? `<a href="${escHtml(a.href)}" class="ledger__author"${idAttr}${a.internal ? '' : ' rel="noopener noreferrer"'}>${escHtml(a.name)}</a>`
+      : `<span class="ledger__author"${idAttr}>${escHtml(a.name)}</span>`;
     return el + sep;
   })
   .join('');
@@ -211,10 +213,6 @@ const authorsHtml = authors
     padding: 1.1rem 0.6rem;
     border-radius: var(--radius-s);
     border-top: none;
-    transition: background var(--dur-1) var(--ease);
-  }
-  .ledger__row:hover {
-    background: var(--surface);
   }
   /* Draw a hairline only between two *visible* rows, so the first row shown
      under a year heading never doubles the heading's own rule. Every row is a
@@ -281,13 +279,16 @@ const authorsHtml = authors
   .ledger__authors :global(.ledger__author) {
     color: var(--ink-muted);
     text-decoration: none;
+    transition: color var(--dur-1) var(--ease);
   }
   .ledger__authors :global(a.ledger__author:hover) {
     color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }
-  .ledger__authors :global(.ledger__author.is-pi) {
+  /* Bold the authors currently being filtered by — toggled on by the explorer
+     island as active author chips change (nothing is emphasized at rest). */
+  .ledger__authors :global(.ledger__author.is-filtered) {
     color: var(--ink);
     font-weight: 600;
   }

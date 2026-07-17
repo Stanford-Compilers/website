@@ -138,12 +138,21 @@ describe('matchesFilters', () => {
     expect(matchesFilters(sample[1], { ...base, award: true })).toBe(true);
     expect(matchesFilters(sample[0], { ...base, award: true })).toBe(false);
   });
-  it('filters by member', () => {
-    expect(matchesFilters(sample[0], { ...base, member: 'olivia-hsu' })).toBe(true);
-    expect(matchesFilters(sample[1], { ...base, member: 'olivia-hsu' })).toBe(false);
+  it('filters by author', () => {
+    expect(matchesFilters(sample[0], { ...base, authors: ['olivia-hsu'] })).toBe(true);
+    expect(matchesFilters(sample[1], { ...base, authors: ['olivia-hsu'] })).toBe(false);
+  });
+  it('requires every selected author (AND across authors)', () => {
+    // sample[0] is co-authored by both; sample[1] by neither / only one.
+    expect(
+      matchesFilters(sample[0], { ...base, authors: ['olivia-hsu', 'fredrik-kjolstad'] })
+    ).toBe(true);
+    expect(
+      matchesFilters(sample[1], { ...base, authors: ['olivia-hsu', 'fredrik-kjolstad'] })
+    ).toBe(false);
   });
   it('combines dimensions with AND', () => {
-    const state = { ...base, years: [2024], venues: ['oopsla'], member: 'olivia-hsu' };
+    const state = { ...base, years: [2024], venues: ['oopsla'], authors: ['olivia-hsu'] };
     expect(filterPublications(sample, state).map((p) => p.id)).toEqual(['a']);
   });
 });
@@ -180,7 +189,7 @@ describe('facets', () => {
 describe('countActiveFilters', () => {
   it('counts each active dimension', () => {
     expect(countActiveFilters(emptyFilterState())).toBe(0);
-    // q + years + topics + award + member = 5 (venues empty)
+    // q + years + topics + award + authors = 5 (venues empty)
     expect(
       countActiveFilters({
         q: 'x',
@@ -188,7 +197,7 @@ describe('countActiveFilters', () => {
         venues: [],
         topics: ['a'],
         award: true,
-        member: 'm',
+        authors: ['m'],
       })
     ).toBe(5);
   });
@@ -202,7 +211,7 @@ describe('URL state serialization', () => {
       venues: ['pldi'],
       topics: ['distributed'],
       award: true,
-      member: 'olivia-hsu',
+      authors: ['olivia-hsu'],
     };
     const restored = filterStateFromParams(filterStateToParams(state));
     expect(restored.q).toBe('tensor algebra');
@@ -210,7 +219,7 @@ describe('URL state serialization', () => {
     expect(restored.venues).toEqual(['pldi']);
     expect(restored.topics).toEqual(['distributed']);
     expect(restored.award).toBe(true);
-    expect(restored.member).toBe('olivia-hsu');
+    expect(restored.authors).toEqual(['olivia-hsu']);
   });
   it('omits empty dimensions for clean URLs', () => {
     expect(filterStateToQuery(emptyFilterState())).toBe('');
@@ -218,11 +227,11 @@ describe('URL state serialization', () => {
   });
   it('parses a real query string', () => {
     const s = filterStateFromParams(
-      new URLSearchParams('year=2024,2023&topic=distributed&member=x')
+      new URLSearchParams('year=2024,2023&topic=distributed&author=x')
     );
     expect(s.years).toEqual([2024, 2023]);
     expect(s.topics).toEqual(['distributed']);
-    expect(s.member).toBe('x');
+    expect(s.authors).toEqual(['x']);
     expect(s.award).toBe(false);
   });
 });

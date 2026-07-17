@@ -22,7 +22,13 @@ const groups = groupByYear(pubs);
 const years = yearFacets(pubs);
 const venues = venueFacets(pubs);
 const topics = topicFacets(pubs);
-const members = memberFacets(pubs).filter((m) => people.get(m.value)); // only known people
+// Lab members who appear on a paper, as searchable author suggestions. The
+// island reads this JSON to power the search-box autocomplete and to label the
+// active-author chips; the search input picks from here rather than a dropdown.
+const authorIndex = memberFacets(pubs)
+  .filter((m) => people.get(m.value)) // only known people
+  .map((m) => ({ id: m.value, name: people.get(m.value)?.name ?? m.value, count: m.count }));
+const authorsJson = JSON.stringify(authorIndex).replace(/</g, '\\u003c');
 const awards = awardCount(pubs);
 const total = pubs.length;
 ---
@@ -33,17 +39,31 @@ const total = pubs.length;
       <div class="search">
         <label class="search__label" for="pub-search">
           <Icon name="search" size={18} />
-          <span class="visually-hidden">Search publications</span>
+          <span class="visually-hidden">Search publications and authors</span>
         </label>
         <input
           type="search"
           id="pub-search"
           name="q"
           class="search__input"
-          placeholder="Search titles and authors…"
+          placeholder="Search titles, or pick an author…"
           autocomplete="off"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="pub-suggest"
+          aria-autocomplete="list"
+          aria-label="Search publications by title, or type an author name to filter by author"
           data-q
         />
+        <ul
+          class="suggest"
+          id="pub-suggest"
+          role="listbox"
+          aria-label="Matching authors"
+          data-suggest
+          hidden
+        >
+        </ul>
       </div>
 
       <div class="dd">
@@ -123,66 +143,15 @@ const total = pubs.length;
         </div>
       </div>
 
-      <div class="dd dd--member" data-member-root>
-        <span class="visually-hidden" id="pub-member-label">Lab member</span>
-        <button
-          type="button"
-          class="chip chip--member"
-          data-member-button
-          aria-haspopup="listbox"
-          aria-expanded="false"
-          aria-labelledby="pub-member-label pub-member-value"
-        >
-          <span
-            class="chip__value"
-            id="pub-member-value"
-            data-member-value
-            data-placeholder="Member">Member</span
-          >
-          <Icon name="chevron-down" size={16} class="chip__chev" />
-        </button>
-        <ul
-          class="member__list"
-          role="listbox"
-          tabindex="-1"
-          aria-labelledby="pub-member-label"
-          data-member-list
-          hidden
-        >
-          <li
-            class="member__option"
-            role="option"
-            data-value=""
-            data-label="Anyone"
-            aria-selected="true"
-          >
-            <span class="member__option-check" aria-hidden="true"></span>
-            <span class="member__option-name">Anyone</span>
-          </li>
-          {
-            members.map((m) => (
-              <li
-                class="member__option"
-                role="option"
-                data-value={m.value}
-                data-label={people.get(m.value)?.name}
-                aria-selected="false"
-              >
-                <span class="member__option-check" aria-hidden="true" />
-                <span class="member__option-name">{people.get(m.value)?.name}</span>
-                <span class="member__option-count mono">{m.count}</span>
-              </li>
-            ))
-          }
-        </ul>
-        <input type="hidden" name="member" data-member value="" />
-      </div>
-
       <button type="button" class="chip chip--award" data-award-chip aria-pressed="false">
         <Icon name="check" size={15} />
         <span>Awards</span>
         <span class="opt__count">{awards}</span>
       </button>
+    </div>
+
+    <div class="toolbar__active" data-active-filters>
+      <ul class="filter-tags" aria-label="Active author filters" data-author-tags></ul>
     </div>
 
     <div class="toolbar__meta">
@@ -194,6 +163,8 @@ const total = pubs.length;
       </button>
     </div>
   </form>
+
+  <script type="application/json" data-authors set:html={authorsJson} is:inline />
 
   <div class="results">
     <div class="results__list" data-list>
@@ -257,6 +228,7 @@ const total = pubs.length;
   }
 
   .search {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -287,6 +259,67 @@ const total = pubs.length;
   }
   .search__input:focus-visible {
     outline: none;
+  }
+
+  /* ---- Author autocomplete popup ------------------------------ */
+  /* Spans the search box; options are built by the island, so their inner
+     styles are :global (JS-created nodes carry no scope hash). */
+  .suggest {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    right: 0;
+    z-index: 60;
+    max-height: 16rem;
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-s);
+    box-shadow: var(--shadow-2);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .suggest[hidden] {
+    display: none;
+  }
+  .suggest::-webkit-scrollbar {
+    width: 6px;
+  }
+  .suggest::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 999px;
+  }
+  .suggest :global(.suggest__opt) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: var(--radius-xs);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    cursor: pointer;
+    scroll-margin: 0.3rem;
+  }
+  .suggest :global(.suggest__opt.is-active) {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .suggest :global(.suggest__name) {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .suggest :global(.suggest__count) {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
   }
 
   /* ---- Dropdown chips ----------------------------------------- */
@@ -357,12 +390,6 @@ const total = pubs.length;
     color: var(--accent-contrast);
     background: var(--accent);
     border-radius: 999px;
-  }
-  .chip--member .chip__value {
-    max-width: 12rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   .chip--award .opt__count {
     color: inherit;
@@ -477,15 +504,18 @@ const total = pubs.length;
     color: var(--ink-subtle);
   }
 
+  /* Count + Clear are grouped at the left, under the wide search box — the one
+     part of the row no facet dropdown opens over. (The chips flex to the right,
+     so their panels cover the right edge; a right-anchored Clear would sit under
+     an open Topic/Awards panel and be unclickable.) Count stays put; Clear just
+     appears beside it. */
   .toolbar__meta {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 1rem;
     min-height: 1.9rem;
     margin-top: 0.7rem;
-    padding-top: 0.65rem;
-    border-top: 1px solid var(--line);
   }
   .clear {
     display: inline-flex;
@@ -512,79 +542,78 @@ const total = pubs.length;
     white-space: nowrap;
   }
 
-  /* ---- Member listbox popup (position: fixed, JS-placed) ------ */
-  .member__list {
-    position: fixed;
-    z-index: 60;
-    max-height: 15rem;
-    margin: 0;
-    padding: 0.3rem;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    list-style: none;
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-s);
-    box-shadow: var(--shadow-2);
-    scrollbar-width: thin;
-    scrollbar-color: var(--line-strong) transparent;
-  }
-  .member__list[hidden] {
-    display: none;
-  }
-  .member__list::-webkit-scrollbar {
-    width: 6px;
-  }
-  .member__list::-webkit-scrollbar-thumb {
-    background: var(--line-strong);
-    border-radius: 999px;
-  }
-  .member__option {
+  /* ---- Active author filters (chips row) ---------------------- */
+  /* Collapsed to zero height at rest; slides open when at least one author is
+     picked so the results shift down, never sideways. Tags are built by the
+     island, hence the :global inner styles. */
+  .toolbar__active {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.5rem;
-    border-radius: var(--radius-xs);
-    font-size: var(--step--1);
-    color: var(--ink-muted);
-    cursor: pointer;
-    scroll-margin: 0.3rem;
-  }
-  .member__option.is-active {
-    background: var(--surface-2);
-    color: var(--ink);
-  }
-  .member__option[aria-selected='true'] {
-    color: var(--ink);
-  }
-  .member__option-check {
-    flex: none;
-    position: relative;
-    width: 13px;
-    height: 13px;
-  }
-  .member__option[aria-selected='true'] .member__option-check::after {
-    content: '';
-    position: absolute;
-    left: 3px;
-    top: -1px;
-    width: 5px;
-    height: 9px;
-    border: solid var(--accent);
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  .member__option-name {
-    flex: 1;
-    min-width: 0;
+    gap: 0.5rem;
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    transition:
+      max-height var(--dur-2) var(--ease),
+      margin-top var(--dur-2) var(--ease),
+      opacity var(--dur-2) var(--ease);
   }
-  .member__option-count {
-    flex: none;
+  .toolbar__active.is-shown {
+    max-height: 12rem;
+    margin-top: 0.7rem;
+    opacity: 1;
+  }
+  .filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toolbar__active :global(.filter-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    cursor: pointer;
+    font-family: var(--font-sans);
     font-size: var(--step--2);
-    color: var(--ink-subtle);
+    font-weight: 500;
+    color: var(--accent);
+    border: 1px solid var(--accent-line);
+    background: var(--accent-tint);
+    border-radius: 999px;
+    padding: 0.25rem 0.35rem 0.25rem 0.7rem;
+    transition:
+      background var(--dur-1) var(--ease),
+      border-color var(--dur-1) var(--ease);
+  }
+  .toolbar__active :global(.filter-tag:hover) {
+    border-color: var(--accent);
+    background: var(--accent-tint);
+  }
+  .toolbar__active :global(.filter-tag:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .toolbar__active :global(.filter-tag__x) {
+    display: inline-grid;
+    place-items: center;
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 999px;
+    color: currentColor;
+    opacity: 0.75;
+    transition:
+      background var(--dur-1) var(--ease),
+      opacity var(--dur-1) var(--ease);
+  }
+  .toolbar__active :global(.filter-tag:hover .filter-tag__x) {
+    opacity: 1;
+    background: var(--accent-line);
   }
 
   /* ---- Results ------------------------------------------------ */
