@@ -1,8 +1,13 @@
 /**
- * Publication explorer enhancement. Filters the server-rendered list in place
- * using data-* attributes on each item — no re-rendering, no framework. Keeps
- * filter state in the URL, announces the result count via aria-live, and hides
- * empty year groups. Without JS the complete grouped list is already present.
+ * Publication explorer enhancement for the ledger layout. Filters the
+ * server-rendered list in place using data-* attributes on each row — no
+ * re-rendering, no framework. Keeps filter state in the URL, announces the
+ * result count via aria-live, and hides empty year groups. Without JS the
+ * complete grouped list is already present and the toolbar is hidden.
+ *
+ * The toolbar's Year / Venue / Topic filters are multi-select checkbox
+ * dropdowns, "Lab member" is a single-select ARIA listbox, and "Awards" is a
+ * toggle. Each ledger row's BibTeX / Cite disclosures are wired here too.
  */
 
 interface State {
@@ -17,20 +22,20 @@ interface State {
 const DIAC = /[\u0300-\u036f]/g;
 const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(DIAC, '');
 
-/** Minimal controller for a value store: what the explorer needs from the member widget. */
+/** Minimal controller for the member widget: what the explorer reads from it. */
 interface MemberControl {
   get value(): string;
   set value(v: string);
+  close(): void;
 }
 
 /**
- * Custom themed dropdown replacing the native <select> for "Lab member".
- * Implements the ARIA listbox pattern \u2014 a trigger button plus a popup list \u2014
+ * Custom themed dropdown replacing a native <select> for "Lab member".
+ * Implements the ARIA listbox pattern — a trigger button plus a popup list —
  * with keyboard navigation (arrows, Home/End, type-ahead, Enter/Escape),
  * outside-click dismissal, and a hidden input that carries the value so the
- * rest of the explorer reads it exactly like the old select. Calls onChange
- * only on user-driven selection; programmatic .value assignment stays silent
- * (the caller runs apply() itself, as it did with the select).
+ * rest of the explorer reads it like a plain field. Calls onChange only on
+ * user-driven selection; programmatic .value assignment stays silent.
  */
 function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberControl {
   const wrap = root.querySelector<HTMLElement>('[data-member-root]');
@@ -40,9 +45,16 @@ function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberCon
   const hidden = root.querySelector<HTMLInputElement>('[data-member]');
   if (!wrap || !button || !list || !valueEl || !hidden) {
     // Degrade to a bare value store; the explorer keeps working without member filtering.
-    return { get value() { return hidden?.value ?? ''; }, set value(_v: string) {} };
+    return {
+      get value() {
+        return hidden?.value ?? '';
+      },
+      set value(_v: string) {},
+      close() {},
+    };
   }
   const h = hidden;
+  const placeholder = valueEl.dataset.placeholder ?? 'Anyone';
   const options = Array.from(list.querySelectorAll<HTMLElement>('[role="option"]'));
   options.forEach((o, i) => {
     if (!o.id) o.id = `pub-member-opt-${i}`;
@@ -53,14 +65,14 @@ function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberCon
 
   const labelFor = (v: string) => {
     const opt = options.find((o) => o.dataset.value === v) ?? options[0];
-    return opt?.dataset.label ?? opt?.textContent?.trim() ?? 'Anyone';
+    return opt?.dataset.label ?? opt?.textContent?.trim() ?? placeholder;
   };
 
   const setValue = (v: string, fire: boolean) => {
     h.value = v;
-    valueEl.textContent = labelFor(v);
+    valueEl.textContent = v === '' ? placeholder : labelFor(v);
     for (const o of options) o.setAttribute('aria-selected', String(o.dataset.value === v));
-    button.classList.toggle('member__button--placeholder', v === '');
+    button.classList.toggle('is-on', v !== '');
     if (fire) onChange();
   };
 
@@ -78,10 +90,10 @@ function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberCon
     if (!wrap.contains(e.target as Node)) closeList(false);
   };
 
-  // The list is `position: fixed`, so it must be placed against the trigger's
-  // viewport rect every time it opens (and re-placed while open, since the rail
-  // it lives in scrolls). Flip upward when there isn't room below, and cap the
-  // height to the space actually available so it never runs off-screen.
+  // The list is `position: fixed`, so place it against the trigger's viewport
+  // rect every time it opens (and re-place while open, since the page scrolls).
+  // Flip upward when there isn't room below, and cap the height to the space
+  // actually available so it never runs off-screen.
   const GAP = 6;
   const MAX_H = 240; // 15rem, mirrors the CSS max-height
   const MARGIN = 8; // keep clear of the viewport edge
@@ -94,7 +106,7 @@ function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberCon
     const up = below < wanted && above > below;
     const avail = Math.max(96, up ? above : below);
     list.style.left = `${Math.round(r.left)}px`;
-    list.style.width = `${Math.round(r.width)}px`;
+    list.style.minWidth = `${Math.round(r.width)}px`;
     list.style.maxHeight = `${Math.round(Math.min(MAX_H, avail))}px`;
     if (up) {
       list.style.top = 'auto';
@@ -213,6 +225,9 @@ function setupMemberDropdown(root: HTMLElement, onChange: () => void): MemberCon
     set value(v: string) {
       setValue(v, false);
     },
+    close() {
+      closeList(false);
+    },
   };
 }
 
@@ -223,35 +238,53 @@ export function setupExplorer(): void {
 
   const form = root.querySelector<HTMLFormElement>('[data-filters]');
   const qInput = root.querySelector<HTMLInputElement>('[data-q]');
-  const awardInput = root.querySelector<HTMLInputElement>('[data-award]');
+  const awardChip = root.querySelector<HTMLButtonElement>('[data-award-chip]');
   const items = Array.from(root.querySelectorAll<HTMLElement>('[data-pub-item]'));
   const groups = Array.from(root.querySelectorAll<HTMLElement>('[data-year-group]'));
   const countEl = root.querySelector<HTMLElement>('[data-count]');
   const emptyEl = root.querySelector<HTMLElement>('[data-empty]');
   const clearBtn = root.querySelector<HTMLElement>('[data-clear]');
   const clearBtn2 = root.querySelector<HTMLElement>('[data-clear-2]');
-  const panel = root.querySelector<HTMLDetailsElement>('[data-filters-panel]');
-  const activeCountEl = root.querySelector<HTMLElement>('[data-active-count]');
+  const list = root.querySelector<HTMLElement>('[data-list]');
+  const ddButtons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dd]'));
   const total = items.length;
   if (!form || !qInput) return;
 
-  // Custom themed listbox in place of the native <select>; exposes a .value
-  // that the rest of this function reads and writes just like the old element.
+  // Custom themed listbox in place of a native <select> for "Lab member".
   const memberDropdown = setupMemberDropdown(root, apply);
-
-  // Filters collapse by default on small screens; expand on wider ones. An inline
-  // head-adjacent script sets this before first paint — here we keep it correct
-  // after view-transition swaps and across the breakpoint on resize.
-  const mobile = window.matchMedia('(max-width: 60rem)');
-  const syncPanel = () => {
-    if (panel) panel.open = !mobile.matches;
-  };
-  syncPanel();
-  mobile.addEventListener('change', syncPanel);
 
   const checks = (facet: string) =>
     Array.from(form.querySelectorAll<HTMLInputElement>(`input[data-facet="${facet}"]`));
 
+  /* ---- dropdown open/close --------------------------------------- */
+  const closeDropdowns = () => {
+    for (const btn of ddButtons) {
+      const panel = btn.nextElementSibling as HTMLElement | null;
+      if (panel) panel.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  };
+  for (const btn of ddButtons) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const panel = btn.nextElementSibling as HTMLElement | null;
+      if (!panel) return;
+      const willOpen = panel.hidden;
+      closeDropdowns();
+      memberDropdown.close();
+      if (willOpen) {
+        panel.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
+  // Close checkbox dropdowns when clicking outside any .dd (selecting an option
+  // inside keeps the panel open, so multi-select works).
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('.dd')) closeDropdowns();
+  });
+
+  /* ---- state ----------------------------------------------------- */
   function readState(): State {
     return {
       q: qInput!.value.trim(),
@@ -264,7 +297,7 @@ export function setupExplorer(): void {
       topics: checks('topic')
         .filter((c) => c.checked)
         .map((c) => c.value),
-      award: Boolean(awardInput?.checked),
+      award: awardChip?.getAttribute('aria-pressed') === 'true',
       member: memberDropdown.value,
     };
   }
@@ -301,8 +334,25 @@ export function setupExplorer(): void {
     if (s.award) p.set('award', '1');
     if (s.member) p.set('member', s.member);
     const qs = p.toString();
-    const url = qs ? `${location.pathname}?${qs}` : location.pathname;
-    history.replaceState(null, '', url);
+    history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname);
+  }
+
+  /** Reflect a facet's selection count on its chip: accent state + count badge. */
+  function syncChip(facet: string, count: number): void {
+    const btn = ddButtons.find((b) => b.dataset.dd === facet);
+    if (!btn) return;
+    btn.classList.toggle('is-on', count > 0);
+    let badge = btn.querySelector<HTMLElement>('.chip__n');
+    if (count > 0) {
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'chip__n';
+        btn.insertBefore(badge, btn.querySelector('.chip__chev'));
+      }
+      badge.textContent = String(count);
+    } else if (badge) {
+      badge.remove();
+    }
   }
 
   function apply(): void {
@@ -315,9 +365,9 @@ export function setupExplorer(): void {
       if (show) visible++;
     }
     for (const g of groups) {
-      const anyVisible = g.querySelector('[data-pub-item]:not([hidden])');
-      g.hidden = !anyVisible;
+      g.hidden = !g.querySelector('[data-pub-item]:not([hidden])');
     }
+
     const active = isActive(s);
     if (countEl) {
       countEl.textContent = active
@@ -326,17 +376,12 @@ export function setupExplorer(): void {
     }
     if (emptyEl) emptyEl.hidden = visible !== 0;
     if (clearBtn) clearBtn.hidden = !active;
-    if (activeCountEl) {
-      const n =
-        (s.q ? 1 : 0) +
-        s.years.length +
-        s.venues.length +
-        s.topics.length +
-        (s.award ? 1 : 0) +
-        (s.member ? 1 : 0);
-      activeCountEl.textContent = String(n);
-      activeCountEl.hidden = n === 0;
-    }
+
+    syncChip('year', s.years.length);
+    syncChip('venue', s.venues.length);
+    syncChip('topic', s.topics.length);
+    if (awardChip) awardChip.classList.toggle('is-on', s.award);
+
     syncUrl(s);
   }
 
@@ -345,20 +390,12 @@ export function setupExplorer(): void {
     qInput!.value = p.get('q') ?? '';
     const setChecks = (facet: string, csv: string | null) => {
       const set = new Set((csv ?? '').split(',').filter(Boolean));
-      let any = false;
-      for (const c of checks(facet)) {
-        c.checked = set.has(c.value);
-        if (c.checked) any = true;
-      }
-      if (any) {
-        const details = checks(facet)[0]?.closest('details');
-        if (details) details.open = true;
-      }
+      for (const c of checks(facet)) c.checked = set.has(c.value);
     };
     setChecks('year', p.get('year'));
     setChecks('venue', p.get('venue'));
     setChecks('topic', p.get('topic'));
-    if (awardInput) awardInput.checked = p.get('award') === '1';
+    if (awardChip) awardChip.setAttribute('aria-pressed', String(p.get('award') === '1'));
     memberDropdown.value = p.get('member') ?? '';
     apply();
   }
@@ -367,11 +404,43 @@ export function setupExplorer(): void {
     qInput!.value = '';
     for (const facet of ['year', 'venue', 'topic'])
       checks(facet).forEach((c) => (c.checked = false));
-    if (awardInput) awardInput.checked = false;
+    if (awardChip) awardChip.setAttribute('aria-pressed', 'false');
     memberDropdown.value = '';
+    closeDropdowns();
     apply();
     qInput!.focus();
   }
+
+  /* ---- ledger BibTeX / Cite disclosures (delegated) -------------- */
+  list?.addEventListener('click', (e) => {
+    const toggle = (e.target as HTMLElement).closest<HTMLButtonElement>('.act[data-act]');
+    if (!toggle) return;
+    const row = toggle.closest('.ledger__row');
+    const panel = row?.querySelector<HTMLElement>('[data-panel]');
+    if (!row || !panel) return;
+    const kind = toggle.dataset.act;
+    const box = panel.querySelector<HTMLElement>(`.ledger__panelbox[data-kind="${kind}"]`);
+    if (!box) return;
+    const willOpen = panel.hidden || box.hidden; // closed, or showing the other kind
+
+    // Collapse every open panel and reset every toggle in the list first.
+    root.querySelectorAll<HTMLElement>('[data-panel]').forEach((pl) => {
+      pl.hidden = true;
+      pl.querySelectorAll<HTMLElement>('.ledger__panelbox').forEach((b) => (b.hidden = true));
+    });
+    root
+      .querySelectorAll('.act[data-act][aria-expanded="true"]')
+      .forEach((a) => a.setAttribute('aria-expanded', 'false'));
+
+    if (willOpen) {
+      panel.hidden = false;
+      box.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  /* ---- wiring ---------------------------------------------------- */
+  form.addEventListener('submit', (e) => e.preventDefault());
 
   let debounce: number | undefined;
   qInput.addEventListener('input', () => {
@@ -379,8 +448,17 @@ export function setupExplorer(): void {
     debounce = window.setTimeout(apply, 120);
   });
   form.addEventListener('change', apply);
+  awardChip?.addEventListener('click', () => {
+    const on = awardChip.getAttribute('aria-pressed') === 'true';
+    awardChip.setAttribute('aria-pressed', String(!on));
+    apply();
+  });
   clearBtn?.addEventListener('click', clearAll);
   clearBtn2?.addEventListener('click', clearAll);
+  // Opening the member listbox collapses any open checkbox dropdown.
+  root.querySelector<HTMLButtonElement>('[data-member-button]')?.addEventListener('click', () => {
+    closeDropdowns();
+  });
 
   applyFromUrl();
 }

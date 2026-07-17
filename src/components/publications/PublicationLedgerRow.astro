@@ -1,0 +1,467 @@
+---
+/**
+ * One publication rendered as a dense "ledger" row: a left gutter carries the
+ * venue and date, the main column holds the title, byline, and topic/award
+ * chips, and a right-aligned action cluster carries the external links plus
+ * BibTeX / Cite disclosures. The disclosure panels live in the main column so a
+ * wide BibTeX block can span its full width; the toggle buttons that reveal
+ * them sit in the action cluster (wired by the explorer island).
+ *
+ * The `<li>` itself is the grid row and carries the data-* filter attributes the
+ * explorer reads. Without JS the full grouped list is still present and every
+ * external link works; the title links to the paper's detail page (which has a
+ * copyable BibTeX/citation of its own), so the inert disclosure toggles are
+ * hidden until the island upgrades them.
+ */
+import Icon from '../ui/Icon.astro';
+import { resolveAuthor, type Pub, type Person } from '../../lib/collections';
+import { venueShort, TOPICS } from '../../lib/taxonomy';
+import { toBibtex, citationString } from '../../lib/citation';
+
+interface Props {
+  pub: Pub;
+  people: Map<string, Person>;
+}
+const { pub, people } = Astro.props;
+
+const authors = pub.authors.map((a) => resolveAuthor(a, people));
+const venue = venueShort(pub.venueKey);
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dateStr = pub.month ? `${MONTHS[pub.month - 1]} ${pub.year}` : String(pub.year);
+
+const bibtex = toBibtex(pub, pub.links);
+const citation = citationString(pub);
+const titleHref = pub.detail ? `/publications/${pub.id}` : (pub.links.pdf ?? pub.links.doi);
+
+// External link actions, in a stable order, keeping only those that exist.
+const actions = [
+  pub.links.pdf && { href: pub.links.pdf, icon: 'pdf', label: 'PDF' },
+  pub.links.doi && { href: pub.links.doi, icon: 'doi', label: 'DOI' },
+  pub.links.arxiv && { href: pub.links.arxiv, icon: 'book', label: 'arXiv' },
+  pub.links.code && { href: pub.links.code, icon: 'code', label: 'Code' },
+  pub.links.project && { href: pub.links.project, icon: 'project', label: 'Project' },
+  pub.links.video && { href: pub.links.video, icon: 'video', label: 'Video' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+const bibId = `bib-${pub.id}`;
+const citeId = `cite-${pub.id}`;
+const bibBoxId = `bibbox-${pub.id}`;
+const citeBoxId = `citebox-${pub.id}`;
+
+// Normalized search haystack + facet values for the client-side filter.
+const DIAC = /[\u0300-\u036f]/g;
+const searchText = `${pub.title} ${pub.authors.map((a) => a.name).join(' ')}`
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(DIAC, '');
+const memberIds = pub.authors
+  .filter((a) => a.id)
+  .map((a) => a.id)
+  .join(' ');
+
+const escHtml = (s: string) =>
+  s.replace(
+    /[&<>"]/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string
+  );
+
+// Build the byline as a whitespace-tight HTML string. Astro follows HTML
+// whitespace rules, so a multi-line JSX byline injects a stray space before
+// each comma; concatenating keeps "A, B, and C" clean. The `.ledger__author`
+// styles are :global so they still apply to this injected markup.
+const authorsHtml = authors
+  .map((a, i) => {
+    const cls = a.isPI ? 'ledger__author is-pi' : 'ledger__author';
+    const sep =
+      i < authors.length - 2
+        ? ', '
+        : i === authors.length - 2
+          ? authors.length > 2
+            ? ', and '
+            : ' and '
+          : '';
+    const el = a.href
+      ? `<a href="${escHtml(a.href)}" class="${cls}"${a.internal ? '' : ' rel="noopener noreferrer"'}>${escHtml(a.name)}</a>`
+      : `<span class="${cls}">${escHtml(a.name)}</span>`;
+    return el + sep;
+  })
+  .join('');
+---
+
+<li
+  class="ledger__row"
+  data-pub-item
+  data-year={String(pub.year)}
+  data-venue={pub.venueKey}
+  data-topics={pub.topics.join(' ')}
+  data-award={pub.award ? '1' : '0'}
+  data-members={memberIds}
+  data-text={searchText}
+>
+  <div class="ledger__meta">
+    <span class="ledger__venue mono">{venue}</span>
+    <span class="ledger__date mono">{dateStr}</span>
+  </div>
+
+  <div class="ledger__main">
+    <h3 class="ledger__title">
+      {
+        titleHref ? (
+          <a
+            href={titleHref}
+            class="ledger__title-link"
+            {...(pub.detail ? {} : { rel: 'noopener noreferrer' })}
+          >
+            {pub.title}
+          </a>
+        ) : (
+          pub.title
+        )
+      }
+    </h3>
+
+    <p class="ledger__authors" set:html={authorsHtml} />
+
+    {
+      (pub.topics.length > 0 || pub.status === 'to-appear' || pub.award) && (
+        <div class="ledger__sub">
+          {pub.topics.map((t) => (
+            <a class="tag" href={`/publications?topic=${t}`}>
+              {TOPICS[t as keyof typeof TOPICS]?.short ?? t}
+            </a>
+          ))}
+          {pub.status === 'to-appear' && <span class="ledger__status">To appear</span>}
+          {pub.award && (
+            <span class="ledger__award">
+              <Icon name="check" size={13} /> {pub.award}
+            </span>
+          )}
+        </div>
+      )
+    }
+
+    <div class="ledger__panel" hidden data-panel>
+      <div class="ledger__panelbox" id={bibBoxId} data-kind="bib" hidden>
+        <pre id={bibId} class="ledger__code scroll-x" set:text={bibtex} />
+        <button
+          type="button"
+          class="ledger__copy"
+          data-copy-target={bibId}
+          data-copy-label="BibTeX"
+        >
+          <Icon name="copy" size={13} />
+          <span>Copy BibTeX</span>
+        </button>
+      </div>
+      <div class="ledger__panelbox" id={citeBoxId} data-kind="cite" hidden>
+        <p id={citeId} class="ledger__cite" set:text={citation} />
+        <button
+          type="button"
+          class="ledger__copy"
+          data-copy-target={citeId}
+          data-copy-label="Citation"
+        >
+          <Icon name="copy" size={13} />
+          <span>Copy citation</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ledger__actions">
+    {
+      actions.map((a) => (
+        <a class="act" href={a.href} target="_blank" rel="noopener noreferrer">
+          <Icon name={a.icon} size={15} />
+          <span>{a.label}</span>
+        </a>
+      ))
+    }
+    <span class="ledger__toggles">
+      <button
+        type="button"
+        class="act act--toggle"
+        data-act="bib"
+        aria-expanded="false"
+        aria-controls={bibBoxId}
+      >
+        <Icon name="quote" size={15} />
+        <span>BibTeX</span>
+      </button>
+      <button
+        type="button"
+        class="act act--toggle"
+        data-act="cite"
+        aria-expanded="false"
+        aria-controls={citeBoxId}
+      >
+        <Icon name="copy" size={15} />
+        <span>Cite</span>
+      </button>
+    </span>
+  </div>
+</li>
+
+<style>
+  .ledger__row {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr) auto;
+    gap: 0 1.25rem;
+    align-items: start;
+    padding: 1.1rem 0.6rem;
+    border-radius: var(--radius-s);
+    border-top: none;
+    transition: background var(--dur-1) var(--ease);
+  }
+  .ledger__row:hover {
+    background: var(--surface);
+  }
+  /* Draw a hairline only between two *visible* rows, so the first row shown
+     under a year heading never doubles the heading's own rule. Every row is a
+     PublicationLedgerRow, so this sibling rule stays correct under any filter. */
+  .ledger__row:not([hidden]) ~ .ledger__row:not([hidden]) {
+    border-top: 1px solid var(--line-hairline);
+  }
+  .ledger__row[hidden] {
+    display: none;
+  }
+
+  /* Gutter — venue over date. */
+  .ledger__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-top: 0.15rem;
+  }
+  .ledger__venue {
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .ledger__date {
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+  }
+
+  /* Main column. */
+  .ledger__main {
+    min-width: 0;
+  }
+  .ledger__title {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: var(--step-1);
+    line-height: 1.22;
+    letter-spacing: -0.005em;
+    margin: 0 0 0.25rem;
+  }
+  .ledger__title-link {
+    color: var(--ink);
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition:
+      background-size var(--dur-2) var(--ease),
+      color var(--dur-1) var(--ease);
+  }
+  .ledger__title-link:hover {
+    color: var(--accent);
+    background-size: 100% 1.5px;
+  }
+  .ledger__authors {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    line-height: 1.45;
+    margin: 0;
+  }
+  /* :global — the byline is injected via set:html, so it carries no scope hash. */
+  .ledger__authors :global(.ledger__author) {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .ledger__authors :global(a.ledger__author:hover) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  .ledger__authors :global(.ledger__author.is-pi) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .ledger__sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-muted);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    padding: 0.1em 0.5em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color var(--dur-1) var(--ease),
+      border-color var(--dur-1) var(--ease);
+  }
+  a.tag:hover {
+    color: var(--accent);
+    border-color: var(--accent-line);
+  }
+  .ledger__status {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--tech);
+    border: 1px solid var(--tech-line);
+    background: var(--tech-tint);
+    border-radius: var(--radius-xs);
+    padding: 0.1em 0.5em;
+    white-space: nowrap;
+  }
+  .ledger__award {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35ch;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Right-aligned action cluster. */
+  .ledger__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    padding-top: 0.15rem;
+  }
+  .ledger__toggles {
+    display: inline-flex;
+    gap: 0.3rem;
+  }
+  .act {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45ch;
+    height: 30px;
+    padding: 0 0.6rem;
+    border-radius: var(--radius-s);
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color var(--dur-1) var(--ease),
+      background var(--dur-1) var(--ease),
+      border-color var(--dur-1) var(--ease);
+  }
+  .act :global(.icon) {
+    color: var(--ink-subtle);
+    transition: color var(--dur-1) var(--ease);
+  }
+  .act:hover {
+    color: var(--accent);
+    background: var(--surface-2);
+    border-color: var(--accent-line);
+  }
+  .act:hover :global(.icon) {
+    color: var(--accent);
+  }
+  .act[aria-expanded='true'] {
+    color: var(--accent);
+    background: var(--surface-2);
+    border-color: var(--accent-line);
+  }
+  .act[aria-expanded='true'] :global(.icon) {
+    color: var(--accent);
+  }
+
+  /* Disclosure panels — span the main column. */
+  .ledger__panel {
+    margin-top: 0.85rem;
+  }
+  .ledger__panel[hidden],
+  .ledger__panelbox[hidden] {
+    display: none;
+  }
+  .ledger__code,
+  .ledger__cite {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    padding: 0.8rem 0.9rem;
+    margin: 0 0 0.55rem;
+  }
+  .ledger__code {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre;
+  }
+  .ledger__cite {
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .ledger__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4ch;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-muted);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-xs);
+    padding: 0.4em 0.7em;
+    background: var(--surface);
+    cursor: pointer;
+    transition:
+      color var(--dur-1) var(--ease),
+      border-color var(--dur-1) var(--ease);
+  }
+  .ledger__copy:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Without JS the toggles are inert — hide them; the title still links to the
+     detail page, which carries a copyable BibTeX + citation. */
+  :global(html:not(.js)) .ledger__toggles {
+    display: none;
+  }
+
+  @media (max-width: 46rem) {
+    .ledger__row {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+      padding: 1rem 0.4rem;
+    }
+    .ledger__meta {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 0.6rem;
+      padding-top: 0;
+    }
+    .ledger__actions {
+      justify-content: flex-start;
+      margin-top: 0.35rem;
+    }
+  }
+</style>

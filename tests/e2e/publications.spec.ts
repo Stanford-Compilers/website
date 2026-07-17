@@ -18,8 +18,8 @@ test.describe('publication explorer (with JavaScript)', () => {
 
   test('topic facet filters and syncs to the URL; clear resets', async ({ page }) => {
     await page.goto('/publications');
-    // Open the Topic facet (a collapsed <details>) and check "Distributed".
-    await page.locator('.facet__summary', { hasText: 'Topic' }).click();
+    // Open the Topic dropdown and check "Distributed".
+    await page.locator('[data-dd="topic"]').click();
     const distributed = page.locator('input[data-facet="topic"][value="distributed"]');
     await distributed.check();
     await expect(page).toHaveURL(/topic=distributed/);
@@ -46,7 +46,7 @@ test.describe('publication explorer (with JavaScript)', () => {
     for (let i = 0; i < n; i++) {
       await expect(visible.nth(i)).toHaveAttribute('data-award', '1');
     }
-    await expect(page.locator('input[data-award]')).toBeChecked();
+    await expect(page.locator('[data-award-chip]')).toHaveAttribute('aria-pressed', 'true');
   });
 
   test('shows an empty state when nothing matches', async ({ page }) => {
