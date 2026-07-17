@@ -31,16 +31,16 @@ describe('monogramHue', () => {
 });
 
 describe('sortPeople', () => {
-  it('sorts by order then surname', () => {
+  it('sorts by order then first name', () => {
     const people = [
-      { name: 'Bobby Yan', order: 100 },
       { name: 'James Dong', order: 100 },
+      { name: 'Bobby Yan', order: 100 },
       { name: 'Fredrik Kjolstad', order: 0 },
     ];
     expect(sortPeople(people).map((p) => p.name)).toEqual([
       'Fredrik Kjolstad',
-      'James Dong',
       'Bobby Yan',
+      'James Dong',
     ]);
   });
 });

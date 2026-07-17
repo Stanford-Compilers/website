@@ -10,6 +10,12 @@ export function surname(name: string): string {
   return parts[parts.length - 1] || name;
 }
 
+/** First (given) name token, used to sort the directory alphabetically by first name. */
+export function firstName(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  return parts[0] || name;
+}
+
 /** Initials for the monogram placeholder, max two letters. */
 export function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -30,10 +36,10 @@ export function monogramHue(name: string): number {
   return hash;
 }
 
-/** Sort within a category: explicit order first, then alphabetical by surname. */
+/** Sort within a category: explicit order first, then alphabetical by first name. */
 export function sortPeople<T extends PersonLike>(people: readonly T[]): T[] {
   return [...people].sort((a, b) => {
     if (a.order !== b.order) return a.order - b.order;
-    return surname(a.name).localeCompare(surname(b.name));
+    return firstName(a.name).localeCompare(firstName(b.name));
   });
 }

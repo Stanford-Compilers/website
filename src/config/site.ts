@@ -97,7 +97,7 @@ export interface SiteConfig {
 export const SITE: SiteConfig = {
   name: 'Stanford Compilers Lab',
   shortName: 'Stanford Compilers Lab',
-  tagline: 'Languages and compilers across data forms and machines.',
+  tagline: 'Languages and compilers across data representations and machines.',
   description:
     'We develop programming languages and compiler systems that let the same high-level ' +
     'computation run across different data representations and different machines — from ' +

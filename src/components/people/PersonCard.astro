@@ -18,12 +18,16 @@ const primaryExternal = !person.hasDetail && Boolean(primaryHref);
 
 const profiles = [
   person.website &&
-    !primaryExternal && { href: person.website, icon: 'external', label: 'Website' },
+    person.website !== primaryHref && { href: person.website, icon: 'external', label: 'Website' },
   person.github && { href: person.github, icon: 'github', label: 'GitHub' },
   person.scholar && { href: person.scholar, icon: 'scholar', label: 'Google Scholar' },
   person.orcid && { href: person.orcid, icon: 'orcid', label: 'ORCID' },
   person.linkedin &&
-    !primaryExternal && { href: person.linkedin, icon: 'linkedin', label: 'LinkedIn' },
+    person.linkedin !== primaryHref && {
+      href: person.linkedin,
+      icon: 'linkedin',
+      label: 'LinkedIn',
+    },
 ].filter(Boolean) as { href: string; icon: string; label: string }[];
 
 const hue = monogramHue(person.name);

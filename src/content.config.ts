@@ -37,7 +37,7 @@ const people = defineCollection({
       gradYear: z.number().int().optional(),
       /** Alumni: current position / destination, e.g. "Anthropic". */
       destination: z.string().optional(),
-      /** Lower sorts first within a category; ties break alphabetically by surname. */
+      /** Lower sorts first within a category; ties break alphabetically by first name. */
       order: z.number().default(100),
       featured: z.boolean().default(false),
     }),

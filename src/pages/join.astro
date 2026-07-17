@@ -117,10 +117,6 @@ const faqs = [
             {SITE.contact.email}
           </Button>
         </div>
-        <p class="join-contact__spam subtle">
-          We prefer a plain email link over a contact form — it keeps your message private and
-          avoids third-party form services.
-        </p>
       </div>
       <div class="join-contact__list">
         <p class="join-contact__list-label kicker">Please include</p>
@@ -139,7 +135,7 @@ const faqs = [
   </section>
 
   <section class="section">
-    <div class="container container--narrow">
+    <div class="container container--wide">
       <h2 class="faq-title">Questions</h2>
       <div class="faq">
         {
@@ -218,7 +214,6 @@ const faqs = [
     border-left-width: 3px;
     border-radius: var(--radius-s);
     background: var(--accent-tint);
-    max-width: 72ch;
   }
   .admissions-note__icon {
     flex: none;
@@ -241,13 +236,11 @@ const faqs = [
     margin-top: var(--space-s);
     max-width: 18ch;
   }
+  .join-contact__intro > .muted {
+    margin-top: var(--space-m);
+  }
   .join-contact__cta {
     margin-top: var(--space-l);
-  }
-  .join-contact__spam {
-    margin-top: var(--space-s);
-    font-size: var(--step--2);
-    max-width: 44ch;
   }
   .join-contact__list {
     padding: var(--space-l);
@@ -316,7 +309,6 @@ const faqs = [
   .faq__a {
     padding-bottom: var(--space-m);
     color: var(--ink-muted);
-    max-width: 68ch;
     line-height: 1.6;
   }
 
