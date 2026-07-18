@@ -6,12 +6,13 @@
  * complete grouped list is already present and the toolbar is hidden.
  *
  * The toolbar's Year / Venue / Topic filters are multi-select checkbox
- * dropdowns and "Awards" is a toggle. Authors are filtered from the search box
- * itself: typing surfaces matching lab members in an autocomplete popup, and
- * picking one adds a removable chip to the active-filters row. Multiple authors
- * combine with AND (papers co-authored by all of them), and every byline bolds
- * the authors currently being filtered by. Each ledger row's BibTeX / Cite
- * disclosures are wired here too.
+ * dropdowns and "Awards" is a toggle. Authors and topics are also filterable
+ * from the search box itself: typing surfaces matching lab members and topics
+ * in an autocomplete popup. Picking an author adds a removable chip to the
+ * active-filters row; picking a topic checks its box in the Topic dropdown.
+ * Multiple authors combine with AND (papers co-authored by all of them), and
+ * every byline bolds the authors currently being filtered by. Each ledger
+ * row's BibTeX / Cite disclosures are wired here too.
  */
 
 interface State {
@@ -23,8 +24,9 @@ interface State {
   authors: string[];
 }
 
-/** A searchable lab-member author, injected as JSON by the component. */
-interface Author {
+/** A search-box suggestion: a lab-member author or a topic. */
+interface Suggestion {
+  kind: 'author' | 'topic';
   id: string;
   name: string;
   count: number;
@@ -62,17 +64,30 @@ export function setupExplorer(): void {
   const total = items.length;
   if (!form || !qInput || !suggestEl || !tagsEl || !activeRow) return;
 
-  // Author suggestion index (lab members that appear on a paper).
-  let authorList: { id: string; name: string; count: number }[] = [];
-  try {
-    authorList = JSON.parse(root.querySelector<HTMLElement>('[data-authors]')?.textContent || '[]');
-  } catch {
-    authorList = [];
-  }
-  const authors: Author[] = authorList.map((a) => {
-    const norm = normalize(a.name);
-    return { ...a, norm, words: norm.split(/\s+/).filter(Boolean) };
-  });
+  // Suggestion indexes injected as JSON: lab-member authors and topics. A
+  // topic's `alt` carries its short label so typing either form matches.
+  const readIndex = (sel: string): { id: string; name: string; alt?: string; count: number }[] => {
+    try {
+      return JSON.parse(root.querySelector<HTMLElement>(sel)?.textContent || '[]');
+    } catch {
+      return [];
+    }
+  };
+  const toSuggestion =
+    (kind: Suggestion['kind']) =>
+    (e: { id: string; name: string; alt?: string; count: number }): Suggestion => {
+      const norm = normalize(e.alt ? `${e.name} ${e.alt}` : e.name);
+      return {
+        kind,
+        id: e.id,
+        name: e.name,
+        count: e.count,
+        norm,
+        words: norm.split(/\s+/).filter(Boolean),
+      };
+    };
+  const authors = readIndex('[data-authors]').map(toSuggestion('author'));
+  const topics = readIndex('[data-topics]').map(toSuggestion('topic'));
   const authorById = new Map(authors.map((a) => [a.id, a]));
 
   // Active author-filter ids: the source of truth for the chips + author facet.
@@ -82,7 +97,7 @@ export function setupExplorer(): void {
     Array.from(form.querySelectorAll<HTMLInputElement>(`input[data-facet="${facet}"]`));
 
   /* ---- author autocomplete (search box) -------------------------- */
-  let suggestOptions: { el: HTMLElement; id: string }[] = [];
+  let suggestOptions: { el: HTMLElement; id: string; kind: Suggestion['kind'] }[] = [];
   let suggestActive = -1;
 
   const openSuggest = () => {
@@ -116,11 +131,19 @@ export function setupExplorer(): void {
       closeSuggest();
       return;
     }
-    const chosen = new Set(selectedAuthors);
-    const matches = authors
-      .filter((a) => !chosen.has(a.id) && a.norm.includes(query))
+    const chosenAuthors = new Set(selectedAuthors);
+    const chosenTopics = new Set(
+      checks('topic')
+        .filter((c) => c.checked)
+        .map((c) => c.value)
+    );
+    const matches = [
+      ...authors.filter((a) => !chosenAuthors.has(a.id)),
+      ...topics.filter((t) => !chosenTopics.has(t.id)),
+    ]
+      .filter((s) => s.norm.includes(query))
       .sort((a, b) => {
-        // Names with a word starting on the query rank first, then by frequency.
+        // Entries with a word starting on the query rank first, then by frequency.
         const aw = a.words.some((w) => w.startsWith(query)) ? 0 : 1;
         const bw = b.words.some((w) => w.startsWith(query)) ? 0 : 1;
         if (aw !== bw) return aw - bw;
@@ -132,22 +155,30 @@ export function setupExplorer(): void {
       return;
     }
     suggestEl.textContent = '';
-    suggestOptions = matches.map((a, i) => {
+    suggestOptions = matches.map((s, i) => {
       const li = document.createElement('li');
       li.setAttribute('role', 'option');
       li.className = 'suggest__opt';
       li.id = `pub-suggest-opt-${i}`;
-      li.dataset.value = a.id;
+      li.dataset.value = s.id;
+      li.dataset.kind = s.kind;
       li.setAttribute('aria-selected', 'false');
       const name = document.createElement('span');
       name.className = 'suggest__name';
-      name.textContent = a.name;
+      name.textContent = s.name;
+      li.append(name);
+      if (s.kind === 'topic') {
+        const kind = document.createElement('span');
+        kind.className = 'suggest__kind';
+        kind.textContent = 'Topic';
+        li.append(kind);
+      }
       const count = document.createElement('span');
       count.className = 'suggest__count';
-      count.textContent = String(a.count);
-      li.append(name, count);
+      count.textContent = String(s.count);
+      li.append(count);
       suggestEl.append(li);
-      return { el: li, id: a.id };
+      return { el: li, id: s.id, kind: s.kind };
     });
     suggestActive = -1;
     openSuggest();
@@ -198,6 +229,23 @@ export function setupExplorer(): void {
     selectedAuthors = selectedAuthors.filter((a) => a !== id);
     renderAuthorTags();
     apply();
+  };
+
+  // A topic suggestion checks its box in the Topic dropdown, so the chip
+  // badge, URL state, and clearing behave exactly as if it were picked there.
+  const selectTopic = (id: string) => {
+    const box = checks('topic').find((c) => c.value === id);
+    if (!box) return;
+    box.checked = true;
+    qInput.value = '';
+    closeSuggest();
+    apply();
+    qInput.focus();
+  };
+
+  const selectSuggestion = (s: { id: string; kind: Suggestion['kind'] }) => {
+    if (s.kind === 'topic') selectTopic(s.id);
+    else selectAuthor(s.id);
   };
 
   /* ---- dropdown open/close --------------------------------------- */
@@ -424,7 +472,7 @@ export function setupExplorer(): void {
       case 'Enter':
         if (!suggestEl.hidden && suggestActive >= 0) {
           e.preventDefault();
-          selectAuthor(suggestOptions[suggestActive].id);
+          selectSuggestion(suggestOptions[suggestActive]);
         }
         break;
       case 'Escape':
@@ -441,7 +489,12 @@ export function setupExplorer(): void {
   suggestEl.addEventListener('mousedown', (e) => e.preventDefault());
   suggestEl.addEventListener('click', (e) => {
     const li = (e.target as HTMLElement).closest<HTMLElement>('.suggest__opt');
-    if (li?.dataset.value) selectAuthor(li.dataset.value);
+    if (li?.dataset.value) {
+      selectSuggestion({
+        id: li.dataset.value,
+        kind: li.dataset.kind === 'topic' ? 'topic' : 'author',
+      });
+    }
   });
   suggestEl.addEventListener('mousemove', (e) => {
     const li = (e.target as HTMLElement).closest<HTMLElement>('.suggest__opt');

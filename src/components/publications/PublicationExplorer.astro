@@ -29,6 +29,18 @@ const authorIndex = memberFacets(pubs)
   .filter((m) => people.get(m.value)) // only known people
   .map((m) => ({ id: m.value, name: people.get(m.value)?.name ?? m.value, count: m.count }));
 const authorsJson = JSON.stringify(authorIndex).replace(/</g, '\\u003c');
+// Topics are searchable from the box too; `alt` carries the short chip label
+// when it differs, so typing either form of the name matches.
+const topicIndex = topics.map((t) => {
+  const meta = TOPICS[t.value as keyof typeof TOPICS];
+  return {
+    id: t.value,
+    name: meta?.label ?? t.value,
+    ...(meta && meta.short !== meta.label ? { alt: meta.short } : {}),
+    count: t.count,
+  };
+});
+const topicsJson = JSON.stringify(topicIndex).replace(/</g, '\\u003c');
 const awards = awardCount(pubs);
 const total = pubs.length;
 ---
@@ -39,27 +51,27 @@ const total = pubs.length;
       <div class="search">
         <label class="search__label" for="pub-search">
           <Icon name="search" size={18} />
-          <span class="visually-hidden">Search publications and authors</span>
+          <span class="visually-hidden">Search publications, authors, and topics</span>
         </label>
         <input
           type="search"
           id="pub-search"
           name="q"
           class="search__input"
-          placeholder="Search titles, or pick an author…"
+          placeholder="Search titles, or pick an author or topic…"
           autocomplete="off"
           role="combobox"
           aria-expanded="false"
           aria-controls="pub-suggest"
           aria-autocomplete="list"
-          aria-label="Search publications by title, or type an author name to filter by author"
+          aria-label="Search publications by title, or type an author name or topic to filter"
           data-q
         />
         <ul
           class="suggest"
           id="pub-suggest"
           role="listbox"
-          aria-label="Matching authors"
+          aria-label="Matching authors and topics"
           data-suggest
           hidden
         >
@@ -165,6 +177,7 @@ const total = pubs.length;
   </form>
 
   <script type="application/json" data-authors set:html={authorsJson} is:inline />
+  <script type="application/json" data-topics set:html={topicsJson} is:inline />
 
   <div class="results">
     <div class="results__list" data-list>
@@ -320,6 +333,15 @@ const total = pubs.length;
     font-family: var(--font-mono);
     font-size: var(--step--2);
     color: var(--ink-subtle);
+  }
+  .suggest :global(.suggest__kind) {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--ink-subtle);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.05rem 0.5rem;
   }
 
   /* ---- Dropdown chips ----------------------------------------- */
