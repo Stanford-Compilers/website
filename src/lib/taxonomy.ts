@@ -14,6 +14,7 @@
 export const TOPIC_KEYS = [
   'sparse-tensor-algebra',
   'array-programming',
+  'data-layouts',
   'compiler-ir',
   'meta-compilation',
   'distributed',
@@ -44,7 +45,12 @@ export const TOPICS: Record<TopicKey, TopicMeta> = {
   'array-programming': {
     label: 'Sparse & structured arrays',
     short: 'Sparse arrays',
-    blurb: 'Array programming models, formats, and shape operators over irregular data.',
+    blurb: 'Array programming models and shape operators over irregular data.',
+  },
+  'data-layouts': {
+    label: 'Data representations',
+    short: 'Layouts',
+    blurb: 'Decoupling the layouts and formats of data structures from the algorithms that use them.',
   },
   'compiler-ir': {
     label: 'Compiler representations',

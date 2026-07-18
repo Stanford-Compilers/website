@@ -59,8 +59,8 @@
   venueDetail: "PACMPL vol. 10, PLDI"
   status: "published"
   topics:
-    - "array-programming"
-    - "compiler-ir"
+    - "data-layouts"
+    - "dsl"
   links:
     pdf: "https://fredrikbk.com/publications/scion.pdf"
 - id: "osdi26twill"
@@ -83,7 +83,6 @@
   status: "published"
   topics:
     - "autoscheduling"
-    - "compiler-ir"
   links:
     pdf: "https://fredrikbk.com/publications/twill.pdf"
 - id: "oopsla26deegen"
@@ -423,7 +422,7 @@
   status: "published"
   topics:
     - "sparse-tensor-algebra"
-    - "array-programming"
+    - "compiler-ir"
   links:
     pdf: "https://fredrikbk.com/publications/spconv.pdf"
 - id: "isca24dam"
@@ -446,7 +445,6 @@
   award: "ISCA Distinguished Artifact Award"
   topics:
     - "accelerators"
-    - "compiler-ir"
   software:
     - "dam"
   links:
@@ -818,7 +816,6 @@
   status: "published"
   topics:
     - "distributed"
-    - "sparse-tensor-algebra"
   software:
     - "distal"
   links:
@@ -973,7 +970,6 @@
   status: "published"
   topics:
     - "accelerators"
-    - "foundations"
   links:
     pdf: "https://fredrikbk.com/publications/aha.pdf"
 - id: "spaa20"
@@ -1016,7 +1012,7 @@
   status: "published"
   topics:
     - "sparse-tensor-algebra"
-    - "array-programming"
+    - "data-layouts"
   software:
     - "taco"
   links:
@@ -1062,7 +1058,7 @@
   status: "published"
   topics:
     - "sparse-tensor-algebra"
-    - "array-programming"
+    - "data-layouts"
   software:
     - "taco"
   links:
@@ -1198,7 +1194,6 @@
   status: "published"
   topics:
     - "dsl"
-    - "foundations"
   software:
     - "simit"
   links:
