@@ -37,9 +37,7 @@ const dateStr = pub.month ? `${MONTHS[pub.month - 1]} ${pub.year}` : String(pub.
 // PDFs are self-hosted as root-absolute paths (e.g. "/publications/foo.pdf"). Scholarly
 // metadata (Google Scholar's citation_pdf_url, JSON-LD, BibTeX) needs a fully-qualified
 // URL, so promote local paths to absolute; leave any remaining external URL untouched.
-const pdfAbsolute = pub.links.pdf?.startsWith('/')
-  ? absoluteUrl(pub.links.pdf)
-  : pub.links.pdf;
+const pdfAbsolute = pub.links.pdf?.startsWith('/') ? absoluteUrl(pub.links.pdf) : pub.links.pdf;
 const bibtex = toBibtex(pub, { ...pub.links, pdf: pdfAbsolute });
 const citation = citationString(pub);
 const relatedSoftware = pub.software.map((id) => sw.get(id)).filter(Boolean);

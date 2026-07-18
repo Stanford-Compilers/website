@@ -50,7 +50,8 @@ export const TOPICS: Record<TopicKey, TopicMeta> = {
   'data-layouts': {
     label: 'Data representations',
     short: 'Layouts',
-    blurb: 'Decoupling the layouts and formats of data structures from the algorithms that use them.',
+    blurb:
+      'Decoupling the layouts and formats of data structures from the algorithms that use them.',
   },
   'compiler-ir': {
     label: 'Compiler representations',
