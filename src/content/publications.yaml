@@ -15,7 +15,7 @@
     - "relational"
     - "compiler-ir"
   links:
-    pdf: "https://fredrikbk.com/publications/fused-relational-algebra.pdf"
+    pdf: "/publications/fused-relational-algebra.pdf"
 - id: "pldi26bonsai"
   title: "Bonsai: Compiling Queries to Pruned Tree Traversals"
   year: 2026
@@ -41,7 +41,7 @@
     - "relational"
     - "compiler-ir"
   links:
-    pdf: "https://fredrikbk.com/publications/bonsai.pdf"
+    pdf: "/publications/bonsai.pdf"
   featured: true
 - id: "pldi26scion"
   title: "Decoupling Data Layouts from Bounding Volume Hierarchies"
@@ -62,7 +62,7 @@
     - "data-layouts"
     - "dsl"
   links:
-    pdf: "https://fredrikbk.com/publications/scion.pdf"
+    pdf: "/publications/scion.pdf"
 - id: "osdi26twill"
   title: "Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs"
   year: 2026
@@ -84,7 +84,7 @@
   topics:
     - "autoscheduling"
   links:
-    pdf: "https://fredrikbk.com/publications/twill.pdf"
+    pdf: "/publications/twill.pdf"
 - id: "oopsla26deegen"
   title: "Deegen: A JIT-Capable VM Generator for Dynamic Languages"
   year: 2026
@@ -103,7 +103,7 @@
   software:
     - "deegen"
   links:
-    pdf: "https://fredrikbk.com/publications/deegen.pdf"
+    pdf: "/publications/deegen.pdf"
     doi: "https://doi.org/10.1145/3798246"
   featured: true
 - id: "asplos2026fuseflow"
@@ -129,7 +129,7 @@
     - "accelerators"
     - "compiler-ir"
   links:
-    pdf: "https://fredrikbk.com/publications/fuseflow.pdf"
+    pdf: "/publications/fuseflow.pdf"
 - id: "cgo26scorch"
   title: "Fast Autoscheduling for Sparse ML Frameworks"
   year: 2026
@@ -153,7 +153,7 @@
   software:
     - "scorch"
   links:
-    pdf: "https://fredrikbk.com/publications/scorch.pdf"
+    pdf: "/publications/scorch.pdf"
     doi: "https://doi.org/10.1109/CGO68049.2026.11394842"
 - id: "cgo26ember"
   title: "Ember: A Compiler for Embedding Operations on Decoupled Access-Execute Architectures"
@@ -180,7 +180,7 @@
     - "accelerators"
     - "compiler-ir"
   links:
-    pdf: "https://fredrikbk.com/publications/ember.pdf"
+    pdf: "/publications/ember.pdf"
 - id: "oopsla25"
   title: "REPTILE: Performant Tiling of Recurrences"
   year: 2025
@@ -201,7 +201,7 @@
   software:
     - "recuma"
   links:
-    pdf: "https://fredrikbk.com/publications/recurrences-tiling.pdf"
+    pdf: "/publications/recurrences-tiling.pdf"
 - id: "micro25"
   title: "A Probabilistic Perspective on Tiling Sparse Tensor Algebra"
   year: 2025
@@ -225,7 +225,7 @@
     - "accelerators"
     - "autoscheduling"
   links:
-    pdf: "https://fredrikbk.com/publications/probabilistic-tiling.pdf"
+    pdf: "/publications/probabilistic-tiling.pdf"
 - id: "jssc25"
   title: "Onyx: A 12-nm Programmable Accelerator for Dense and Sparse Applications"
   year: 2025
@@ -307,7 +307,7 @@
   topics:
     - "distributed"
   links:
-    pdf: "https://fredrikbk.com/publications/automatic-task-tracing.pdf"
+    pdf: "/publications/automatic-task-tracing.pdf"
 - id: "asplos25-fusion"
   title: "Composing Distributed Computations Through Task and Kernel Fusion."
   year: 2025
@@ -330,7 +330,7 @@
   topics:
     - "distributed"
   links:
-    pdf: "https://fredrikbk.com/publications/automatic-task-and-kernel-fusion.pdf"
+    pdf: "/publications/automatic-task-and-kernel-fusion.pdf"
 - id: "cgo25stardust"
   title: "Stardust: Compiling Sparse Tensor Algebra to a Reconfigurable Dataflow Architecture"
   year: 2025
@@ -353,7 +353,7 @@
   software:
     - "sam"
   links:
-    pdf: "https://fredrikbk.com/publications/stardust-compiling-ta-to-rdas.pdf"
+    pdf: "/publications/stardust-compiling-ta-to-rdas.pdf"
 - id: "oopsla24recurrences"
   title: "Compiling Recurrences over Dense and Sparse Arrays"
   year: 2024
@@ -374,7 +374,7 @@
   software:
     - "recuma"
   links:
-    pdf: "https://fredrikbk.com/publications/recurrences.pdf"
+    pdf: "/publications/recurrences.pdf"
     doi: "https://doi.org/10.1145/3649820"
 - id: "oopsla24shapes"
   title: "Compilation of Shape Operators on Sparse Arrays"
@@ -401,7 +401,7 @@
   software:
     - "burrito"
   links:
-    pdf: "https://fredrikbk.com/publications/burrito.pdf"
+    pdf: "/publications/burrito.pdf"
     doi: "https://doi.org/10.1145/3689752"
 - id: "oopsla24convolutions"
   title: "Compiler Support for Sparse Tensor Convolutions"
@@ -424,7 +424,7 @@
     - "sparse-tensor-algebra"
     - "compiler-ir"
   links:
-    pdf: "https://fredrikbk.com/publications/spconv.pdf"
+    pdf: "/publications/spconv.pdf"
 - id: "isca24dam"
   title: "The Dataflow Abstract Machine Simulator Framework"
   year: 2024
@@ -448,7 +448,7 @@
   software:
     - "dam"
   links:
-    pdf: "https://fredrikbk.com/publications/dam.pdf"
+    pdf: "/publications/dam.pdf"
     doi: "https://doi.org/10.1109/ISCA59077.2024.00046"
   featured: true
 - id: "pldi24"
@@ -472,7 +472,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/general-workspaces.pdf"
+    pdf: "/publications/general-workspaces.pdf"
 - id: "vlsi24"
   title: "Onyx: A 12nm 756 GOPS/W Coarse-Grained Reconfigurable Array for Accelerating Dense and Sparse Applications"
   year: 2024
@@ -528,7 +528,7 @@
     - "accelerators"
     - "dsl"
   links:
-    pdf: "https://fredrikbk.com/publications/revet.pdf"
+    pdf: "/publications/revet.pdf"
 - id: "sc23-legate-sparse"
   title: "Legate Sparse: Distributed Sparse Computing in Python"
   year: 2023
@@ -555,7 +555,7 @@
   software:
     - "legate-sparse"
   links:
-    pdf: "https://fredrikbk.com/publications/legate-sparse.pdf"
+    pdf: "/publications/legate-sparse.pdf"
     doi: "https://doi.org/10.1145/3581784.3607033"
   featured: true
 - id: "pldi23-etch"
@@ -580,7 +580,7 @@
   software:
     - "etch"
   links:
-    pdf: "https://fredrikbk.com/publications/indexed-streams.pdf"
+    pdf: "/publications/indexed-streams.pdf"
     video: "https://youtu.be/BSis3h_A51Y?si=owxeFuHEIeETsLQk&t=2270"
     doi: "https://doi.org/10.1145/3591268"
 - id: "pldi23-mosaic"
@@ -606,7 +606,7 @@
     - "mosaic"
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/mosaic.pdf"
+    pdf: "/publications/mosaic.pdf"
     doi: "https://doi.org/10.1145/3591236"
   featured: true
 - id: "asplos23-baco"
@@ -636,7 +636,7 @@
   topics:
     - "autoscheduling"
   links:
-    pdf: "https://fredrikbk.com/publications/baco.pdf"
+    pdf: "/publications/baco.pdf"
 - id: "asplos23-sam"
   title: "The Sparse Abstract Machine"
   year: 2023
@@ -662,7 +662,7 @@
   software:
     - "sam"
   links:
-    pdf: "https://fredrikbk.com/publications/sam.pdf"
+    pdf: "/publications/sam.pdf"
     video: "https://youtu.be/zCzZKWheizE?si=6jwUl0oVAT6ETJ6N&t=18"
     doi: "https://doi.org/10.1145/3582016.3582051"
   featured: true
@@ -686,7 +686,7 @@
   topics:
     - "accelerators"
   links:
-    pdf: "https://fredrikbk.com/publications/unified-buffer.pdf"
+    pdf: "/publications/unified-buffer.pdf"
 - id: "cgo23"
   title: "Looplets: A Language For Structured Coiteration"
   year: 2023
@@ -708,7 +708,7 @@
   software:
     - "looplets"
   links:
-    pdf: "https://fredrikbk.com/publications/looplets.pdf"
+    pdf: "/publications/looplets.pdf"
     doi: "https://doi.org/10.1145/3579990.3580020"
 - id: "aha23"
   title: "AHA: An agile approach to the design of coarse-grained reconfigurable accelerators and compilers"
@@ -755,7 +755,7 @@
   topics:
     - "accelerators"
   links:
-    pdf: "https://fredrikbk.com/publications/aha-tecs.pdf"
+    pdf: "/publications/aha-tecs.pdf"
 - id: "sc22-spdistal"
   title: "SpDISTAL: Compiling Distributed Sparse Tensor Computations"
   year: 2022
@@ -776,7 +776,7 @@
   software:
     - "distal"
   links:
-    pdf: "https://fredrikbk.com/publications/spdistal.pdf"
+    pdf: "/publications/spdistal.pdf"
 - id: "taco22-mlir-sparse"
   title: "Compiler Support for Sparse Tensor Computations in MLIR"
   year: 2022
@@ -798,7 +798,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/mlir-sparse.pdf"
+    pdf: "/publications/mlir-sparse.pdf"
     video: "https://youtu.be/x-nHc3hBxHM?si=aYuF8sBMRtZZ3MAB&t=14"
 - id: "pldi22-distal"
   title: "DISTAL: The Distributed Tensor Algebra Compiler"
@@ -819,7 +819,7 @@
   software:
     - "distal"
   links:
-    pdf: "https://fredrikbk.com/publications/distal.pdf"
+    pdf: "/publications/distal.pdf"
     video: "https://youtu.be/1dYngihnfFU?si=ZqhraHBAgJ573G6v"
     doi: "https://doi.org/10.1145/3519939.3523437"
   featured: true
@@ -843,7 +843,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/asymptotic-autoscheduling.pdf"
+    pdf: "/publications/asymptotic-autoscheduling.pdf"
     video: "https://youtu.be/a5IaZjkKBRA"
 - id: "copy-and-patch"
   title: "Copy-and-Patch Compilation"
@@ -864,7 +864,7 @@
   software:
     - "copy-and-patch"
   links:
-    pdf: "https://fredrikbk.com/publications/copy-and-patch.pdf"
+    pdf: "/publications/copy-and-patch.pdf"
     video: "https://youtu.be/PaQJcBdwG9Y"
     doi: "https://doi.org/10.1145/3485513"
   featured: true
@@ -895,7 +895,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/Sparse_Array_Programming.pdf"
+    pdf: "/publications/Sparse_Array_Programming.pdf"
     video: "https://youtu.be/sY_jEfaP8f4"
 - id: "oopsla20"
   title: "A Sparse Iteration Space Transformation Framework for Sparse Tensor Algebra"
@@ -925,7 +925,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco-scheduling.pdf"
+    pdf: "/publications/taco-scheduling.pdf"
     video: "https://youtu.be/0wJsGWA5pTU"
 - id: "aha20"
   title: "Creating an Agile Hardware Design Flow"
@@ -971,7 +971,7 @@
   topics:
     - "accelerators"
   links:
-    pdf: "https://fredrikbk.com/publications/aha.pdf"
+    pdf: "/publications/aha.pdf"
 - id: "spaa20"
   title: "Sparse Tensor Transpositions"
   year: 2020
@@ -995,7 +995,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco-transposition.pdf"
+    pdf: "/publications/taco-transposition.pdf"
 - id: "pldi20"
   title: "Automatic Generation of Efficient Sparse Tensor Format Conversion Routines"
   year: 2020
@@ -1016,7 +1016,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco-conversion.pdf"
+    pdf: "/publications/taco-conversion.pdf"
     video: "https://youtu.be/s6JRY8qcjvA"
 - id: "cgo19"
   title: "Tensor Algebra Compilation with Workspaces"
@@ -1040,7 +1040,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco-workspaces.pdf"
+    pdf: "/publications/taco-workspaces.pdf"
 - id: "oopsla18"
   title: "Format Abstraction for Sparse Tensor Algebra Compilers"
   year: 2018
@@ -1062,7 +1062,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco-formats.pdf"
+    pdf: "/publications/taco-formats.pdf"
     video: "https://youtu.be/sQOq3Ci4tB0"
 - id: "avancees18"
   title: "Taco: compilation et génération de code d’expressions tensorielles"
@@ -1110,7 +1110,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco-tools.pdf"
+    pdf: "/publications/taco-tools.pdf"
     video: "https://youtu.be/eE38PC2ctFs"
 - id: "oopsla17"
   title: "The Tensor Algebra Compiler"
@@ -1136,7 +1136,7 @@
   software:
     - "taco"
   links:
-    pdf: "https://fredrikbk.com/publications/taco.pdf"
+    pdf: "/publications/taco.pdf"
     video: "https://youtu.be/Kffbzf9etLE"
     doi: "https://doi.org/10.1145/3133901"
   featured: true
@@ -1175,7 +1175,7 @@
   software:
     - "simit"
   links:
-    pdf: "https://fredrikbk.com/publications/simit.pdf"
+    pdf: "/publications/simit.pdf"
     video: "https://youtu.be/raPkxhHy5ro"
     doi: "https://doi.org/10.1145/2866569"
   featured: true
@@ -1197,7 +1197,7 @@
   software:
     - "simit"
   links:
-    pdf: "https://fredrikbk.com/publications/why_simulation_languages.pdf"
+    pdf: "/publications/why_simulation_languages.pdf"
 - id: "eurompi13"
   title: "MPI Datatype Processing using Runtime Compilation"
   year: 2013
@@ -1216,7 +1216,7 @@
     - "foundations"
     - "meta-compilation"
   links:
-    pdf: "https://fredrikbk.com/publications/datatype_compilation.pdf"
+    pdf: "/publications/datatype_compilation.pdf"
 - id: "ppopp12"
   title: "Automatic Datatype Generation and Optimization"
   year: 2012
@@ -1235,7 +1235,7 @@
   topics:
     - "foundations"
   links:
-    pdf: "https://fredrikbk.com/publications/datatype_generation.pdf"
+    pdf: "/publications/datatype_generation.pdf"
 - id: "icse11"
   title: "Transformation for Class Immutability"
   year: 2011
@@ -1254,7 +1254,7 @@
   topics:
     - "foundations"
   links:
-    pdf: "https://fredrikbk.com/publications/immutator.pdf"
+    pdf: "/publications/immutator.pdf"
 - id: "cap10"
   title: "Bringing the HPC Programmer's IDE into the 21st Century through Refactoring"
   year: 2010
@@ -1273,7 +1273,7 @@
   topics:
     - "foundations"
   links:
-    pdf: "https://fredrikbk.com/publications/hpc_refactoring.pdf"
+    pdf: "/publications/hpc_refactoring.pdf"
 - id: "paraplop10"
   title: "Ghost Cell Pattern"
   year: 2010
@@ -1290,4 +1290,4 @@
   topics:
     - "foundations"
   links:
-    pdf: "https://fredrikbk.com/publications/ghost_cell_pattern.pdf"
+    pdf: "/publications/ghost_cell_pattern.pdf"
