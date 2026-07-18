@@ -26,7 +26,7 @@ export interface SocialLink {
 }
 
 export interface SiteConfig {
-  /** Full display name of the lab. Temporary until the group picks a permanent name. */
+  /** Full display name of the lab. */
   name: string;
   /** Short name for tight spaces (nav, wordmark). */
   shortName: string;
