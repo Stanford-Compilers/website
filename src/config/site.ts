@@ -134,11 +134,7 @@ export const SITE: SiteConfig = {
   ],
 
   nav: [
-    {
-      label: 'Research',
-      href: '/research',
-      description: 'The problem we work on and how we approach it.',
-    },
+    { label: 'People', href: '/people', description: 'Who is in the group.' },
     {
       label: 'Publications',
       href: '/publications',
@@ -149,8 +145,6 @@ export const SITE: SiteConfig = {
       href: '/software',
       description: 'Systems and compilers the group builds.',
     },
-    { label: 'People', href: '/people', description: 'Who is in the group.' },
-    { label: 'About', href: '/about', description: 'The group and its research narrative.' },
     { label: 'Join', href: '/join', description: 'For prospective students and collaborators.' },
   ],
 
