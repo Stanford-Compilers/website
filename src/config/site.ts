@@ -60,8 +60,6 @@ export interface SiteConfig {
     personId: string;
   };
   contact: {
-    /** Primary public contact address. */
-    email: string;
     /** Mailing / office line shown in the footer and join page. */
     mailing: string;
   };
@@ -122,7 +120,6 @@ export const SITE: SiteConfig = {
   },
 
   contact: {
-    email: 'kjolstad@cs.stanford.edu',
     mailing:
       'Department of Computer Science, Stanford University, 353 Jane Stanford Way, Stanford, CA 94305',
   },

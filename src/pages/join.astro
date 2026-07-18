@@ -111,11 +111,6 @@ const faqs = [
       </aside>
 
       <article class="letter">
-        <p class="letter__salutation">Hello—</p>
-        <p class="letter__opening">
-          Different routes apply depending on how you hope to get involved.
-        </p>
-
         {
           audiences.map((audience) => (
             <section class="letter__chapter" id={audience.id}>
@@ -159,8 +154,8 @@ const faqs = [
           how your interests line up with the group’s work.
         </p>
         <div class="reply-intro__cta">
-          <Button href={`mailto:${SITE.contact.email}`} variant="primary" iconRight="mail">
-            Compose email
+          <Button href="/people" variant="primary" iconRight="arrow-right">
+            Find who to email
           </Button>
         </div>
       </div>
@@ -170,7 +165,7 @@ const faqs = [
         <dl class="email-sheet__fields">
           <div class="email-sheet__field">
             <dt>To</dt>
-            <dd>{SITE.contact.email}</dd>
+            <dd><a href="/people">The lab member closest to your interests</a></dd>
           </div>
           <div class="email-sheet__field">
             <dt>Example subject</dt>
@@ -322,23 +317,12 @@ const faqs = [
   .letter {
     min-width: 0;
   }
-  .letter__salutation {
-    font-family: var(--font-display);
-    font-size: var(--step-4);
-    font-style: italic;
-    line-height: 1;
-  }
-  .letter__opening {
-    max-width: 38ch;
-    margin-top: var(--space-m);
-    color: var(--ink-muted);
-    font-family: var(--font-display);
-    font-size: var(--step-1);
-    line-height: 1.55;
-  }
   .letter__chapter {
     position: relative;
     margin-top: clamp(var(--space-2xl), 6vw, var(--space-3xl));
+  }
+  .letter__chapter:first-child {
+    margin-top: 0;
   }
   .letter__chapter-note {
     margin-bottom: var(--space-xs);

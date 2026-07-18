@@ -17,8 +17,8 @@ relatedProjects:
 publications:
   - oopsla24shapes
 tags:
+  - Racket
   - C++
-  - MLIR
 featured: true
 order: 1
 ---

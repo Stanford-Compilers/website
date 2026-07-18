@@ -8,9 +8,9 @@ import SoftwareCard from '../components/software/SoftwareCard.astro';
 import Button from '../components/ui/Button.astro';
 import Icon from '../components/ui/Icon.astro';
 import { SITE } from '../config/site';
-import { loadFeaturedPublications, loadFeaturedSoftware, peopleMap } from '../lib/collections';
+import { loadPublications, loadFeaturedSoftware, peopleMap } from '../lib/collections';
 
-const featuredPubs = (await loadFeaturedPublications()).slice(0, 5);
+const recentPubs = (await loadPublications()).slice(0, 5);
 const featuredSoftware = await loadFeaturedSoftware(6);
 const pMap = await peopleMap();
 
@@ -150,8 +150,25 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
     </div>
   </section>
 
+  {/* ---------------- Recent publications ---------------- */}
+  <section class="section" aria-labelledby="pubs-title">
+    <div class="container container--wide">
+      <SectionHead
+        kicker="Publications"
+        title="Recent work"
+        description="The group's latest papers. Every paper, with search and filters, is on the publications page."
+        id="pubs-title"
+        href="/publications"
+        linkLabel="All publications"
+      />
+      <div class="pub-list">
+        {recentPubs.map((pub) => <PublicationItem pub={pub} people={pMap} headingLevel={3} />)}
+      </div>
+    </div>
+  </section>
+
   {/* ---------------- Featured software ---------------- */}
-  <section class="section" aria-labelledby="software-title">
+  <section class="section band" aria-labelledby="software-title">
     <div class="container container--wide">
       <SectionHead
         kicker="Software"
@@ -170,23 +187,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
           ))
         }
       </ul>
-    </div>
-  </section>
-
-  {/* ---------------- Selected publications ---------------- */}
-  <section class="section band" aria-labelledby="pubs-title">
-    <div class="container container--wide">
-      <SectionHead
-        kicker="Publications"
-        title="Selected & recent work"
-        description="A few papers that show the range of the group. Every paper, with search and filters, is on the publications page."
-        id="pubs-title"
-        href="/publications"
-        linkLabel="All publications"
-      />
-      <div class="pub-list">
-        {featuredPubs.map((pub) => <PublicationItem pub={pub} people={pMap} headingLevel={3} />)}
-      </div>
     </div>
   </section>
 
