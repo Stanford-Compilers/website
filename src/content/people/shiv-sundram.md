@@ -2,7 +2,7 @@
 name: Shiv Sundram
 role: PhD student
 category: phd
-portrait: ../../assets/people/shiv-sundram.png
+portrait: ../../assets/people/shiv-sundram.jpg
 website: https://shivsundram.github.io/
 github: https://github.com/shivsundram
 scholar: https://scholar.google.com/citations?user=_jx8wqEAAAAJ
