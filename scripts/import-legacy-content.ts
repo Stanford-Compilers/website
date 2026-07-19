@@ -9,13 +9,15 @@
  *
  * Author order is preserved exactly as published. Structured metadata that is not present
  * in the source (venue keys, research topics, related software, DOIs, person links,
- * featured flags) is supplied by the curated CURATION table below and merged in.
+ * featured flags) is supplied by the curated CURATION table below and merged in. Existing
+ * verified BibTeX and outbound links are preserved so a re-import cannot discard the audit.
  *
  * Re-run this whenever the archive is refreshed; then hand-review the diff.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { parse } from 'yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -345,6 +347,8 @@ function parseAuthors(segment: string): ParsedAuthor[] {
 
 function main() {
   const html = readFileSync(HTML, 'utf8');
+  const existingRecords = parse(readFileSync(OUT, 'utf8')) as Array<Record<string, unknown>>;
+  const existingById = new Map(existingRecords.map((record) => [record.id, record]));
   const start = html.indexOf('Publications</h2>');
   const tableStart = html.indexOf('<table', start);
   const tableEnd = html.indexOf('</table>', tableStart);
@@ -385,7 +389,10 @@ function main() {
     const cur = CURATION[slug];
     if (!cur) missing.push(slug);
 
-    const links: Record<string, string> = {};
+    const previous = existingById.get(slug);
+    const links: Record<string, string> = {
+      ...((previous?.links as Record<string, string> | undefined) ?? {}),
+    };
     if (pdf) links.pdf = absolutizePdf(pdf[1]);
     if (video) links.video = decodeEntities(video[1]);
     if (cur?.doi) links.doi = cur.doi;
@@ -405,6 +412,7 @@ function main() {
       topics: cur?.topics ?? [],
       ...(cur?.software?.length ? { software: cur.software } : {}),
       links,
+      ...(previous?.bibtex ? { bibtex: previous.bibtex } : {}),
       ...(cur?.featured ? { featured: true } : {}),
     };
     records.push(record);

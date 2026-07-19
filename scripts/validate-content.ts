@@ -30,6 +30,11 @@ const warnings: string[] = [];
 const err = (m: string) => errors.push(m);
 const warn = (m: string) => warnings.push(m);
 
+function bareDoi(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  return value.replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').trim() || undefined;
+}
+
 function readFrontmatter(file: string): Record<string, unknown> {
   const raw = readFileSync(file, 'utf8');
   const m = raw.match(/^---\n([\s\S]*?)\n---/);
@@ -110,6 +115,60 @@ for (const pub of pubs) {
   }
   for (const a of pub.authors ?? []) {
     if (a.id && !personIds.has(a.id)) err(`pub ${pub.id}: author id "${a.id}" not found`);
+  }
+  const bibtex = pub.bibtex as
+    { type?: string; fields?: Record<string, string | number> } | undefined;
+  if (!bibtex?.type || !bibtex.fields) {
+    err(`pub ${pub.id}: missing normalized BibTeX metadata`);
+  } else {
+    if (bibtex.type !== bibtex.type.toLowerCase()) {
+      err(`pub ${pub.id}: BibTeX type must be lowercase`);
+    }
+    for (const field of Object.keys(bibtex.fields)) {
+      if (field !== field.toLowerCase())
+        err(`pub ${pub.id}: BibTeX field "${field}" must be lowercase`);
+    }
+    for (const field of ['author', 'title', 'year']) {
+      if (bibtex.fields[field] === undefined) err(`pub ${pub.id}: BibTeX missing ${field}`);
+    }
+    if (Number(bibtex.fields.year) !== pub.year) {
+      err(`pub ${pub.id}: BibTeX year does not match publication year`);
+    }
+    if (String(bibtex.fields.title ?? '').replace(/[{}]/g, '') !== pub.title) {
+      err(`pub ${pub.id}: BibTeX title does not match publication title`);
+    }
+    const containerField = bibtex.type === 'article' ? 'journal' : 'booktitle';
+    if (bibtex.fields[containerField] === undefined) {
+      err(`pub ${pub.id}: BibTeX ${bibtex.type} missing ${containerField}`);
+    }
+    if (
+      bibtex.fields.month !== undefined &&
+      !/^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)$/.test(String(bibtex.fields.month))
+    ) {
+      err(`pub ${pub.id}: BibTeX month must be a lowercase month macro`);
+    }
+    if (
+      pub.month !== undefined &&
+      bibtex.fields.month !== undefined &&
+      bibtex.fields.month !==
+        ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'][
+          pub.month - 1
+        ]
+    ) {
+      err(`pub ${pub.id}: BibTeX month does not match publication month`);
+    }
+    const linkDoi = bareDoi(pub.links?.doi);
+    const bibDoi = bareDoi(bibtex.fields.doi);
+    if (linkDoi && bibDoi !== linkDoi) {
+      err(`pub ${pub.id}: BibTeX DOI does not match links.doi`);
+    }
+    if (bibDoi && bibtex.fields.url !== `https://doi.org/${bibDoi}`) {
+      err(`pub ${pub.id}: BibTeX URL must be https://doi.org/${bibDoi}`);
+    }
+    const bibUrl = String(bibtex.fields.url ?? '');
+    if (/^(?:https?:\/\/[^/]+)?\/publications\/.*\.pdf(?:$|[?#])/i.test(bibUrl)) {
+      err(`pub ${pub.id}: BibTeX must not use a self-hosted PDF URL`);
+    }
   }
   if (!pub.topics || pub.topics.length === 0) warn(`pub ${pub.id}: no topics assigned`);
 }

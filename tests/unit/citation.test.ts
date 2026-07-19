@@ -16,6 +16,7 @@ function pub(p: Partial<PubRecord> & { id: string }): PubRecord {
     topics: [],
     software: [],
     featured: false,
+    bibtex: p.bibtex,
   };
 }
 
@@ -70,24 +71,64 @@ describe('toBibtex', () => {
     const b = toBibtex(pub({ id: 'x', title: 'DISTAL', year: 2022, month: 6, venueKey: 'pldi' }));
     expect(b).toMatch(/^@inproceedings\{/);
     expect(b).toContain('booktitle');
-    expect(b).toContain('month     = {jun}');
+    expect(b).toContain('month     = jun');
   });
   it('uses @article for journals', () => {
     const b = toBibtex(pub({ id: 'y', title: 'Simit', year: 2016, venueKey: 'tog' }));
     expect(b).toMatch(/^@article\{/);
     expect(b).toContain('journal');
   });
-  it('strips the doi.org prefix', () => {
+  it('normalizes the DOI and uses its canonical URL', () => {
     const b = toBibtex(pub({ id: 'z', title: 'TACO', year: 2017, venueKey: 'oopsla' }), {
       doi: 'https://doi.org/10.1145/3133901',
     });
     expect(b).toContain('doi       = {10.1145/3133901}');
-    expect(b).not.toContain('https://doi.org');
+    expect(b).toContain('url       = {https://doi.org/10.1145/3133901}');
   });
   it('escapes nothing weird and includes author with " and "', () => {
     const b = toBibtex(
       pub({ id: 'w', title: 'X', year: 2020, authors: [{ name: 'A B' }, { name: 'C D' }] })
     );
     expect(b).toContain('author    = {A B and C D}');
+  });
+  it('uses verified metadata while normalizing the generated entry', () => {
+    const b = toBibtex(
+      pub({
+        id: 'shape',
+        title: 'Compilation of Shape Operators on Sparse Arrays',
+        year: 2024,
+        month: 10,
+        authors: [{ name: 'Alexander J Root' }, { name: 'Bobby Yan' }],
+        bibtex: {
+          type: 'article',
+          fields: {
+            author: 'Root, Alexander J and Yan, Bobby',
+            title: 'Compilation of Shape Operators on Sparse Arrays',
+            year: 2024,
+            volume: 8,
+            number: 'OOPSLA2',
+            url: 'http://dx.doi.org/10.1145/3689752',
+            doi: '10.1145/3689752',
+            month: 'oct',
+            articleno: 312,
+            pages: '1162–1188',
+            numpages: 27,
+          },
+        },
+      })
+    );
+    expect(b).toMatch(/^@article\{root2024compilation,/);
+    expect(b).toContain('author    = {Root, Alexander J and Yan, Bobby}');
+    expect(b).toContain('month     = oct');
+    expect(b).toContain('articleno = {312}');
+    expect(b).toContain('pages     = {1162--1188}');
+    expect(b).toContain('url       = {https://doi.org/10.1145/3689752}');
+    expect(b).not.toContain('dx.doi.org');
+  });
+  it('never puts a self-hosted PDF URL in fallback BibTeX', () => {
+    const b = toBibtex(pub({ id: 'pdf', title: 'Paper', year: 2020 }), {
+      pdf: 'https://compilers.stanford.edu/publications/paper.pdf',
+    });
+    expect(b).not.toContain('compilers.stanford.edu');
   });
 });

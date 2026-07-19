@@ -75,13 +75,11 @@ facts observed during the verification pass on **2026-07-16**; re-verify if time
 - 🟧 **PDF hosting:** every PDF link points to `https://fredrikbk.com/publications/*.pdf`
   (the PI's current site). If that site is retired, links break. Decide whether to keep
   linking there or self-host the PDFs in this repo.
-- 🟩 **Missing PDFs/DOIs:** three papers have no PDF on the source and therefore no PDF link
-  — `jssc25` (Onyx, JSSC 2025), `ieeemicro24` (IEEE Micro 2025), `vlsi24` (Onyx, VLSI 2024).
-  Add PDFs/DOIs if available.
-- 🟩 **DOIs:** DOIs were added for the ~14 papers confirmed during verification; others have
-  only PDF links. Add more DOIs when convenient (`src/content/publications.yaml`).
-- 🟩 **`avancees18`** "PDF" link is a Google Scholar cluster link (as on the source), not a
-  direct PDF. Confirm.
+- 🟩 **DOIs and BibTeX:** all 52 records were audited against publisher/DOI metadata. Forty-nine
+  have canonical DOI links; the three publications without DOIs use official venue or publisher
+  URLs in BibTeX. Citation keys and field formatting are normalized by the site.
+- 🟩 **`avancees18`:** the former Google Scholar cluster link was replaced with the official CEA
+  publication URL.
 - 🟩 **Abstracts:** none are included (not invented). Add if desired.
 - 🟩 **Video links** point to `youtu.be`; confirm they remain valid.
 

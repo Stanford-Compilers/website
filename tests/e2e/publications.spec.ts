@@ -122,7 +122,7 @@ test.describe('publication explorer (with JavaScript)', () => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {});
     await page.goto('/publications/oopsla17');
     const code = page.locator('#bib-oopsla17');
-    await expect(code).toContainText('@inproceedings{kjolstad2017tensor');
+    await expect(code).toContainText('@article{kjolstad2017tensor');
     await page.getByRole('button', { name: /Copy/ }).first().click();
     await expect(page.locator('[data-copy-live]')).toContainText(/copied/i);
   });

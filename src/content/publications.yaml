@@ -16,6 +16,24 @@
     - "compiler-ir"
   links:
     pdf: "/publications/fused-relational-algebra.pdf"
+    doi: "https://doi.org/10.1145/3808283"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Dong, James and Kjolstad, Fredrik"
+      title: "A Compiler for Fused Relational Operations on Multisets"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2026
+      month: "jun"
+      volume: 10
+      number: "PLDI"
+      articleno: 205
+      numpages: 25
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3808283"
+      url: "https://doi.org/10.1145/3808283"
+      keywords: "relational algebra, databases, sparse compilation, multisets, bags"
 - id: "pldi26bonsai"
   title: "Bonsai: Compiling Queries to Pruned Tree Traversals"
   year: 2026
@@ -42,6 +60,24 @@
     - "compiler-ir"
   links:
     pdf: "/publications/bonsai.pdf"
+    doi: "https://doi.org/10.1145/3808256"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Root, Alexander J and Gyurgyik, Christophe and Goel, Purvi and Fatahalian, Kayvon and Ragan-Kelley, Jonathan and Adams, Andrew and Kjolstad, Fredrik"
+      title: "{Bonsai}: Compiling Queries to Pruned Tree Traversals"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2026
+      month: "jun"
+      volume: 10
+      number: "PLDI"
+      articleno: 178
+      numpages: 29
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3808256"
+      url: "https://doi.org/10.1145/3808256"
+      keywords: "compilation, data independence, acceleration structures, tree data structures"
   featured: true
 - id: "pldi26scion"
   title: "Decoupling Data Layouts from Bounding Volume Hierarchies"
@@ -63,6 +99,24 @@
     - "dsl"
   links:
     pdf: "/publications/scion.pdf"
+    doi: "https://doi.org/10.1145/3808253"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Gyurgyik, Christophe and Root, Alexander J and Kjolstad, Fredrik"
+      title: "Decoupling Data Layouts from Bounding Volume Hierarchies"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2026
+      month: "jun"
+      volume: 10
+      number: "PLDI"
+      articleno: 175
+      numpages: 39
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3808253"
+      url: "https://doi.org/10.1145/3808253"
+      keywords: "acceleration structure, data independence, augmented tree, specialization"
 - id: "osdi26twill"
   title: "Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs"
   year: 2026
@@ -76,7 +130,7 @@
       id: "fredrik-kjolstad"
     - name: "Alex Aiken"
       url: "http://theory.stanford.edu/~aiken/"
-    - name: "Maryam Dehnavi"
+    - name: "Maryam Mehri Dehnavi"
     - name: "Michael Garland"
     - name: "Michael Bauer"
   venueKey: "osdi"
@@ -85,10 +139,23 @@
     - "autoscheduling"
   links:
     pdf: "/publications/twill.pdf"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Soi, Rupanshu and Yadav, Rohan and Kjolstad, Fredrik and Aiken, Alex and Dehnavi, Maryam Mehri and Garland, Michael and Bauer, Michael"
+      title: "Optimal Software Pipelining and Warp Specialization for Tensor Core {GPUs}"
+      booktitle: "20th USENIX Symposium on Operating Systems Design and Implementation (OSDI 26)"
+      year: 2026
+      month: "jul"
+      pages: "1875--1890"
+      publisher: "USENIX Association"
+      address: "Seattle, WA"
+      isbn: "978-1-939133-55-7"
+      url: "https://www.usenix.org/conference/osdi26/presentation/soi"
 - id: "oopsla26deegen"
   title: "Deegen: A JIT-Capable VM Generator for Dynamic Languages"
   year: 2026
-  month: 10
+  month: 4
   order: 4
   authors:
     - name: "Haoran Xu"
@@ -96,8 +163,8 @@
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "oopsla"
-  venueDetail: "PACMPL vol. 10, OOPSLA"
-  status: "to-appear"
+  venueDetail: "PACMPL vol. 10, OOPSLA1"
+  status: "published"
   topics:
     - "meta-compilation"
   software:
@@ -105,6 +172,23 @@
   links:
     pdf: "/publications/deegen.pdf"
     doi: "https://doi.org/10.1145/3798246"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Xu, Haoran and Kjolstad, Fredrik"
+      title: "{Deegen}: A {JIT}-Capable {VM} Generator for Dynamic Languages"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2026
+      month: "apr"
+      volume: 10
+      number: "OOPSLA1"
+      articleno: 138
+      numpages: 29
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3798246"
+      url: "https://doi.org/10.1145/3798246"
+      keywords: "Inline Caching, Dynamic Languages, Binary Code Patching"
   featured: true
 - id: "asplos2026fuseflow"
   title: "FuseFlow: A Fusion-Centric Compilation Framework for Sparse Deep Learning on Streaming Dataflow"
@@ -130,10 +214,25 @@
     - "compiler-ir"
   links:
     pdf: "/publications/fuseflow.pdf"
+    doi: "https://doi.org/10.1145/3779212.3790165"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Lacouture, Rubens and Zhang, Nathan and Sharma, Ritvik and Siracusa, Marco and Kjolstad, Fredrik and Olukotun, Kunle and Hsu, Olivia"
+      title: "{FuseFlow}: A Fusion-Centric Compilation Framework for Sparse Deep Learning on Streaming Dataflow"
+      booktitle: "Proceedings of the 31st ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2"
+      year: 2026
+      month: "mar"
+      pages: "798--820"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3779212.3790165"
+      url: "https://doi.org/10.1145/3779212.3790165"
+      keywords: "sparse machine learning, Einsum, tensor compiler, kernel fusion, spatial dataflow accelerator"
 - id: "cgo26scorch"
   title: "Fast Autoscheduling for Sparse ML Frameworks"
   year: 2026
-  month: 2
+  month: 1
   order: 6
   authors:
     - name: "Bobby Yan"
@@ -155,10 +254,22 @@
   links:
     pdf: "/publications/scorch.pdf"
     doi: "https://doi.org/10.1109/CGO68049.2026.11394842"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Yan, Bobby and Root, Alexander J and Gale, Trevor and Broman, David and Kjolstad, Fredrik"
+      title: "Fast Autoscheduling for Sparse {ML} Frameworks"
+      booktitle: "2026 IEEE/ACM International Symposium on Code Generation and Optimization (CGO)"
+      year: 2026
+      month: "jan"
+      pages: "28--43"
+      publisher: "IEEE"
+      doi: "10.1109/CGO68049.2026.11394842"
+      url: "https://doi.org/10.1109/CGO68049.2026.11394842"
 - id: "cgo26ember"
   title: "Ember: A Compiler for Embedding Operations on Decoupled Access-Execute Architectures"
   year: 2026
-  month: 2
+  month: 1
   order: 7
   authors:
     - name: "Marco Siracusa"
@@ -181,6 +292,20 @@
     - "compiler-ir"
   links:
     pdf: "/publications/ember.pdf"
+    doi: "https://doi.org/10.1109/CGO68049.2026.11395192"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Siracusa, Marco and Hsu, Olivia and Soria-Pardos, Victor and Randall, Joshua and Grasset, Arnaud and Biscondi, Eric and Joseph, Doug and Allen, Randy and Kjolstad, Fredrik and Planas, Miquel Moretó and Armejach, Adrià"
+      title: "{Ember}: A Compiler for Embedding Operations on Decoupled Access-Execute Architectures"
+      booktitle: "2026 IEEE/ACM International Symposium on Code Generation and Optimization (CGO)"
+      year: 2026
+      month: "jan"
+      pages: "150--163"
+      publisher: "IEEE"
+      doi: "10.1109/CGO68049.2026.11395192"
+      url: "https://doi.org/10.1109/CGO68049.2026.11395192"
+      keywords: "Recommendation models, Large language models, Graph learning models, Tensor compilers, Hardware-software co-design, Machine learning accelerators"
 - id: "oopsla25"
   title: "REPTILE: Performant Tiling of Recurrences"
   year: 2025
@@ -193,7 +318,7 @@
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "oopsla"
-  venueDetail: "PACMPL vol. 9, OOPSLA"
+  venueDetail: "PACMPL vol. 9, OOPSLA2"
   status: "published"
   topics:
     - "recurrences"
@@ -202,6 +327,24 @@
     - "recuma"
   links:
     pdf: "/publications/recurrences-tiling.pdf"
+    doi: "https://doi.org/10.1145/3763074"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Tariq, Muhammad Usman and Sundram, Shiv and Kjolstad, Fredrik"
+      title: "{REPTILE}: Performant Tiling of Recurrences"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2025
+      month: "oct"
+      volume: 9
+      number: "OOPSLA2"
+      articleno: 296
+      numpages: 27
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3763074"
+      url: "https://doi.org/10.1145/3763074"
+      keywords: "recurrences, tiling, code generation, linear solvers, BLAS/LAPACK"
 - id: "micro25"
   title: "A Probabilistic Perspective on Tiling Sparse Tensor Algebra"
   year: 2025
@@ -209,7 +352,7 @@
   order: 9
   authors:
     - name: "Ritvik Sharma"
-    - name: "Zi Xue"
+    - name: "Zi Yu Xue"
     - name: "Nathan Zhang"
     - name: "Rubens Lacouture"
       id: "rubens-lacouture"
@@ -226,10 +369,25 @@
     - "autoscheduling"
   links:
     pdf: "/publications/probabilistic-tiling.pdf"
+    doi: "https://doi.org/10.1145/3725843.3756095"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Sharma, Ritvik and Xue, Zi Yu and Zhang, Nathan and Lacouture, Rubens and Kjolstad, Fredrik and Achour, Sara and Horowitz, Mark"
+      title: "A Probabilistic Perspective on Tiling Sparse Tensor Algebra"
+      booktitle: "Proceedings of the 58th IEEE/ACM International Symposium on Microarchitecture"
+      year: 2025
+      month: "oct"
+      pages: "795--808"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3725843.3756095"
+      url: "https://doi.org/10.1145/3725843.3756095"
+      keywords: "Tensor Algebra, Sparse Computation, Hardware Acceleration, Tiling"
 - id: "jssc25"
   title: "Onyx: A 12-nm Programmable Accelerator for Dense and Sparse Applications"
-  year: 2025
-  month: 9
+  year: 2026
+  month: 5
   order: 10
   authors:
     - name: "Kalhan Koul"
@@ -252,20 +410,37 @@
     - name: "Jayashree Adivarahan"
     - name: "Ritvik Sharma"
     - name: "Christopher Torng"
-    - name: "Joel Emer"
+    - name: "Joel S. Emer"
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
     - name: "Mark Horowitz"
     - name: "Priyanka Raina"
   venueKey: "jssc"
+  venueDetail: "vol. 61, no. 5"
   status: "published"
   topics:
     - "accelerators"
-  links: {}
+  links:
+    doi: "https://doi.org/10.1109/JSSC.2025.3604724"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Koul, Kalhan and Hsu, Olivia and Mei, Yuchen and Ravipati, Sai Gautham and Strange, Maxwell and Melchert, Jackson and Carsello, Alex and Kong, Taeyoung and Chen, Po-Han and Ke, Huifeng and Zhang, Keyi and Liu, Qiaoyi and Nyengele, Gedeon and Xie, Zhouhua and Balasingam, Akhilesh and Adivarahan, Jayashree and Sharma, Ritvik and Torng, Christopher and Emer, Joel S. and Kjolstad, Fredrik and Horowitz, Mark and Raina, Priyanka"
+      title: "{Onyx}: A 12-nm Programmable Accelerator for Dense and Sparse Applications"
+      journal: "IEEE Journal of Solid-State Circuits"
+      year: 2026
+      month: "may"
+      volume: 61
+      number: 5
+      pages: "2336--2348"
+      publisher: "IEEE"
+      doi: "10.1109/JSSC.2025.3604724"
+      url: "https://doi.org/10.1109/JSSC.2025.3604724"
+      keywords: "Coarse-grained reconfigurable array (CGRA), compilers, computer vision, image processing, machine learning (ML), reconfigurable accelerators, sparse matrices"
 - id: "ieeemicro24"
   title: "Designing Programmable Accelerators for Sparse Tensor Algebra"
   year: 2025
-  month: 4
+  month: 5
   order: 11
   authors:
     - name: "Kalhan Koul"
@@ -282,15 +457,31 @@
       id: "fredrik-kjolstad"
     - name: "Priyanka Raina"
   venueKey: "ieeemicro"
+  venueDetail: "vol. 45, no. 3"
   status: "published"
   topics:
     - "accelerators"
     - "sparse-tensor-algebra"
-  links: {}
+  links:
+    doi: "https://doi.org/10.1109/MM.2025.3556611"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Koul, Kalhan and Xie, Zhouhua and Strange, Maxwell and Ravipati, Sai Gautham and Cheng, Bo Wun and Hsu, Olivia and Chen, Po-Han and Horowitz, Mark and Kjolstad, Fredrik and Raina, Priyanka"
+      title: "Designing Programmable Accelerators for Sparse Tensor Algebra"
+      journal: "IEEE Micro"
+      year: 2025
+      month: "may"
+      volume: 45
+      number: 3
+      pages: "58--65"
+      publisher: "IEEE"
+      doi: "10.1109/MM.2025.3556611"
+      url: "https://doi.org/10.1109/MM.2025.3556611"
 - id: "asplos25-tracing"
   title: "Automatic Tracing in Task-Based Runtime Systems"
   year: 2025
-  month: 4
+  month: 3
   order: 12
   authors:
     - name: "Rohan Yadav"
@@ -308,10 +499,25 @@
     - "distributed"
   links:
     pdf: "/publications/automatic-task-tracing.pdf"
+    doi: "https://doi.org/10.1145/3669940.3707237"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Yadav, Rohan and Bauer, Michael and Broman, David and Garland, Michael and Aiken, Alex and Kjolstad, Fredrik"
+      title: "Automatic Tracing in Task-Based Runtime Systems"
+      booktitle: "Proceedings of the 30th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 1"
+      year: 2025
+      month: "mar"
+      pages: "84--99"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3669940.3707237"
+      url: "https://doi.org/10.1145/3669940.3707237"
+      keywords: "Dynamic Analysis, Runtime Systems, Tracing"
 - id: "asplos25-fusion"
-  title: "Composing Distributed Computations Through Task and Kernel Fusion."
+  title: "Composing Distributed Computations Through Task and Kernel Fusion"
   year: 2025
-  month: 4
+  month: 3
   order: 13
   authors:
     - name: "Rohan Yadav"
@@ -331,6 +537,21 @@
     - "distributed"
   links:
     pdf: "/publications/automatic-task-and-kernel-fusion.pdf"
+    doi: "https://doi.org/10.1145/3669940.3707216"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Yadav, Rohan and Sundram, Shiv and Lee, Wonchan and Garland, Michael and Bauer, Michael and Aiken, Alex and Kjolstad, Fredrik"
+      title: "Composing Distributed Computations Through Task and Kernel Fusion"
+      booktitle: "Proceedings of the 30th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 1"
+      year: 2025
+      month: "mar"
+      pages: "182--197"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3669940.3707216"
+      url: "https://doi.org/10.1145/3669940.3707216"
+      keywords: "Distributed Programming, Composable Software"
 - id: "cgo25stardust"
   title: "Stardust: Compiling Sparse Tensor Algebra to a Reconfigurable Dataflow Architecture"
   year: 2025
@@ -354,10 +575,25 @@
     - "sam"
   links:
     pdf: "/publications/stardust-compiling-ta-to-rdas.pdf"
+    doi: "https://doi.org/10.1145/3696443.3708918"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Hsu, Olivia and Rucker, Alexander and Zhao, Tian and Desai, Varun and Olukotun, Kunle and Kjolstad, Fredrik"
+      title: "{Stardust}: Compiling Sparse Tensor Algebra to a Reconfigurable Dataflow Architecture"
+      booktitle: "Proceedings of the 23rd ACM/IEEE International Symposium on Code Generation and Optimization"
+      year: 2025
+      month: "mar"
+      pages: "628--643"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3696443.3708918"
+      url: "https://doi.org/10.1145/3696443.3708918"
+      keywords: "sparse tensor algebra, DSLs, compilers, dataflow, reconfigurable architectures, parallel patterns"
 - id: "oopsla24recurrences"
   title: "Compiling Recurrences over Dense and Sparse Arrays"
   year: 2024
-  month: 10
+  month: 4
   order: 15
   authors:
     - name: "Shiv Sundram"
@@ -366,7 +602,7 @@
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "oopsla"
-  venueDetail: "PACMPL vol. 8, OOPSLA"
+  venueDetail: "PACMPL vol. 8, OOPSLA1"
   status: "published"
   topics:
     - "recurrences"
@@ -376,6 +612,23 @@
   links:
     pdf: "/publications/recurrences.pdf"
     doi: "https://doi.org/10.1145/3649820"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Sundram, Shiv and Tariq, Muhammad Usman and Kjolstad, Fredrik"
+      title: "Compiling Recurrences over Dense and Sparse Arrays"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2024
+      month: "apr"
+      volume: 8
+      number: "OOPSLA1"
+      articleno: 103
+      numpages: 26
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3649820"
+      url: "https://doi.org/10.1145/3649820"
+      keywords: "recurrences, sparse tensor algebra, linear algebra, dynamic programming"
 - id: "oopsla24shapes"
   title: "Compilation of Shape Operators on Sparse Arrays"
   year: 2024
@@ -389,11 +642,11 @@
     - name: "Peiming Liu"
     - name: "Christophe Gyurgyik"
       id: "christophe-gyurgyik"
-    - name: "Aart J.C Bik"
+    - name: "Aart J.C. Bik"
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "oopsla"
-  venueDetail: "PACMPL vol. 8, OOPSLA"
+  venueDetail: "PACMPL vol. 8, OOPSLA2"
   status: "published"
   topics:
     - "array-programming"
@@ -401,6 +654,23 @@
   links:
     pdf: "/publications/burrito.pdf"
     doi: "https://doi.org/10.1145/3689752"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Root, Alexander J and Yan, Bobby and Liu, Peiming and Gyurgyik, Christophe and Bik, Aart J.C. and Kjolstad, Fredrik"
+      title: "Compilation of Shape Operators on Sparse Arrays"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2024
+      month: "oct"
+      volume: 8
+      number: "OOPSLA2"
+      articleno: 312
+      numpages: 27
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3689752"
+      url: "https://doi.org/10.1145/3689752"
+      keywords: "sparse array programming, sparse iteration theory, sparse data structures"
 - id: "oopsla24convolutions"
   title: "Compiler Support for Sparse Tensor Convolutions"
   year: 2024
@@ -414,15 +684,32 @@
     - name: "Yinying Li"
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
-    - name: "Aart J.C Bik"
+    - name: "Aart J.C. Bik"
   venueKey: "oopsla"
-  venueDetail: "PACMPL vol. 8, OOPSLA"
+  venueDetail: "PACMPL vol. 8, OOPSLA2"
   status: "published"
   topics:
     - "sparse-tensor-algebra"
     - "compiler-ir"
   links:
     pdf: "/publications/spconv.pdf"
+    doi: "https://doi.org/10.1145/3689721"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Liu, Peiming and Root, Alexander J and Xu, Anlun and Li, Yinying and Kjolstad, Fredrik and Bik, Aart J.C."
+      title: "Compiler Support for Sparse Tensor Convolutions"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2024
+      month: oct
+      volume: 8
+      number: "OOPSLA2"
+      articleno: 281
+      numpages: 29
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3689721"
+      url: "https://doi.org/10.1145/3689721"
 - id: "isca24dam"
   title: "The Dataflow Abstract Machine Simulator Framework"
   year: 2024
@@ -448,6 +735,18 @@
   links:
     pdf: "/publications/dam.pdf"
     doi: "https://doi.org/10.1109/ISCA59077.2024.00046"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Zhang, Nathan and Lacouture, Rubens and Sohn, Gina and Mure, Paul and Zhang, Qizheng and Kjolstad, Fredrik and Olukotun, Kunle"
+      title: "The Dataflow Abstract Machine Simulator Framework"
+      booktitle: "2024 {ACM/IEEE} 51st Annual International Symposium on Computer Architecture ({ISCA})"
+      year: 2024
+      month: jun
+      pages: "532--547"
+      publisher: "IEEE"
+      doi: "10.1109/ISCA59077.2024.00046"
+      url: "https://doi.org/10.1109/ISCA59077.2024.00046"
   featured: true
 - id: "pldi24"
   title: "Compilation of Modular and General Sparse Workspaces"
@@ -471,6 +770,23 @@
     - "taco"
   links:
     pdf: "/publications/general-workspaces.pdf"
+    doi: "https://doi.org/10.1145/3656426"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Zhang, Genghan and Hsu, Olivia and Kjolstad, Fredrik"
+      title: "Compilation of Modular and General Sparse Workspaces"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2024
+      month: jun
+      volume: 8
+      number: "PLDI"
+      articleno: 196
+      numpages: 26
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3656426"
+      url: "https://doi.org/10.1145/3656426"
 - id: "vlsi24"
   title: "Onyx: A 12nm 756 GOPS/W Coarse-Grained Reconfigurable Array for Accelerating Dense and Sparse Applications"
   year: 2024
@@ -504,18 +820,31 @@
   status: "published"
   topics:
     - "accelerators"
-  links: {}
+  links:
+    doi: "https://doi.org/10.1109/VLSITechnologyandCir46783.2024.10631383"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Koul, Kalhan and Strange, Maxwell and Melchert, Jackson and Carsello, Alex and Mei, Yuchen and Hsu, Olivia and Kong, Taeyoung and Chen, Po-Han and Ke, Huifeng and Zhang, Keyi and Liu, Qiaoyi and Nyengele, Gedeon and Balasingam, Akhilesh and Adivarahan, Jayashree and Sharma, Ritvik and Xie, Zhouhua and Torng, Christopher and Emer, Joel and Kjolstad, Fredrik and Horowitz, Mark and Raina, Priyanka"
+      title: "{Onyx}: A 12nm 756 {GOPS/W} Coarse-Grained Reconfigurable Array for Accelerating Dense and Sparse Applications"
+      booktitle: "2024 {IEEE} Symposium on {VLSI} Technology and Circuits ({VLSI} Technology and Circuits)"
+      year: 2024
+      month: jun
+      pages: "1--2"
+      publisher: "IEEE"
+      doi: "10.1109/VLSITechnologyandCir46783.2024.10631383"
+      url: "https://doi.org/10.1109/VLSITechnologyandCir46783.2024.10631383"
 - id: "hpca24"
   title: "Revet: A Language and Compiler for Dataflow Threads"
   year: 2024
   month: 3
   order: 21
   authors:
-    - name: "Alexander Rucker"
+    - name: "Alexander C. Rucker"
     - name: "Shiv Sundram"
       id: "shiv-sundram"
     - name: "Coleman Smith"
-    - name: "Matt Vilim"
+    - name: "Matthew Vilim"
     - name: "Raghu Prabhakar"
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
@@ -527,6 +856,19 @@
     - "dsl"
   links:
     pdf: "/publications/revet.pdf"
+    doi: "https://doi.org/10.1109/HPCA57654.2024.00016"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Rucker, Alexander C. and Sundram, Shiv and Smith, Coleman and Vilim, Matthew and Prabhakar, Raghu and Kjolstad, Fredrik and Olukotun, Kunle"
+      title: "{Revet}: A Language and Compiler for Dataflow Threads"
+      booktitle: "2024 {IEEE} International Symposium on High-Performance Computer Architecture ({HPCA})"
+      year: 2024
+      month: mar
+      pages: "61--74"
+      publisher: "IEEE"
+      doi: "10.1109/HPCA57654.2024.00016"
+      url: "https://doi.org/10.1109/HPCA57654.2024.00016"
 - id: "sc23-legate-sparse"
   title: "Legate Sparse: Distributed Sparse Computing in Python"
   year: 2023
@@ -537,8 +879,8 @@
       id: "rohan-yadav"
     - name: "Wonchan Lee"
     - name: "Melih Elibol"
-    - name: "Manolis Papadakis"
     - name: "Taylor Lee-Patti"
+    - name: "Manolis Papadakis"
     - name: "Michael Garland"
     - name: "Alex Aiken"
       url: "http://theory.stanford.edu/~aiken/"
@@ -555,9 +897,23 @@
   links:
     pdf: "/publications/legate-sparse.pdf"
     doi: "https://doi.org/10.1145/3581784.3607033"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Yadav, Rohan and Lee, Wonchan and Elibol, Melih and Lee-Patti, Taylor and Papadakis, Manolis and Garland, Michael and Aiken, Alex and Kjolstad, Fredrik and Bauer, Michael"
+      title: "{Legate Sparse}: Distributed Sparse Computing in {Python}"
+      booktitle: "Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis"
+      year: 2023
+      month: nov
+      articleno: 13
+      numpages: 12
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3581784.3607033"
+      url: "https://doi.org/10.1145/3581784.3607033"
   featured: true
 - id: "pldi23-etch"
-  title: "Indexed Streams: A Formal Intermediate Representation for the Fused Execution of Contraction Operations"
+  title: "Indexed Streams: A Formal Intermediate Representation for Fused Contraction Programs"
   year: 2023
   month: 6
   order: 23
@@ -565,7 +921,7 @@
     - name: "Scott Kovach"
       id: "scott-kovach"
     - name: "Praneeth Kolichala"
-    - name: "Timothy Gu"
+    - name: "Tiancheng Gu"
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "pldi"
@@ -581,6 +937,22 @@
     pdf: "/publications/indexed-streams.pdf"
     video: "https://youtu.be/BSis3h_A51Y?si=owxeFuHEIeETsLQk&t=2270"
     doi: "https://doi.org/10.1145/3591268"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Kovach, Scott and Kolichala, Praneeth and Gu, Tiancheng and Kjolstad, Fredrik"
+      title: "Indexed Streams: A Formal Intermediate Representation for Fused Contraction Programs"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2023
+      month: jun
+      volume: 7
+      number: "PLDI"
+      articleno: 154
+      numpages: 25
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3591268"
+      url: "https://doi.org/10.1145/3591268"
 - id: "pldi23-mosaic"
   title: "Mosaic: An Interoperable Compiler for Tensor Algebra"
   year: 2023
@@ -606,14 +978,30 @@
   links:
     pdf: "/publications/mosaic.pdf"
     doi: "https://doi.org/10.1145/3591236"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Bansal, Manya and Hsu, Olivia and Olukotun, Kunle and Kjolstad, Fredrik"
+      title: "{Mosaic}: An Interoperable Compiler for Tensor Algebra"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2023
+      month: jun
+      volume: 7
+      number: "PLDI"
+      articleno: 122
+      numpages: 26
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3591236"
+      url: "https://doi.org/10.1145/3591236"
   featured: true
 - id: "asplos23-baco"
   title: "BaCO: A Fast and Portable Bayesian Compiler Optimization Framework"
   year: 2023
-  month: 4
+  month: 3
   order: 25
   authors:
-    - name: "Erik Hellsten"
+    - name: "Erik Orm Hellsten"
     - name: "Artur Souza"
     - name: "Johannes Lenfers"
     - name: "Rubens Lacouture"
@@ -635,6 +1023,20 @@
     - "autoscheduling"
   links:
     pdf: "/publications/baco.pdf"
+    doi: "https://doi.org/10.1145/3623278.3624770"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Hellsten, Erik Orm and Souza, Artur and Lenfers, Johannes and Lacouture, Rubens and Hsu, Olivia and Ejjeh, Adel and Kjolstad, Fredrik and Steuwer, Michel and Olukotun, Kunle and Nardi, Luigi"
+      title: "{BaCO}: A Fast and Portable Bayesian Compiler Optimization Framework"
+      booktitle: "Proceedings of the 28th {ACM} International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 4"
+      year: 2023
+      month: mar
+      pages: "19--42"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3623278.3624770"
+      url: "https://doi.org/10.1145/3623278.3624770"
 - id: "asplos23-sam"
   title: "The Sparse Abstract Machine"
   year: 2023
@@ -647,8 +1049,8 @@
     - name: "Ritvik Sharma"
     - name: "Jaeyeon Won"
     - name: "Kunle Olukotun"
-    - name: "Joel Emer"
-    - name: "Mark Horowitz"
+    - name: "Joel S. Emer"
+    - name: "Mark A. Horowitz"
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "asplos"
@@ -663,6 +1065,19 @@
     pdf: "/publications/sam.pdf"
     video: "https://youtu.be/zCzZKWheizE?si=6jwUl0oVAT6ETJ6N&t=18"
     doi: "https://doi.org/10.1145/3582016.3582051"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Hsu, Olivia and Strange, Maxwell and Sharma, Ritvik and Won, Jaeyeon and Olukotun, Kunle and Emer, Joel S. and Horowitz, Mark A. and Kjolstad, Fredrik"
+      title: "The Sparse Abstract Machine"
+      booktitle: "Proceedings of the 28th {ACM} International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3"
+      year: 2023
+      month: mar
+      pages: "710--726"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3582016.3582051"
+      url: "https://doi.org/10.1145/3582016.3582051"
   featured: true
 - id: "taco23-ubuffer"
   title: "Unified Buffer: Compiling Image Processing and Machine Learning Applications to Push-Memory Accelerators"
@@ -685,8 +1100,25 @@
     - "accelerators"
   links:
     pdf: "/publications/unified-buffer.pdf"
+    doi: "https://doi.org/10.1145/3572908"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Liu, Qiaoyi and Setter, Jeff and Huff, Dillon and Strange, Maxwell and Feng, Kathleen and Horowitz, Mark and Raina, Priyanka and Kjolstad, Fredrik"
+      title: "{Unified Buffer}: Compiling Image Processing and Machine Learning Applications to Push-Memory Accelerators"
+      journal: "ACM Transactions on Architecture and Code Optimization"
+      year: 2023
+      month: mar
+      volume: 20
+      number: 2
+      articleno: 26
+      numpages: 26
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3572908"
+      url: "https://doi.org/10.1145/3572908"
 - id: "cgo23"
-  title: "Looplets: A Language For Structured Coiteration"
+  title: "Looplets: A Language for Structured Coiteration"
   year: 2023
   month: 2
   order: 28
@@ -708,8 +1140,21 @@
   links:
     pdf: "/publications/looplets.pdf"
     doi: "https://doi.org/10.1145/3579990.3580020"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Ahrens, Willow and Donenfeld, Daniel and Kjolstad, Fredrik and Amarasinghe, Saman"
+      title: "{Looplets}: A Language for Structured Coiteration"
+      booktitle: "Proceedings of the 21st {ACM/IEEE} International Symposium on Code Generation and Optimization"
+      year: 2023
+      month: feb
+      pages: "41--54"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3579990.3580020"
+      url: "https://doi.org/10.1145/3579990.3580020"
 - id: "aha23"
-  title: "AHA: An agile approach to the design of coarse-grained reconfigurable accelerators and compilers"
+  title: "AHA: An Agile Approach to the Design of Coarse-Grained Reconfigurable Accelerators and Compilers"
   year: 2023
   month: 1
   order: 29
@@ -732,7 +1177,7 @@
     - name: "Kathleen Feng"
     - name: "Dillon Huff"
     - name: "Ankita Nayak"
-    - name: "Raj Setaluri"
+    - name: "Rajsekhar Setaluri"
     - name: "James Thomas"
     - name: "Nikhil Bhagdikar"
     - name: "David Durst"
@@ -754,6 +1199,23 @@
     - "accelerators"
   links:
     pdf: "/publications/aha-tecs.pdf"
+    doi: "https://doi.org/10.1145/3534933"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Koul, Kalhan and Melchert, Jackson and Sreedhar, Kavya and Truong, Leonard and Nyengele, Gedeon and Zhang, Keyi and Liu, Qiaoyi and Setter, Jeff and Chen, Po-Han and Mei, Yuchen and Strange, Maxwell and Daly, Ross and Donovick, Caleb and Carsello, Alex and Kong, Taeyoung and Feng, Kathleen and Huff, Dillon and Nayak, Ankita and Setaluri, Rajsekhar and Thomas, James and Bhagdikar, Nikhil and Durst, David and Myers, Zachary and Tsiskaridze, Nestan and Richardson, Stephen and Bahr, Rick and Fatahalian, Kayvon and Hanrahan, Pat and Barrett, Clark and Horowitz, Mark and Torng, Christopher and Kjolstad, Fredrik and Raina, Priyanka"
+      title: "{AHA}: An Agile Approach to the Design of Coarse-Grained Reconfigurable Accelerators and Compilers"
+      journal: "ACM Transactions on Embedded Computing Systems"
+      year: 2023
+      month: jan
+      volume: 22
+      number: 2
+      articleno: 35
+      numpages: 34
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3534933"
+      url: "https://doi.org/10.1145/3534933"
 - id: "sc22-spdistal"
   title: "SpDISTAL: Compiling Distributed Sparse Tensor Computations"
   year: 2022
@@ -775,13 +1237,26 @@
     - "distal"
   links:
     pdf: "/publications/spdistal.pdf"
+    doi: "https://doi.org/10.1109/SC41404.2022.00064"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Yadav, Rohan and Aiken, Alex and Kjolstad, Fredrik"
+      title: "{SpDISTAL}: Compiling Distributed Sparse Tensor Computations"
+      booktitle: "{SC22}: International Conference for High Performance Computing, Networking, Storage and Analysis"
+      year: 2022
+      month: nov
+      pages: "1--15"
+      publisher: "IEEE"
+      doi: "10.1109/SC41404.2022.00064"
+      url: "https://doi.org/10.1109/SC41404.2022.00064"
 - id: "taco22-mlir-sparse"
   title: "Compiler Support for Sparse Tensor Computations in MLIR"
   year: 2022
   month: 9
   order: 31
   authors:
-    - name: "Aart J.C Bik"
+    - name: "Aart Bik"
     - name: "Penporn Koanantakool"
     - name: "Tatiana Shpeisman"
     - name: "Nicolas Vasilache"
@@ -798,6 +1273,23 @@
   links:
     pdf: "/publications/mlir-sparse.pdf"
     video: "https://youtu.be/x-nHc3hBxHM?si=aYuF8sBMRtZZ3MAB&t=14"
+    doi: "https://doi.org/10.1145/3544559"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Bik, Aart and Koanantakool, Penporn and Shpeisman, Tatiana and Vasilache, Nicolas and Zheng, Bixia and Kjolstad, Fredrik"
+      title: "Compiler Support for Sparse Tensor Computations in {MLIR}"
+      journal: "ACM Transactions on Architecture and Code Optimization"
+      year: 2022
+      month: sep
+      volume: 19
+      number: 4
+      articleno: 50
+      numpages: 25
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3544559"
+      url: "https://doi.org/10.1145/3544559"
 - id: "pldi22-distal"
   title: "DISTAL: The Distributed Tensor Algebra Compiler"
   year: 2022
@@ -820,6 +1312,19 @@
     pdf: "/publications/distal.pdf"
     video: "https://youtu.be/1dYngihnfFU?si=ZqhraHBAgJ573G6v"
     doi: "https://doi.org/10.1145/3519939.3523437"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Yadav, Rohan and Aiken, Alex and Kjolstad, Fredrik"
+      title: "{DISTAL}: The Distributed Tensor Algebra Compiler"
+      booktitle: "Proceedings of the 43rd {ACM SIGPLAN} International Conference on Programming Language Design and Implementation"
+      year: 2022
+      month: jun
+      pages: "286--300"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3519939.3523437"
+      url: "https://doi.org/10.1145/3519939.3523437"
   featured: true
 - id: "pldi22-autoscheduling"
   title: "Autoscheduling for Sparse Tensor Algebra with an Asymptotic Cost Model"
@@ -843,10 +1348,24 @@
   links:
     pdf: "/publications/asymptotic-autoscheduling.pdf"
     video: "https://youtu.be/a5IaZjkKBRA"
+    doi: "https://doi.org/10.1145/3519939.3523442"
+  bibtex:
+    type: "inproceedings"
+    fields:
+      author: "Ahrens, Willow and Kjolstad, Fredrik and Amarasinghe, Saman"
+      title: "Autoscheduling for Sparse Tensor Algebra with an Asymptotic Cost Model"
+      booktitle: "Proceedings of the 43rd {ACM SIGPLAN} International Conference on Programming Language Design and Implementation"
+      year: 2022
+      month: jun
+      pages: "269--285"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3519939.3523442"
+      url: "https://doi.org/10.1145/3519939.3523442"
 - id: "copy-and-patch"
-  title: "Copy-and-Patch Compilation"
+  title: "Copy-and-Patch Compilation: A Fast Compilation Algorithm for High-Level Languages and Bytecode"
   year: 2021
-  month: 11
+  month: 10
   order: 34
   authors:
     - name: "Haoran Xu"
@@ -865,11 +1384,27 @@
     pdf: "/publications/copy-and-patch.pdf"
     video: "https://youtu.be/PaQJcBdwG9Y"
     doi: "https://doi.org/10.1145/3485513"
+  bibtex:
+    type: "article"
+    fields:
+      author: "Xu, Haoran and Kjolstad, Fredrik"
+      title: "Copy-and-Patch Compilation: A Fast Compilation Algorithm for High-Level Languages and Bytecode"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2021
+      month: oct
+      volume: 5
+      number: "OOPSLA"
+      articleno: 136
+      numpages: 30
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3485513"
+      url: "https://doi.org/10.1145/3485513"
   featured: true
 - id: "oopsla21array"
   title: "Compilation of Sparse Array Programming Models"
   year: 2021
-  month: 11
+  month: 10
   order: 35
   authors:
     - name: "Rawn Henry"
@@ -895,6 +1430,23 @@
   links:
     pdf: "/publications/Sparse_Array_Programming.pdf"
     video: "https://youtu.be/sY_jEfaP8f4"
+    doi: "https://doi.org/10.1145/3485505"
+  bibtex:
+    type: article
+    fields:
+      author: "Henry, Rawn and Hsu, Olivia and Yadav, Rohan and Chou, Stephen and Olukotun, Kunle and Amarasinghe, Saman and Kjolstad, Fredrik"
+      title: "Compilation of Sparse Array Programming Models"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2021
+      month: oct
+      volume: 5
+      number: "OOPSLA"
+      articleno: 128
+      numpages: 29
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3485505"
+      url: "https://doi.org/10.1145/3485505"
 - id: "oopsla20"
   title: "A Sparse Iteration Space Transformation Framework for Sparse Tensor Algebra"
   year: 2020
@@ -925,6 +1477,23 @@
   links:
     pdf: "/publications/taco-scheduling.pdf"
     video: "https://youtu.be/0wJsGWA5pTU"
+    doi: "https://doi.org/10.1145/3428226"
+  bibtex:
+    type: article
+    fields:
+      author: "Senanayake, Ryan and Hong, Changwan and Wang, Ziheng and Wilson, Amalee and Chou, Stephen and Kamil, Shoaib and Amarasinghe, Saman and Kjolstad, Fredrik"
+      title: "A Sparse Iteration Space Transformation Framework for Sparse Tensor Algebra"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2020
+      month: nov
+      volume: 4
+      number: "OOPSLA"
+      articleno: 158
+      numpages: 30
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3428226"
+      url: "https://doi.org/10.1145/3428226"
 - id: "aha20"
   title: "Creating an Agile Hardware Design Flow"
   year: 2020
@@ -970,6 +1539,19 @@
     - "accelerators"
   links:
     pdf: "/publications/aha.pdf"
+    doi: "https://doi.org/10.1109/DAC18072.2020.9218553"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Bahr, Rick and Barrett, Clark and Bhagdikar, Nikhil and Carsello, Alex and Daly, Ross and Donovick, Caleb and Durst, David and Fatahalian, Kayvon and Feng, Kathleen and Hanrahan, Pat and Hofstee, Teguh and Horowitz, Mark and Huff, Dillon and Kjolstad, Fredrik and Kong, Taeyoung and Liu, Qiaoyi and Mann, Makai and Melchert, Jackson and Nayak, Ankita and Niemetz, Aina and Nyengele, Gedeon and Raina, Priyanka and Richardson, Stephen and Setaluri, Raj and Setter, Jeff and Sreedhar, Kavya and Strange, Maxwell and Thomas, James and Torng, Christopher and Truong, Leonard and Tsiskaridze, Nestan and Zhang, Keyi"
+      title: "Creating an Agile Hardware Design Flow"
+      booktitle: "2020 57th {ACM}/{IEEE} Design Automation Conference ({DAC})"
+      year: 2020
+      month: jul
+      pages: "1--6"
+      publisher: "IEEE"
+      doi: "10.1109/DAC18072.2020.9218553"
+      url: "https://doi.org/10.1109/DAC18072.2020.9218553"
 - id: "spaa20"
   title: "Sparse Tensor Transpositions"
   year: 2020
@@ -994,6 +1576,20 @@
     - "taco"
   links:
     pdf: "/publications/taco-transposition.pdf"
+    doi: "https://doi.org/10.1145/3350755.3400245"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Mueller, Suzanne and Ahrens, Willow and Chou, Stephen and Kjolstad, Fredrik and Amarasinghe, Saman"
+      title: "Sparse Tensor Transpositions"
+      booktitle: "Proceedings of the 32nd ACM Symposium on Parallelism in Algorithms and Architectures"
+      year: 2020
+      month: jul
+      pages: "559--561"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3350755.3400245"
+      url: "https://doi.org/10.1145/3350755.3400245"
 - id: "pldi20"
   title: "Automatic Generation of Efficient Sparse Tensor Format Conversion Routines"
   year: 2020
@@ -1016,6 +1612,20 @@
   links:
     pdf: "/publications/taco-conversion.pdf"
     video: "https://youtu.be/s6JRY8qcjvA"
+    doi: "https://doi.org/10.1145/3385412.3385963"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Chou, Stephen and Kjolstad, Fredrik and Amarasinghe, Saman"
+      title: "Automatic Generation of Efficient Sparse Tensor Format Conversion Routines"
+      booktitle: "Proceedings of the 41st ACM SIGPLAN Conference on Programming Language Design and Implementation"
+      year: 2020
+      month: jun
+      pages: "823--838"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3385412.3385963"
+      url: "https://doi.org/10.1145/3385412.3385963"
 - id: "cgo19"
   title: "Tensor Algebra Compilation with Workspaces"
   year: 2019
@@ -1039,6 +1649,19 @@
     - "taco"
   links:
     pdf: "/publications/taco-workspaces.pdf"
+    doi: "https://doi.org/10.1109/CGO.2019.8661185"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Kjolstad, Fredrik and Ahrens, Willow and Kamil, Shoaib and Amarasinghe, Saman"
+      title: "Tensor Algebra Compilation with Workspaces"
+      booktitle: "2019 {IEEE}/{ACM} International Symposium on Code Generation and Optimization ({CGO})"
+      year: 2019
+      month: feb
+      pages: "180--192"
+      publisher: "IEEE"
+      doi: "10.1109/CGO.2019.8661185"
+      url: "https://doi.org/10.1109/CGO.2019.8661185"
 - id: "oopsla18"
   title: "Format Abstraction for Sparse Tensor Algebra Compilers"
   year: 2018
@@ -1062,9 +1685,27 @@
   links:
     pdf: "/publications/taco-formats.pdf"
     video: "https://youtu.be/sQOq3Ci4tB0"
+    doi: "https://doi.org/10.1145/3276493"
+  bibtex:
+    type: article
+    fields:
+      author: "Chou, Stephen and Kjolstad, Fredrik and Amarasinghe, Saman"
+      title: "Format Abstraction for Sparse Tensor Algebra Compilers"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2018
+      month: oct
+      volume: 2
+      number: "OOPSLA"
+      articleno: 123
+      numpages: 30
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3276493"
+      url: "https://doi.org/10.1145/3276493"
 - id: "avancees18"
-  title: "Taco: compilation et génération de code d’expressions tensorielles"
+  title: "TACO: Compilation et génération de code d’expressions tensorielles"
   year: 2018
+  month: 6
   order: 42
   authors:
     - name: "David Lugato"
@@ -1077,18 +1718,30 @@
     - name: "Shoaib Kamil"
       url: "http://people.csail.mit.edu/skamil/"
   venueKey: "avancees"
-  venueDetail: "Volume 12"
+  venueDetail: "No. 12"
   status: "published"
   topics:
     - "sparse-tensor-algebra"
   software:
     - "taco"
   links:
-    pdf: "https://scholar.google.com/scholar?oi=bibs&cluster=8503015401540923787&btnI=1&hl=en"
+    pdf: "https://www-physique-chimie.cea.fr/science-en-ligne/docs/chocs-avancees/avancees2018.pdf"
+  bibtex:
+    type: article
+    fields:
+      author: "Lugato, David and Kjolstad, Fredrik and Chou, Stephen and Amarasinghe, Saman and Kamil, Shoaib"
+      title: "{TACO}: Compilation et génération de code d’expressions tensorielles"
+      journal: "Chocs Avancées"
+      year: 2018
+      month: jun
+      number: 12
+      pages: "52--53"
+      publisher: "Commissariat à l'énergie atomique et aux énergies alternatives"
+      url: "https://www-physique-chimie.cea.fr/science-en-ligne/docs/chocs-avancees/avancees2018.pdf"
 - id: "ase17"
   title: "taco: A Tool to Generate Tensor Algebra Kernels"
   year: 2017
-  month: 11
+  month: 10
   order: 43
   authors:
     - name: "Fredrik Kjolstad"
@@ -1110,6 +1763,19 @@
   links:
     pdf: "/publications/taco-tools.pdf"
     video: "https://youtu.be/eE38PC2ctFs"
+    doi: "https://doi.org/10.1109/ASE.2017.8115709"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Kjolstad, Fredrik and Chou, Stephen and Lugato, David and Kamil, Shoaib and Amarasinghe, Saman"
+      title: "{taco}: A Tool to Generate Tensor Algebra Kernels"
+      booktitle: "2017 32nd {IEEE}/{ACM} International Conference on Automated Software Engineering ({ASE})"
+      year: 2017
+      month: oct
+      pages: "943--948"
+      publisher: "IEEE"
+      doi: "10.1109/ASE.2017.8115709"
+      url: "https://doi.org/10.1109/ASE.2017.8115709"
 - id: "oopsla17"
   title: "The Tensor Algebra Compiler"
   year: 2017
@@ -1137,11 +1803,27 @@
     pdf: "/publications/taco.pdf"
     video: "https://youtu.be/Kffbzf9etLE"
     doi: "https://doi.org/10.1145/3133901"
+  bibtex:
+    type: article
+    fields:
+      author: "Kjolstad, Fredrik and Kamil, Shoaib and Chou, Stephen and Lugato, David and Amarasinghe, Saman"
+      title: "The Tensor Algebra Compiler"
+      journal: "Proceedings of the ACM on Programming Languages"
+      year: 2017
+      month: oct
+      volume: 1
+      number: "OOPSLA"
+      articleno: 77
+      numpages: 29
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/3133901"
+      url: "https://doi.org/10.1145/3133901"
   featured: true
 - id: "tog16a"
   title: "Simit: A Language for Physical Simulation"
   year: 2016
-  month: 5
+  month: 3
   order: 45
   authors:
     - name: "Fredrik Kjolstad"
@@ -1166,7 +1848,7 @@
     - name: "Saman Amarasinghe"
       url: "http://people.csail.mit.edu/saman/"
   venueKey: "siggraph"
-  venueDetail: "presented at SIGGRAPH 2016"
+  venueDetail: "ACM TOG vol. 35, no. 2; presented at SIGGRAPH 2016"
   status: "published"
   topics:
     - "dsl"
@@ -1176,6 +1858,22 @@
     pdf: "/publications/simit.pdf"
     video: "https://youtu.be/raPkxhHy5ro"
     doi: "https://doi.org/10.1145/2866569"
+  bibtex:
+    type: article
+    fields:
+      author: "Kjolstad, Fredrik and Kamil, Shoaib and Ragan-Kelley, Jonathan and Levin, David I. W. and Sueda, Shinjiro and Chen, Desai and Vouga, Etienne and Kaufman, Danny M. and Kanwar, Gurtej and Matusik, Wojciech and Amarasinghe, Saman"
+      title: "Simit: A Language for Physical Simulation"
+      journal: "ACM Transactions on Graphics"
+      year: 2016
+      month: mar
+      volume: 35
+      number: 2
+      articleno: 20
+      numpages: 21
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/2866569"
+      url: "https://doi.org/10.1145/2866569"
   featured: true
 - id: "tog16b"
   title: "Why New Programming Languages for Simulation?"
@@ -1188,7 +1886,7 @@
     - name: "Fredrik Kjolstad"
       id: "fredrik-kjolstad"
   venueKey: "tog"
-  venueDetail: "perspective"
+  venueDetail: "vol. 35, no. 2; perspective"
   status: "published"
   topics:
     - "dsl"
@@ -1196,6 +1894,23 @@
     - "simit"
   links:
     pdf: "/publications/why_simulation_languages.pdf"
+    doi: "https://doi.org/10.1145/2930661"
+  bibtex:
+    type: article
+    fields:
+      author: "Bernstein, Gilbert Louis and Kjolstad, Fredrik"
+      title: "Why New Programming Languages for Simulation?"
+      journal: "ACM Transactions on Graphics"
+      year: 2016
+      month: may
+      volume: 35
+      number: 2
+      articleno: "20e"
+      numpages: 3
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/2930661"
+      url: "https://doi.org/10.1145/2930661"
 - id: "eurompi13"
   title: "MPI Datatype Processing using Runtime Compilation"
   year: 2013
@@ -1215,6 +1930,20 @@
     - "meta-compilation"
   links:
     pdf: "/publications/datatype_compilation.pdf"
+    doi: "https://doi.org/10.1145/2488551.2488552"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Schneider, Timo and Kjolstad, Fredrik and Hoefler, Torsten"
+      title: "{MPI} Datatype Processing using Runtime Compilation"
+      booktitle: "Proceedings of the 20th European MPI Users' Group Meeting"
+      year: 2013
+      month: sep
+      pages: "19--24"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/2488551.2488552"
+      url: "https://doi.org/10.1145/2488551.2488552"
 - id: "ppopp12"
   title: "Automatic Datatype Generation and Optimization"
   year: 2012
@@ -1234,6 +1963,20 @@
     - "foundations"
   links:
     pdf: "/publications/datatype_generation.pdf"
+    doi: "https://doi.org/10.1145/2145816.2145878"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Kjolstad, Fredrik and Hoefler, Torsten and Snir, Marc"
+      title: "Automatic Datatype Generation and Optimization"
+      booktitle: "Proceedings of the 17th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming"
+      year: 2012
+      month: feb
+      pages: "327--328"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/2145816.2145878"
+      url: "https://doi.org/10.1145/2145816.2145878"
 - id: "icse11"
   title: "Transformation for Class Immutability"
   year: 2011
@@ -1253,39 +1996,78 @@
     - "foundations"
   links:
     pdf: "/publications/immutator.pdf"
+    doi: "https://doi.org/10.1145/1985793.1985803"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Kjolstad, Fredrik and Dig, Danny and Acevedo, Gabriel and Snir, Marc"
+      title: "Transformation for Class Immutability"
+      booktitle: "Proceedings of the 33rd International Conference on Software Engineering"
+      year: 2011
+      month: may
+      pages: "61--70"
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/1985793.1985803"
+      url: "https://doi.org/10.1145/1985793.1985803"
 - id: "cap10"
   title: "Bringing the HPC Programmer's IDE into the 21st Century through Refactoring"
   year: 2010
   month: 10
   order: 50
   authors:
-    - name: "Fredrik Kjolstad"
+    - name: "Fredrik Berg Kjolstad"
       id: "fredrik-kjolstad"
     - name: "Danny Dig"
       url: "http://web.engr.oregonstate.edu/~digd/"
     - name: "Marc Snir"
       url: "http://snir.cs.illinois.edu"
   venueKey: "workshop"
-  venueDetail: "SPLASH 2010 CAP workshop"
+  venueDetail: "SPLASH 2010 Workshop on Concurrency for the Application Programmer"
   status: "published"
   topics:
     - "foundations"
   links:
     pdf: "/publications/hpc_refactoring.pdf"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Kjolstad, Fredrik Berg and Dig, Danny and Snir, Marc"
+      title: "Bringing the {HPC} Programmer's {IDE} into the 21st Century through Refactoring"
+      booktitle: "SPLASH 2010 Workshop on Concurrency for the Application Programmer"
+      year: 2010
+      month: oct
+      pages: "1--4"
+      url: "https://gee.cs.oswego.edu/dl/html/CAP2010.html"
 - id: "paraplop10"
   title: "Ghost Cell Pattern"
   year: 2010
   month: 3
   order: 51
   authors:
-    - name: "Fredrik Kjolstad"
+    - name: "Fredrik Berg Kjolstad"
       id: "fredrik-kjolstad"
     - name: "Marc Snir"
       url: "http://snir.cs.illinois.edu"
   venueKey: "workshop"
-  venueDetail: "ParaPLoP 2010"
+  venueDetail: "ParaPLoP 2010, article 4"
   status: "published"
   topics:
     - "foundations"
   links:
     pdf: "/publications/ghost_cell_pattern.pdf"
+    doi: "https://doi.org/10.1145/1953611.1953615"
+  bibtex:
+    type: inproceedings
+    fields:
+      author: "Kjolstad, Fredrik Berg and Snir, Marc"
+      title: "Ghost Cell Pattern"
+      booktitle: "Proceedings of the 2010 Workshop on Parallel Programming Patterns"
+      year: 2010
+      month: mar
+      articleno: 4
+      numpages: 9
+      publisher: "Association for Computing Machinery"
+      address: "New York, NY, USA"
+      doi: "10.1145/1953611.1953615"
+      url: "https://doi.org/10.1145/1953611.1953615"
