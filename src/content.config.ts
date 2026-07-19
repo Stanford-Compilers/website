@@ -90,6 +90,11 @@ const publications = defineCollection({
           slides: z.string().url().optional(),
         })
         .default({}),
+      /** Verified BibTeX fields; keys, ordering, and formatting are normalized at render time. */
+      bibtex: z.object({
+        type: z.string().regex(/^[a-z]+$/i),
+        fields: z.record(z.string(), z.union([z.string(), z.number()])),
+      }),
       /** Whether this appears in the homepage "selected work" list. */
       featured: z.boolean().default(false),
       /** Whether a standalone detail page is generated (needs enough metadata). */

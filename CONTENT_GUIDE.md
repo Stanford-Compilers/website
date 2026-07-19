@@ -96,10 +96,26 @@ ordering only matters to break ties within the same month.
     code: "https://github.com/…"    # optional
     project: "https://…"            # optional
     video: "https://youtu.be/…"     # optional
+  bibtex:                            # required; verify values against the publisher/DOI record
+    type: article                    # article, inproceedings, etc.; omit the leading @
+    fields:                          # renderer normalizes field order and formatting
+      author: "Lovelace, Ada and Coauthor, External and Kjolstad, Fredrik"
+      title: "An Example Compiler"
+      year: 2027
+      journal: "Proceedings of the ACM on Programming Languages"
+      volume: 11
+      number: "PLDI"
+      url: "https://doi.org/10.1145/…"
+      doi: "10.1145/…"
+      month: jun                     # month macros render without braces
   featured: false                   # true → eligible for the homepage "selected work"
 ```
 
-BibTeX and a plain citation are generated automatically — do not hand-write them.
+The site generates the BibTeX citation key in Google Scholar style and emits months as standard
+lowercase BibTeX macros (`month = jun`). Use `Family, Given` author names and `--` in page
+ranges. Keep the values faithful to the publisher or DOI record, but omit empty and redundant
+exporter fields. If a DOI exists, set `url` to its canonical `https://doi.org/...` URL; never use
+a lab-hosted PDF as the BibTeX `url`.
 
 If you need a **new venue** or a **new research topic**, add it once to `src/lib/taxonomy.ts`
 (`VENUES` or `TOPIC_KEYS` / `TOPICS`); it becomes available everywhere, including the filters.

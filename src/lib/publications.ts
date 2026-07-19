@@ -12,6 +12,13 @@ export interface PubAuthor {
   url?: string;
 }
 
+export interface BibtexRecord {
+  /** Normalized BibTeX entry type, without the leading `@`. */
+  type: string;
+  /** Verified bibliographic fields; the renderer applies the house order and formatting. */
+  fields: Record<string, string | number>;
+}
+
 /** Minimal shape the explorer logic needs (a subset of the content schema). */
 export interface PubRecord {
   id: string;
@@ -26,6 +33,7 @@ export interface PubRecord {
   topics: string[];
   software: string[];
   featured: boolean;
+  bibtex?: BibtexRecord;
 }
 
 export interface FilterState {
