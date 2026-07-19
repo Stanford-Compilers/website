@@ -1,34 +1,30 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLayout from '../layouts/PageLayout.astro';
 import Button from '../components/ui/Button.astro';
 import { SITE } from '../config/site';
 
 const audiences = [
   {
+    id: 'stanford-students',
+    nav: 'Current Stanford students',
+    title: 'Current Stanford students',
+    body: 'Graduate and undergraduate students at Stanford who want to work on programming languages, compilers, or systems are welcome to get in touch via email.',
+  },
+  {
     id: 'phd-students',
-    note: 'For applicants',
     nav: 'PhD applicants',
     title: 'Prospective PhD students',
     body: 'Apply through the Stanford Computer Science PhD program. In your application, it helps to say which research you connect with and why. Admission is decided by the department, not by individual emails.',
     admissions: true,
   },
   {
-    id: 'stanford-students',
-    note: 'If you’re at Stanford',
-    nav: 'Stanford students',
-    title: 'Current Stanford students',
-    body: 'Graduate and undergraduate students at Stanford who want to work on languages, compilers, or systems are welcome to get in touch.',
-  },
-  {
     id: 'postdocs-staff',
-    note: 'Official listings',
     nav: 'Postdocs & staff',
     title: 'Postdocs & research staff',
     body: 'Any open positions are posted through Stanford. If you are interested, check official Stanford listings and reach out with your background and interests.',
   },
   {
     id: 'collaborators',
-    note: 'For collaborators',
     nav: 'Collaborators',
     title: 'Visitors & collaborators',
     body: 'Researchers and engineers in industry or academia are welcome to propose collaborations related to the group’s work.',
@@ -39,7 +35,7 @@ const contactFormat = [
   'Your program and year (or that you are applying)',
   'Relevant background — courses, projects, or systems you have built',
   'Research topics you are interested in',
-  'A specific paper or project of ours that caught your attention',
+  'A specific paper or project of ours that caught your attention, and why',
   'Your expected time commitment',
   'A CV or résumé, if appropriate',
 ];
@@ -51,11 +47,11 @@ const faqs = [
   },
   {
     q: 'Should prospective PhD students email before applying?',
-    a: 'The most important step is to apply through the official Stanford Computer Science PhD process, where applications are reviewed by the department. Naming the research you are interested in within your application is generally useful. Given the volume of email, an individual reply to pre-application messages cannot be guaranteed.',
+    a: 'No. Please apply through the official Stanford Computer Science PhD process, where applications are reviewed by the department. Naming the research you are interested in within your application is generally useful. Given the volume of email, an individual reply to pre-application messages cannot be guaranteed.',
   },
   {
     q: 'Are undergraduate projects available?',
-    a: 'Stanford undergraduates interested in research can reach out. Whether a project is available depends on the term and on current work, so availability varies.',
+    a: 'Stanford undergraduates interested in research should reach out to the PhD student(s) working on research that interests them! Whether a project is available depends on the term and on current work, so availability varies.',
   },
   {
     q: 'Are remote internships available?',
@@ -72,24 +68,13 @@ const faqs = [
 ];
 ---
 
-<BaseLayout
+<PageLayout
   title="Join"
-  description="How to get involved with the Stanford Compilers Lab: guidance for prospective PhD students, current Stanford students, postdocs, and collaborators."
+  kicker="Join"
   image="/og/join.png"
-  mainClass="join-page"
+  lead={`How to get involved with the lab.`}
+  description="How to get involved with the lab."
 >
-  <header class="join-hero">
-    <div class="container container--wide join-hero__inner">
-      <p class="kicker">Join & collaborate</p>
-      <h1 class="join-hero__title">Join.</h1>
-      <p class="join-hero__deck">A note on joining and collaborating.</p>
-      <p class="lead join-hero__lead">
-        We’re glad you’re interested. Here is how prospective students, current Stanford students,
-        and collaborators can get involved — and what to expect.
-      </p>
-    </div>
-  </header>
-
   <section class="letter-section" aria-label="Ways to get involved">
     <div class="container container--wide letter-layout">
       <aside class="letter-index">
@@ -114,7 +99,6 @@ const faqs = [
         {
           audiences.map((audience) => (
             <section class="letter__chapter" id={audience.id}>
-              <p class="letter__chapter-note mono">{audience.note}</p>
               <h2>{audience.title}</h2>
               <p>{audience.body}</p>
 
@@ -135,11 +119,6 @@ const faqs = [
             </section>
           ))
         }
-
-        <p class="letter__signoff">
-          With thanks,<br />
-          {SITE.name}
-        </p>
       </article>
     </div>
   </section>
@@ -210,7 +189,7 @@ const faqs = [
       </ol>
     </div>
   </section>
-</BaseLayout>
+</PageLayout>
 
 <style>
   .join-hero {
