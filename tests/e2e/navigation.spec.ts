@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('desktop navigation marks the current page', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === 'mobile', 'desktop-only layout');
-  await page.goto('/research');
+  await page.goto('/join');
   const current = page.locator('.primary-nav__link[aria-current="page"]');
   await expect(current).toHaveText('Research');
   await page
