@@ -198,21 +198,6 @@ const jsonld = {
         <div class="cite">
           <div class="cite__block">
             <div class="cite__head">
-              <span class="cite__label mono">Citation</span>
-              <button
-                type="button"
-                class="cite__copy"
-                data-copy-target={`cite-${pub.id}`}
-                data-copy-label="Citation"
-              >
-                <Icon name="copy" size={14} />
-                <span>Copy</span>
-              </button>
-            </div>
-            <p id={`cite-${pub.id}`} class="cite__text" set:text={citation} />
-          </div>
-          <div class="cite__block">
-            <div class="cite__head">
               <span class="cite__label mono">BibTeX</span>
               <button
                 type="button"
@@ -225,6 +210,21 @@ const jsonld = {
               </button>
             </div>
             <pre id={`bib-${pub.id}`} class="cite__code scroll-x" set:text={bibtex} />
+          </div>
+          <div class="cite__block">
+            <div class="cite__head">
+              <span class="cite__label mono">Citation</span>
+              <button
+                type="button"
+                class="cite__copy"
+                data-copy-target={`cite-${pub.id}`}
+                data-copy-label="Citation"
+              >
+                <Icon name="copy" size={14} />
+                <span>Copy</span>
+              </button>
+            </div>
+            <p id={`cite-${pub.id}`} class="cite__text" set:text={citation} />
           </div>
         </div>
       </section>

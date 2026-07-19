@@ -17,7 +17,6 @@ relatedProjects:
   - mosaic
   - distal
   - sam
-  - burrito
 publications:
   - oopsla17
   - oopsla18
@@ -41,4 +40,4 @@ to code for many different data structures. Later projects extend the same idea 
 new domains and machines: distributing it across clusters ([DISTAL](/software/distal)),
 mapping it to dataflow accelerators ([the Sparse Abstract Machine](/software/sam)),
 binding subexpressions to external libraries ([Mosaic](/software/mosaic)), and adding
-shape operators on sparse arrays ([Burrito](/software/burrito)).
+shape operators on sparse arrays ([Burrito](/publications/oopsla24shapes)).

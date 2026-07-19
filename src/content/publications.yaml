@@ -398,8 +398,6 @@
   topics:
     - "array-programming"
     - "sparse-tensor-algebra"
-  software:
-    - "burrito"
   links:
     pdf: "/publications/burrito.pdf"
     doi: "https://doi.org/10.1145/3689752"

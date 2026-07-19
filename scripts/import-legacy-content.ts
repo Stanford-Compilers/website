@@ -123,7 +123,6 @@ const CURATION: Record<string, Curation> = {
     venueKey: 'oopsla',
     venueDetail: 'PACMPL vol. 8, OOPSLA',
     topics: ['array-programming', 'sparse-tensor-algebra'],
-    software: ['burrito'],
     doi: 'https://doi.org/10.1145/3689752',
   },
   oopsla24convolutions: {
