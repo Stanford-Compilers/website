@@ -4,7 +4,7 @@ test('desktop navigation marks the current page', async ({ page }, testInfo) => 
   test.skip(testInfo.project.name === 'mobile', 'desktop-only layout');
   await page.goto('/join');
   const current = page.locator('.primary-nav__link[aria-current="page"]');
-  await expect(current).toHaveText('Research');
+  await expect(current).toHaveText('Join');
   await page
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'Software' })
