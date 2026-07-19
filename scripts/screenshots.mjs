@@ -9,7 +9,6 @@ const BASE = 'http://localhost:4321';
 
 const routes = [
   ['home', '/'],
-  ['research', '/research'],
   ['publications', '/publications'],
   ['software', '/software'],
   ['software-taco', '/software/taco'],
@@ -17,7 +16,6 @@ const routes = [
   ['person-fk', '/people/fredrik-kjolstad'],
   ['pub-detail', '/publications/oopsla17'],
   ['join', '/join'],
-  ['about', '/about'],
   ['notfound', '/nope-404'],
 ];
 

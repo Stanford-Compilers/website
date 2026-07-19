@@ -20,21 +20,21 @@ const themes = [
     icon: 'layers',
     title: 'Portability across data representations',
     body: 'Programs should move between dense, sparse, graph, and custom layouts without being rewritten around each representation.',
-    href: '/research#representation',
+    href: '/publications?topic=array-programming%2Cdata-layouts%2Crelational%2Crecurrences',
   },
   {
     n: '02',
     icon: 'compass',
     title: 'One program, many machines',
     body: 'Mapping the same high-level intent onto CPUs, GPUs, accelerators, distributed clusters, and heterogeneous systems.',
-    href: '/research#machines',
+    href: '/publications?topic=accelerators%2Cautoscheduling%2Cdistributed',
   },
   {
     n: '03',
     icon: 'chip',
     title: 'Compilers that generate compilers',
     body: 'Meta-compilers, VM generators. Instead of building one compiler at a time, we build methods and generators for creating whole compiler families.',
-    href: '/research#meta',
+    href: '/publications?topic=meta-compilation',
   },
   {
     n: '04',
@@ -72,9 +72,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
             portable across changing data representations and hardware.
           </p>
           <div class="hero__cta">
-            <Button href="/research" variant="primary" iconRight="arrow-right"
-              >Read the research</Button
-            >
             <Button href="/publications" variant="outline">Browse publications</Button>
           </div>
         </div>
@@ -98,8 +95,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
         title="Four threads, one question"
         description="How can a single high-level program stay fast as its data and target keep changing? Our work approaches that question from several directions."
         id="themes-title"
-        href="/research"
-        linkLabel="The full picture"
       />
       <ul class="themes">
         {
@@ -114,9 +109,6 @@ const heroAfter = hlIndex >= 0 ? SITE.tagline.slice(hlIndex + HERO_HIGHLIGHT.len
                 </span>
                 <h3 class="theme__title">{t.title}</h3>
                 <p class="theme__body">{t.body}</p>
-                <span class="theme__more mono">
-                  Explore <Icon name="arrow-right" size={14} />
-                </span>
               </a>
             </li>
           ))

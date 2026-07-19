@@ -14,11 +14,6 @@ const CARDS: Record<string, OgCard> = {
     meta: SITE.tagline,
     footerRight: null,
   },
-  research: {
-    kicker: `${SITE.shortName} · Research`,
-    title: 'One computation, many data representations, many machines',
-    meta: 'The problem we work on and how we approach it.',
-  },
   publications: {
     kicker: `${SITE.shortName} · Publications`,
     title: 'Publications',
@@ -33,11 +28,6 @@ const CARDS: Record<string, OgCard> = {
     kicker: `${SITE.shortName} · People`,
     title: 'People',
     meta: 'The students, researchers, and alumni of the group.',
-  },
-  about: {
-    kicker: `${SITE.shortName} · About`,
-    title: 'About the lab',
-    meta: SITE.tagline,
   },
   join: {
     kicker: `${SITE.shortName} · Join`,

@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 const routes = [
   '/',
-  '/research',
   '/publications',
   '/software',
   '/software/taco',
@@ -10,7 +9,6 @@ const routes = [
   '/people/fredrik-kjolstad',
   '/publications/oopsla17',
   '/join',
-  '/about',
 ];
 
 for (const path of routes) {

@@ -3,7 +3,6 @@ import AxeBuilder from '@axe-core/playwright';
 
 const pages = [
   '/',
-  '/research',
   '/publications',
   '/software',
   '/software/taco',
@@ -11,7 +10,6 @@ const pages = [
   '/people/fredrik-kjolstad',
   '/publications/oopsla17',
   '/join',
-  '/about',
 ];
 
 test.describe('axe accessibility scan (WCAG 2.1 A/AA)', () => {
