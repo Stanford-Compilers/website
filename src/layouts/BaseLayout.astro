@@ -6,6 +6,8 @@ import ThemeScript from '../components/global/ThemeScript.astro';
 import Header from '../components/navigation/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import ClipboardScript from '../components/global/ClipboardScript.astro';
+import ComingSoon from '../components/global/ComingSoon.astro';
+import { COMING_SOON } from '../lib/coming-soon';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
@@ -101,12 +103,22 @@ const allJsonLd = [orgJsonLd, ...pageJsonLd];
     {SITE.features.viewTransitions && <ClientRouter />}
   </head>
   <body>
-    <a href="#main" class="skip-link">Skip to content</a>
-    <Header />
-    <main id="main" class:list={['site-main', mainClass]} tabindex="-1">
-      <slot />
-    </main>
-    <Footer />
+    {
+      COMING_SOON ? (
+        <ComingSoon />
+      ) : (
+        <>
+          <a href="#main" class="skip-link">
+            Skip to content
+          </a>
+          <Header />
+          <main id="main" class:list={['site-main', mainClass]} tabindex="-1">
+            <slot />
+          </main>
+          <Footer />
+        </>
+      )
+    }
     <ClipboardScript />
 
     <script is:inline>

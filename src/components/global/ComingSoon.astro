@@ -1,0 +1,77 @@
+---
+/**
+ * Stand-in for the whole site while `SITE.features.comingSoon` is on (see
+ * src/lib/coming-soon.ts). Rendered by BaseLayout in place of the header, page
+ * content, and footer, so it links nowhere that would only redirect back here.
+ */
+import { SITE } from '../../config/site';
+import Wordmark from './Wordmark.astro';
+---
+
+<main id="main" class="soon" tabindex="-1">
+  <div class="container soon__inner">
+    <Wordmark symbolOnly size={44} class="soon__mark" />
+    <p class="kicker">Coming soon</p>
+    <h1 class="soon__title">{SITE.name}</h1>
+    <p class="soon__tagline">{SITE.tagline}</p>
+    <p class="soon__text">Our new website is being finalized.</p>
+    <p class="soon__affil mono">
+      <a href={SITE.institution.url} rel="noopener noreferrer">{SITE.institution.affiliationLine}</a
+      >
+    </p>
+  </div>
+</main>
+
+<style>
+  .soon {
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-block: var(--space-2xl);
+    outline: none;
+  }
+  .soon__inner {
+    max-width: 38rem;
+  }
+  .soon :global(.soon__mark) {
+    display: block;
+    margin-bottom: var(--space-l);
+  }
+  .soon__title {
+    margin-top: var(--space-s);
+    font-size: clamp(2.6rem, 1.4rem + 5vw, 4.75rem);
+    font-weight: 420;
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  .soon__tagline {
+    margin-top: var(--space-m);
+    max-width: 30ch;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 390;
+    line-height: 1.24;
+    color: var(--ink);
+  }
+  .soon__text {
+    margin-top: var(--space-l);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-strong);
+    color: var(--ink-muted);
+  }
+  .soon__affil {
+    margin-top: var(--space-2xl);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .soon__affil a {
+    color: var(--ink-subtle);
+    text-decoration: none;
+  }
+  .soon__affil a:hover {
+    color: var(--accent);
+  }
+</style>
