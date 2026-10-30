@@ -87,6 +87,12 @@ export interface SiteConfig {
     personDetailPages: boolean;
     /** Show the "Join" call-to-action on the homepage. */
     homeJoinCta: boolean;
+    /**
+     * Hold the public site behind a single "coming soon" page while content is
+     * under review: production builds render only `/`, and every other page
+     * becomes a redirect to it. `pnpm dev` and `FULL_SITE=1` builds ignore it.
+     */
+    comingSoon: boolean;
   };
 }
 
@@ -164,6 +170,7 @@ export const SITE: SiteConfig = {
     viewTransitions: true,
     personDetailPages: true,
     homeJoinCta: true,
+    comingSoon: true,
   },
 };
 

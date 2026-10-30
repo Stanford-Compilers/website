@@ -25,6 +25,8 @@ export default defineConfig({
   webServer: {
     // Build once and serve the production output so tests exercise the real bundle.
     command: 'pnpm run build && pnpm run preview --port 4321 --host',
+    // Test the full site even while production is held behind the coming-soon page.
+    env: { FULL_SITE: '1' },
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
